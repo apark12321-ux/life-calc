@@ -5,3 +5,95 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 16mm;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff !important;
+  }
+
+  body * {
+    visibility: hidden !important;
+  }
+
+  section aside,
+  section aside * {
+    visibility: visible !important;
+  }
+
+  section aside {
+    position: absolute !important;
+    inset: 0 auto auto 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 24px !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 12px !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+
+  section aside::before {
+    content: "생활계산기 천국 계산 결과";
+    display: block;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #111827;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  section aside * {
+    color: #111827 !important;
+    box-shadow: none !important;
+  }
+
+  section aside > div:first-child {
+    margin-bottom: 18px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  section aside > div:first-child > div:first-child {
+    background: #f8fafc !important;
+    border: 1px solid #e5e7eb !important;
+  }
+
+  section aside > div:nth-of-type(2),
+  section aside > div:nth-of-type(4) {
+    display: none !important;
+  }
+
+  section aside > div:nth-of-type(3) {
+    margin-top: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: #ffffff !important;
+  }
+
+  section aside > div:nth-of-type(3) > div {
+    margin-bottom: 8px !important;
+    padding: 12px 14px !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 10px !important;
+    background: #f8fafc !important;
+    page-break-inside: avoid;
+  }
+
+  section aside > div:nth-of-type(3) span:last-child {
+    font-size: 18px !important;
+    font-weight: 900 !important;
+  }
+}
