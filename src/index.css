@@ -1,9 +1,49 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Noto Sans KR", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
+
+@media (min-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 14px;
+  }
+}
+
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
 }
 
 @media print {
@@ -23,12 +63,12 @@
     visibility: hidden !important;
   }
 
-  section aside,
-  section aside * {
+  .print-result,
+  .print-result * {
     visibility: visible !important;
   }
 
-  section aside {
+  .print-result {
     position: absolute !important;
     inset: 0 auto auto 0 !important;
     width: 100% !important;
@@ -43,7 +83,7 @@
     box-shadow: none !important;
   }
 
-  section aside::before {
+  .print-result::before {
     content: "생활계산기 천국 계산 결과";
     display: block;
     margin-bottom: 18px;
@@ -55,35 +95,34 @@
     letter-spacing: -0.03em;
   }
 
-  section aside * {
+  .print-result * {
     color: #111827 !important;
     box-shadow: none !important;
   }
 
-  section aside > div:first-child {
+  .print-hide {
+    display: none !important;
+  }
+
+  .print-result > div:first-child {
     margin-bottom: 18px !important;
     padding-bottom: 16px !important;
     border-bottom: 1px solid #e5e7eb !important;
   }
 
-  section aside > div:first-child > div:first-child {
+  .print-result > div:first-child > div:first-child {
     background: #f8fafc !important;
     border: 1px solid #e5e7eb !important;
   }
 
-  section aside > div:nth-of-type(2),
-  section aside > div:nth-of-type(4) {
-    display: none !important;
-  }
-
-  section aside > div:nth-of-type(3) {
+  .print-result-box {
     margin-top: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     background: #ffffff !important;
   }
 
-  section aside > div:nth-of-type(3) > div {
+  .print-result-box > div {
     margin-bottom: 8px !important;
     padding: 12px 14px !important;
     border: 1px solid #e5e7eb !important;
@@ -92,7 +131,7 @@
     page-break-inside: avoid;
   }
 
-  section aside > div:nth-of-type(3) span:last-child {
+  .print-result-box span:last-child {
     font-size: 18px !important;
     font-weight: 900 !important;
   }
