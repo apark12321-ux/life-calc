@@ -9,7 +9,6 @@ import PropertyCalculator from './components/PropertyCalculator';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
-import { ShieldCheck } from 'lucide-react';
 
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
@@ -56,7 +55,7 @@ export default function App() {
       />
 
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs">
+        <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-6 shadow-xs">
           <div className="flex items-center space-x-2 text-xs text-slate-500">
             <span>스마트 계산 허브</span>
             <span>➔</span>
@@ -70,40 +69,21 @@ export default function App() {
               </>
             )}
           </div>
-
-          <div className="flex items-center space-x-1.5 text-xs text-blue-600 font-semibold bg-blue-50/70 border border-blue-100 py-1 px-2.5 rounded-lg w-fit">
-            <ShieldCheck className="w-4 h-4 text-blue-500" />
-            <span>입력값 기준 계산</span>
-          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          <div className="lg:col-span-3 space-y-6">
-            {currentCategory === 'insurance' && <InsuranceCalculator />}
-            {currentCategory === 'wage' && <WageCalculator />}
-            {currentCategory === 'life' && <LifeCalculator />}
-            {currentCategory === 'finance' && <FinanceCalculator />}
-            {currentCategory === 'property' && <PropertyCalculator />}
-            {currentCategory === 'policy' && (
-              <div className="space-y-6">
-                <AboutApp onNavigateToCalculator={handleNavigateToCalculator} />
-                <PrivacyPolicy />
-                <TermsOfService />
-              </div>
-            )}
-          </div>
-
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-3 text-xs text-slate-600">
-              <p className="font-extrabold text-slate-850 border-b pb-2 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-blue-500" />
-                계산 기준 안내
-              </p>
-              <p className="text-[11px] leading-relaxed">
-                이 화면은 사용자가 입력한 값과 서비스 내부 기준값만 사용합니다. 외부 시세성 정보는 표시하지 않습니다.
-              </p>
+        <div className="space-y-6">
+          {currentCategory === 'insurance' && <InsuranceCalculator />}
+          {currentCategory === 'wage' && <WageCalculator />}
+          {currentCategory === 'life' && <LifeCalculator />}
+          {currentCategory === 'finance' && <FinanceCalculator />}
+          {currentCategory === 'property' && <PropertyCalculator />}
+          {currentCategory === 'policy' && (
+            <div className="space-y-6">
+              <AboutApp onNavigateToCalculator={handleNavigateToCalculator} />
+              <PrivacyPolicy />
+              <TermsOfService />
             </div>
-          </div>
+          )}
         </div>
       </main>
 
