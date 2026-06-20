@@ -76,10 +76,10 @@ export default function AboutApp({ onNavigateToCalculator }: AboutAppProps) {
       <div className="space-y-4">
         <h2 className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
           <Map className="w-4 h-4 text-indigo-600" />
-          구글 로봇 친화형 통합 사이트맵 (HTML Sitemap Index)
+          계산기 전체 바로가기 (전체 서비스 목록)
         </h2>
         <p className="text-[11px] text-slate-500">
-          본 색인 인덱스는 구글 크롤링 봇(Crawler)의 효율적인 링크 순회를 장려하고 가치 지향적 하이퍼텍스트 구조를 형성하기 위해 디자인되었습니다. 메뉴 명칭을 클릭하면 해당하는 정밀 모의계산기로 이동합니다.
+          생활계산기 천국에서 서비스하고 있는 전체 연산 도구 목록 색인입니다. 각 계산기 타이틀을 누르시면 즉시 해당 연계 화면으로 편리하게 이동하실 수 있습니다.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

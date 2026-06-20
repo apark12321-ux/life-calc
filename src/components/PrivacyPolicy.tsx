@@ -12,7 +12,7 @@ export default function PrivacyPolicy() {
           </div>
           <div>
             <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">개인정보처리방침 (Privacy Policy)</h1>
-            <p className="text-xs text-slate-500 mt-0.5">구글 애드센스(Google AdSense) 파트너 및 방문자 쿠키 관련 법적 고지 전문입니다.</p>
+            <p className="text-xs text-slate-500 mt-0.5">이용자 정보 보호 지침 및 방문자 쿠키에 관한 정책 안내 전문입니다.</p>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
 
         <h2 className="text-sm font-bold text-slate-900 border-l-4 border-indigo-600 pl-2">제 2 조 (쿠키 수집 및 제3자 광고 게재 고지)</h2>
         <p>
-          본 계산기 포털은 구글 광고 네트워크 파트너인 구글 애드센스(Google AdSense) 서비스 광고 매칭을 제공하기 위해 브라우저 웹 쿠키(Cookies)를 작동 시킵니다.
+          본 서비스는 이용자의 서비스 이용 편의 증대 및 맞춤형 서비스 제공을 도모하기 위해 브라우저 내 웹 쿠키(Cookies) 기술을 이용하며, 구글 등 서비스 제휴 파트너와의 광고 및 트래픽 연합 기술이 연동될 수 있습니다.
         </p>
         <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-600">
           <li>구글을 포함한 제3자 판매자는 이용자가 본 웹사이트나 다른 웹사이트를 이전 방문한 기록을 바탕으로 맞춤 광고를 게재합니다.</li>
@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
 
         <h2 className="text-sm font-bold text-slate-900 border-l-4 border-indigo-600 pl-2">제 3 조 (고지 의무 및 책임 한계)</h2>
         <p>
-          본 사이트는 구글의 공식 서비스 약정인 온라인 맞춤형 광고 정책 조건인 &apos;개인정보 보호 표준&apos;의 내용을 투철하게 대입 준배하고 있으며 정기적인 보안 업데이트와 가치 기반 문서 관리를 소홀히 하지 않을 것임을 약조합니다.
+          본 사이트는 관련 법령상의 안전 지침을 성실히 준수하고 있으며, 주기적인 개인정보 정책 갱신 및 보안 유지를 약조합니다.
         </p>
       </div>
     </div>

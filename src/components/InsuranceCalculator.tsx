@@ -356,11 +356,11 @@ export default function InsuranceCalculator() {
         </table>
       </div>
 
-      {/* SEO rich-text block for Google AdSense Crawler Approval - Absolute Requirement */}
+      {/* Rich-text block for user guidance */}
       <div className="mt-8 border-t border-slate-100 pt-8 space-y-6">
         <h2 className="text-sm font-bold text-slate-900 flex items-center mb-4">
           <BookOpen className="w-4 h-4 text-indigo-600 mr-1.5" />
-          4대보험 및 급여 수령액 관련 심층 가이드 (SEO용 상세 가이드)
+          4대보험 및 급여 수령액 관련 상세 가이드
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">

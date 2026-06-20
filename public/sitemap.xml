@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main Entry Hub -->
+  <url>
+    <loc>https://life-calc.kr/</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- 4대사회보험 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=insurance</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 주휴수당 / 최저임금 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=wage_hourly</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 연봉 실수령액 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=wage_salary</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 퇴직금 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=wage_retirement</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 실업급여 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=wage_unemployment</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 만나이 및 전통 띠 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=life_age</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 미래 디데이 & 기념일 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=life_dday</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 학번 / 입학졸업 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=life_school</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 예적금 만기 이자수령액 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=finance_savings</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 대출 원리금 상환 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=finance_loan</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <!-- 아파트 평수 제곱미터 환산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=property_size</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 부동산 중개수수료/복비 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=property_agent</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 부동산 취득세율 계산기 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=property_tax</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <!-- 개인정보방침 및 약관 안내 -->
+  <url>
+    <loc>https://life-calc.kr/?calc=policy</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>

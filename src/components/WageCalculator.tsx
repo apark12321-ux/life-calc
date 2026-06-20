@@ -25,6 +25,20 @@ export default function WageCalculator() {
   const [unemploymentPeriod, setUnemploymentPeriod] = useState<number>(18); // months of work
   const [prevAvgWage, setPrevAvgWage] = useState<number>(2800000); // previous avg salary
 
+  // Helper to format currency into Korean units for realtime accessibility
+  const formatKoreanPrice = (num: number): string => {
+    if (num === 0) return '0원';
+    const hundredMillion = Math.floor(num / 100000000);
+    const tenThousand = Math.floor((num % 100000000) / 10000);
+    const remainder = num % 10000;
+    
+    let parts: string[] = [];
+    if (hundredMillion > 0) parts.push(`${hundredMillion}억`);
+    if (tenThousand > 0) parts.push(`${tenThousand.toLocaleString()}만`);
+    if (remainder > 0) parts.push(`${remainder.toLocaleString()}`);
+    return parts.join(' ') + ' 원';
+  };
+
   // Calculations:
   // 1. Hourly Calculation
   const calculateHourly = () => {
@@ -331,28 +345,54 @@ export default function WageCalculator() {
             {/* Left inputs */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">근로자 본인 계약 연봉 (원/연)</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    value={annualSalary}
-                    onChange={(e) => setAnnualSalary(parseInt(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 font-bold"
-                  />
-                  <div className="absolute right-3 top-2 flex space-x-1">
-                    <button
-                      onClick={() => setAnnualSalary(30000000)}
-                      className="text-[9px] bg-slate-200 text-slate-700 py-1 px-1.5 rounded"
-                    >
-                      3천만
-                    </button>
-                    <button
-                      onClick={() => setAnnualSalary(50000000)}
-                      className="text-[9px] bg-slate-200 text-slate-700 py-1 px-1.5 rounded"
-                    >
-                      5천만
-                    </button>
-                  </div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">근로자 본인 계약 연봉 (원/연)</label>
+                  <span className="text-xs text-emerald-600 font-extrabold font-mono bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
+                    ➡ {formatKoreanPrice(annualSalary)}
+                  </span>
+                </div>
+                <input
+                  type="number"
+                  value={annualSalary === 0 ? '' : annualSalary}
+                  onChange={(e) => setAnnualSalary(parseInt(e.target.value) || 0)}
+                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm focus:outline-hidden focus:ring-2 focus:ring-emerald-500 font-bold"
+                />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setAnnualSalary(0)}
+                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                  >
+                    초기화
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnnualSalary(prev => prev + 5000000)}
+                    className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                  >
+                    +500만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnnualSalary(prev => prev + 10000000)}
+                    className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                  >
+                    +1천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnnualSalary(prev => prev + 50000000)}
+                    className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                  >
+                    +5천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnnualSalary(prev => prev + 100000000)}
+                    className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                  >
+                    +1억
+                  </button>
                 </div>
               </div>
 
@@ -440,13 +480,55 @@ export default function WageCalculator() {
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">퇴직 전 마지막 3개월간 평균 세전 기본급여 (원)</label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">퇴직 전 마지막 3개월간 평균 세전 기본급여 (원)</label>
+                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                    ➡ {formatKoreanPrice(prevThreeMonthsSalary)}
+                  </span>
+                </div>
                 <input
                   type="number"
-                  value={prevThreeMonthsSalary}
+                  value={prevThreeMonthsSalary === 0 ? '' : prevThreeMonthsSalary}
                   onChange={(e) => setPrevThreeMonthsSalary(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-sm font-bold focus:outline-hidden"
+                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
                 />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setPrevThreeMonthsSalary(0)}
+                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                  >
+                    초기화
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevThreeMonthsSalary(prev => prev + 500000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +50만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevThreeMonthsSalary(prev => prev + 1000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +100만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevThreeMonthsSalary(prev => prev + 3000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +300만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevThreeMonthsSalary(prev => prev + 5000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +500만
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -521,13 +603,55 @@ export default function WageCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">이직전 3개월 월 평균 급여액 (원)</label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">이직전 3개월 월 평균 급여액 (원)</label>
+                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                    ➡ {formatKoreanPrice(prevAvgWage)}
+                  </span>
+                </div>
                 <input
                   type="number"
-                  value={prevAvgWage}
+                  value={prevAvgWage === 0 ? '' : prevAvgWage}
                   onChange={(e) => setPrevAvgWage(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-sm font-semibold"
+                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
                 />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setPrevAvgWage(0)}
+                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                  >
+                    초기화
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevAvgWage(prev => prev + 500000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +50만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevAvgWage(prev => prev + 1000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +100만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevAvgWage(prev => prev + 3000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +300만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPrevAvgWage(prev => prev + 5000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-101 transition-colors font-bold shrink-0"
+                  >
+                    +500만
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -563,11 +687,11 @@ export default function WageCalculator() {
         </div>
       )}
 
-      {/* SEO Compliance Rich Text Information */}
+      {/* Detailed Rich Text Guide Information */}
       <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans">
         <h2 className="text-sm font-bold text-slate-950 flex items-center mb-1">
           <BookOpen className="w-4 h-4 text-emerald-600 mr-2" />
-          임금(급여) 산출공식 및 주휴수당 세무 가이드 (AdSense 특화 텍스트)
+          임금(급여) 산출공식 및 주휴수당 세무 가이드
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CategoryType } from './types';
 import Navigation from './components/Navigation';
 import AdSenseMock from './components/AdSenseMock';
@@ -12,9 +12,54 @@ import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
 import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon } from 'lucide-react';
 
+interface Indicator {
+  closePrice: string;
+  compareToPreviousClosePrice: string;
+  fluctuationsRatio: string;
+  direction: string;
+  directionText: string;
+}
+
+interface FinancialIndicatorState {
+  kospi: Indicator;
+  usdkrw: Indicator;
+  cd91: Indicator;
+}
+
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
   const [subCalculatorId, setSubCalculatorId] = useState<string>('all');
+  const [financialIndicators, setFinancialIndicators] = useState<FinancialIndicatorState | null>(null);
+  const [loadingIndicators, setLoadingIndicators] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    async function fetchIndicators() {
+      try {
+        const res = await fetch("/api/financial-indicators");
+        const json = await res.json();
+        if (json.success && active) {
+          setFinancialIndicators({
+            kospi: json.kospi,
+            usdkrw: json.usdkrw,
+            cd91: json.cd91
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load real-time financial indicators:", err);
+      } finally {
+        if (active) setLoadingIndicators(false);
+      }
+    }
+
+    fetchIndicators();
+    // Poll every 30 seconds for live updates
+    const timer = setInterval(fetchIndicators, 30000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, []);
 
   // Unified navigation router helper
   const handleNavigateToCalculator = (id: string) => {
@@ -51,6 +96,40 @@ export default function App() {
     setCurrentCategory(cat);
     setSubCalculatorId('all');
   };
+
+  // Parse deep link URL parameters (calc, s, subId, category) on initial load
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const calcId = params.get('calc') || params.get('s') || params.get('subId');
+      const cat = params.get('c') || params.get('category');
+      
+      if (calcId) {
+        handleNavigateToCalculator(calcId);
+      } else if (cat) {
+        handleSelectCategory(cat as CategoryType);
+      }
+    } catch (e) {
+      console.error("Deep link search params parsing failed:", e);
+    }
+  }, []);
+
+  // Dynamically inject Google AdSense core script
+  useEffect(() => {
+    try {
+      const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-8884323201509376";
+      const existingScript = document.querySelector(`script[src*="adsbygoogle.js"]`);
+      if (!existingScript) {
+        const script = document.createElement("script");
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${pubId}`;
+        script.async = true;
+        script.crossOrigin = "anonymous";
+        document.head.appendChild(script);
+      }
+    } catch (e) {
+      console.error("AdSense script injection failed:", e);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans transition-colors duration-200">
@@ -179,23 +258,64 @@ export default function App() {
                   <LayoutGrid className="w-4 h-4 text-blue-600" />
                   실시간 주요 경제 지표
                 </span>
-                <span className="text-[9px] bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded font-extrabold uppercase tracking-wider">LIVE</span>
+                <span className="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-full font-extrabold uppercase tracking-wider animate-pulse flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
+                  LIVE
+                </span>
               </div>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-0.5">
-                  <span className="text-xs text-slate-500 font-medium">코스피 지수 (KOSPI)</span>
-                  <span className="text-xs font-extrabold text-red-500">2,682.35 ▲ 12.4</span>
+              
+              {loadingIndicators ? (
+                <div className="py-4 text-center text-xs text-slate-400 font-medium animate-pulse">
+                  실시간 금융 데이터 조회 중...
                 </div>
-                <div className="flex justify-between items-center py-0.5">
-                  <span className="text-xs text-slate-500 font-medium">원/달러 환율 (USD/KRW)</span>
-                  <span className="text-xs font-extrabold text-blue-500">1,324.50 ▼ 3.1</span>
+              ) : financialIndicators ? (
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center py-0.5">
+                    <span className="text-xs text-slate-500 font-medium">코스피 지수 (KOSPI)</span>
+                    <div className="text-xs font-extrabold flex items-center gap-1.5">
+                      <span className="text-slate-800">{financialIndicators.kospi.closePrice}</span>
+                      <span className={`text-[10px] font-bold ${
+                        financialIndicators.kospi.direction === "RISING" ? "text-red-500" :
+                        financialIndicators.kospi.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
+                      }`}>
+                        {financialIndicators.kospi.directionText} {financialIndicators.kospi.compareToPreviousClosePrice} ({financialIndicators.kospi.fluctuationsRatio}%)
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center py-0.5">
+                    <span className="text-xs text-slate-500 font-medium">원/달러 환율 (USD/KRW)</span>
+                    <div className="text-xs font-extrabold flex items-center gap-1.5">
+                      <span className="text-slate-800">{financialIndicators.usdkrw.closePrice}원</span>
+                      <span className={`text-[10px] font-bold ${
+                        financialIndicators.usdkrw.direction === "RISING" ? "text-red-500" :
+                        financialIndicators.usdkrw.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
+                      }`}>
+                        {financialIndicators.usdkrw.directionText} {financialIndicators.usdkrw.compareToPreviousClosePrice} ({financialIndicators.usdkrw.fluctuationsRatio}%)
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center py-0.5">
+                    <span className="text-xs text-slate-500 font-medium">CD금리 (91일물 기준)</span>
+                    <div className="text-xs font-extrabold flex items-center gap-1.5">
+                      <span className="text-slate-800">{financialIndicators.cd91.closePrice}%</span>
+                      <span className={`text-[10px] font-bold ${
+                        financialIndicators.cd91.direction === "RISING" ? "text-red-500" :
+                        financialIndicators.cd91.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
+                      }`}>
+                        {financialIndicators.cd91.directionText} {financialIndicators.cd91.compareToPreviousClosePrice}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center py-0.5">
-                  <span className="text-xs text-slate-500 font-medium">CD금리 (91일물 기준)</span>
-                  <span className="text-xs font-extrabold text-slate-800">3.65% 단리</span>
+              ) : (
+                <div className="py-4 text-center text-xs text-red-500 font-medium">
+                  금융 정보 수신 실패
                 </div>
-              </div>
-              <p className="text-[10px] text-slate-400 font-medium pt-1 border-t border-slate-100">※ 위 지표는 모의 재직·이자 계산 보조용 20분 지연 데이터입니다.</p>
+              )}
+              
+              <p className="text-[10px] text-slate-400 font-medium pt-1 border-t border-slate-100">
+                ※ 위 지표는 네이버 금융 연계 실시간 지표이며, 보조 연산 및 경제 참고자료입니다.
+              </p>
             </div>
 
             {/* 2026 Policy Briefing Card */}
@@ -280,8 +400,8 @@ export default function App() {
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-slate-500 gap-2">
-            <p>Designed and Built securely for immediate Google SEO & AdSense crawlers approval.</p>
-            <p className="font-mono">IP: SECURE PORTAL ENGINE // 2026 KOREAN STATUTORY VER.</p>
+            <p>생활 속 유용한 세무, 보험, 주거 관련 이자 계산을 위해 법안을 상시 갱신하는 모의 연산 시스템입니다.</p>
+            <p className="font-mono">VER 1.2.6 // KOREAN STATUTORY COMPLIANT</p>
           </div>
         </div>
       </footer>

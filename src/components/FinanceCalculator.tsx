@@ -18,6 +18,20 @@ export default function FinanceCalculator() {
   const [loanRate, setLoanRate] = useState<number>(5.2);
   const [repaymentType, setRepaymentType] = useState<'equal_both' | 'equal_principal' | 'maturity'>('equal_both');
 
+  // Helper to format currency into Korean units for realtime accessibility
+  const formatKoreanPrice = (num: number): string => {
+    if (num === 0) return '0원';
+    const hundredMillion = Math.floor(num / 100000000);
+    const tenThousand = Math.floor((num % 100000000) / 10000);
+    const remainder = num % 10000;
+    
+    let parts: string[] = [];
+    if (hundredMillion > 0) parts.push(`${hundredMillion}억`);
+    if (tenThousand > 0) parts.push(`${tenThousand.toLocaleString()}만`);
+    if (remainder > 0) parts.push(`${remainder.toLocaleString()}`);
+    return parts.join(' ') + ' 원';
+  };
+
   // Calculations:
   // 1. Savings Interest Calculation
   const calculateSavings = () => {
@@ -218,15 +232,98 @@ export default function FinanceCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  {savingsType === 'deposit' ? '예치 원금 (원)' : '매달 적립금액 (원/월)'}
-                </label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">
+                    {savingsType === 'deposit' ? '예치 원금 (원)' : '매달 적립금액 (원/월)'}
+                  </label>
+                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                    ➡ {formatKoreanPrice(principal)}
+                  </span>
+                </div>
                 <input
                   type="number"
-                  value={principal}
+                  value={principal === 0 ? '' : principal}
                   onChange={(e) => setPrincipal(parseInt(e.target.value) || 0)}
                   className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
                 />
+                
+                {savingsType === 'deposit' ? (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(0)}
+                      className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                    >
+                      초기화
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 1000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +100만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 5000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +500만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 10000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +1천만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 50000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +5천만
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(0)}
+                      className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                    >
+                      초기화
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 100000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +10만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 300000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +30만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 500000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +50만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPrincipal(prev => prev + 1000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +100만
+                    </button>
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-3">
@@ -326,13 +423,55 @@ export default function FinanceCalculator() {
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5 font-sans">대출 신청 원금액 (원)</label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 font-sans">대출 신청 원금액 (원)</label>
+                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                    ➡ {formatKoreanPrice(loanPrincipal)}
+                  </span>
+                </div>
                 <input
                   type="number"
-                  value={loanPrincipal}
+                  value={loanPrincipal === 0 ? '' : loanPrincipal}
                   onChange={(e) => setLoanPrincipal(parseInt(e.target.value) || 0)}
                   className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
                 />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setLoanPrincipal(0)}
+                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                  >
+                    초기화
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoanPrincipal(prev => prev + 5000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +500만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoanPrincipal(prev => prev + 10000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +1천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoanPrincipal(prev => prev + 50000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +5천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setLoanPrincipal(prev => prev + 100000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +1억
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

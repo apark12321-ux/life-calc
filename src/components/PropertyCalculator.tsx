@@ -9,13 +9,31 @@ export default function PropertyCalculator() {
   const [pyungValue, setPyungValue] = useState<string>('25.4');
 
   // Brokerage states
+  const [propertyType, setPropertyType] = useState<'house' | 'officetel_living' | 'officetel_business' | 'commercial' | 'land'>('house');
   const [dealType, setDealType] = useState<'sale' | 'lease'>('sale');
-  const [dealAmount, setDealAmount] = useState<number>(300000000); // 300 Million KRW
+  const [leaseType, setLeaseType] = useState<'jeonse' | 'monthly'>('jeonse');
+  const [deposit, setDeposit] = useState<number>(300000000); // represents sales price OR jeonse deposit OR monthly lease deposit
+  const [monthlyRent, setMonthlyRent] = useState<number>(0); 
+  const [negotiatedRate, setNegotiatedRate] = useState<string>(''); // negotiated rate by user (e.g. "0.3")
 
   // Tax states
   const [taxAmount, setTaxAmount] = useState<number>(500000000); // 500 Million KRW
   const [houseSize, setHouseSize] = useState<'under85' | 'over85'>('under85');
   const [isFirstHome, setIsFirstHome] = useState<boolean>(false);
+
+  // Helper to format currency into Korean units for realtime accessibility
+  const formatKoreanPrice = (num: number): string => {
+    if (num === 0) return '0원';
+    const hundredMillion = Math.floor(num / 100000000);
+    const tenThousand = Math.floor((num % 100000000) / 10000);
+    const remainder = num % 10000;
+    
+    let parts: string[] = [];
+    if (hundredMillion > 0) parts.push(`${hundredMillion}억`);
+    if (tenThousand > 0) parts.push(`${tenThousand.toLocaleString()}만`);
+    if (remainder > 0) parts.push(`${remainder.toLocaleString()}`);
+    return parts.join(' ') + ' 원';
+  };
 
   // Math equations and converters:
   // 1. Pyung Converter Handlers
@@ -41,77 +59,133 @@ export default function PropertyCalculator() {
 
   // 2. Korean statutory brokerage fee calculation
   const calculateBrokerage = () => {
-    const P = dealAmount;
-    let rate = 0.004; // default
-    let limit = 0; // limit amount (0 means no limit max)
-
-    if (dealType === 'sale') {
-      // 2025/2026 Korean Statutory Brokerage Caps for Residential Homes:
-      // - Under 50M KRW: 0.6%, max cap 250,000 KRW
-      // - 50M to 200M KRW: 0.5%, max cap 800,000 KRW
-      // - 200M to 900M KRW: 0.4%, no limit
-      // - 900M to 1.2B KRW: 0.5%, no limit
-      // - 1.2B to 1.5B KRW: 0.6%, no limit
-      // - Over 1.5B KRW: 0.7%, no limit
-      if (P < 50000000) {
-        rate = 0.006;
-        limit = 250000;
-      } else if (P < 200000000) {
-        rate = 0.005;
-        limit = 800000;
-      } else if (P < 900000000) {
-        rate = 0.004;
-        limit = 0;
-      } else if (P < 1200000000) {
-        rate = 0.005;
-        limit = 0;
-      } else if (P < 1500000000) {
-        rate = 0.006;
-        limit = 0;
+    // 1) Calculate final transaction amount (거래가액) based on monthly lease calculations
+    let transactionAmount = deposit;
+    if (dealType === 'lease') {
+      if (leaseType === 'monthly') {
+        const standardAmount = deposit + (monthlyRent * 100);
+        if (standardAmount < 50000000) {
+          transactionAmount = deposit + (monthlyRent * 70);
+        } else {
+          transactionAmount = standardAmount;
+        }
       } else {
-        rate = 0.007;
-        limit = 0;
-      }
-    } else {
-      // Lease (전월세) statutory caps:
-      // - Under 50M KRW: 0.5%, max cap 200,000 KRW
-      // - 50M to 100M KRW: 0.4%, max cap 300,000 KRW
-      // - 100M to 600M KRW: 0.3%, no limit
-      // - 600M to 1.2B KRW: 0.4%, no limit
-      // - Over 1.2B KRW: 0.5%, no limit
-      if (P < 50000000) {
-        rate = 0.005;
-        limit = 200000;
-      } else if (P < 100000000) {
-        rate = 0.004;
-        limit = 300000;
-      } else if (P < 600000000) {
-        rate = 0.003;
-        limit = 0;
-      } else if (P < 1200000000) {
-        rate = 0.004;
-        limit = 0;
-      } else {
-        rate = 0.005;
-        limit = 0;
+        transactionAmount = deposit;
       }
     }
 
-    let calculatedFee = Math.floor(P * rate);
+    let maxRate = 0.009; // default general maximum rate (e.g. commercial, general land/offices)
+    let limit = 0; // limit cap for house
+    let isResidential = false;
+
+    if (propertyType === 'house') {
+      isResidential = true;
+      if (dealType === 'sale') {
+        // 2025/2026 Korean Statutory Brokerage Caps for Residential Homes:
+        // - Under 50M KRW: 0.6%, max cap 250,000 KRW
+        // - 50M to 200M KRW: 0.5%, max cap 800,000 KRW
+        // - 200M to 900M KRW: 0.4%, no limit
+        // - 900M to 1.2B KRW: 0.5%, no limit
+        // - 1.2B to 1.5B KRW: 0.6%, no limit
+        // - Over 1.5B KRW: 0.7%, no limit
+        if (transactionAmount < 50000000) {
+          maxRate = 0.006;
+          limit = 250000;
+        } else if (transactionAmount < 200000000) {
+          maxRate = 0.005;
+          limit = 800000;
+        } else if (transactionAmount < 900000000) {
+          maxRate = 0.004;
+          limit = 0;
+        } else if (transactionAmount < 1200000000) {
+          maxRate = 0.005;
+          limit = 0;
+        } else if (transactionAmount < 1500000000) {
+          maxRate = 0.006;
+          limit = 0;
+        } else {
+          maxRate = 0.007;
+          limit = 0;
+        }
+      } else {
+        // Lease (전월세) statutory caps:
+        // - Under 50M KRW: 0.5%, max cap 200,000 KRW
+        // - 50M to 100M KRW: 0.4%, max cap 300,000 KRW
+        // - 100M to 600M KRW: 0.3%, no limit
+        // - 600M to 1.2B KRW: 0.4%, no limit
+        // - Over 1.2B KRW: 0.5%, no limit
+        if (transactionAmount < 50000000) {
+          maxRate = 0.005;
+          limit = 200000;
+        } else if (transactionAmount < 100000000) {
+          maxRate = 0.004;
+          limit = 300000;
+        } else if (transactionAmount < 600000000) {
+          maxRate = 0.003;
+          limit = 0;
+        } else if (transactionAmount < 1200000000) {
+          maxRate = 0.004;
+          limit = 0;
+        } else {
+          maxRate = 0.005;
+          limit = 0;
+        }
+      }
+    } else if (propertyType === 'officetel_living') {
+      // 주거용 오피스텔 (전용 85㎡ 이하, 상하수도 시설 완비 등)
+      if (dealType === 'sale') {
+        maxRate = 0.005;
+      } else {
+        maxRate = 0.004;
+      }
+      limit = 0;
+    } else if (propertyType === 'officetel_business') {
+      // 일반/업무용 오피스텔
+      maxRate = 0.009;
+      limit = 0;
+    } else {
+      // 상가, 사무실, 토지 등
+      maxRate = 0.009;
+      limit = 0;
+    }
+
+    // Determine custom/negotiated rate
+    const parsedCustom = parseFloat(negotiatedRate);
+    const hasCustom = !isNaN(parsedCustom) && parsedCustom > 0;
+    // Applied rate cannot legally exceed the statutory maximum rate!
+    const appliedRate = hasCustom ? Math.min(parsedCustom / 100, maxRate) : maxRate;
+
+    // Calculate maximum legal fee
+    let maxLegalFee = Math.floor(transactionAmount * maxRate);
+    if (limit > 0 && maxLegalFee > limit) {
+      maxLegalFee = limit;
+    }
+
+    // Fee calculations
+    let calculatedFee = Math.floor(transactionAmount * appliedRate);
     if (limit > 0 && calculatedFee > limit) {
       calculatedFee = limit;
+    }
+    
+    // Safety check: Negotiated or applied fee should never overshoot maximum legally permissible fee
+    if (calculatedFee > maxLegalFee) {
+      calculatedFee = maxLegalFee;
     }
 
     // Add VAT (value added tax - usually 10% on top of the fee if general taxable company)
     const vat = Math.floor(calculatedFee * 0.1);
 
     return {
-      rate: (rate * 100).toFixed(1),
+      maxRate: (maxRate * 100).toFixed(2),
+      appliedRate: (appliedRate * 100).toFixed(3),
+      transactionAmount,
       calculatedFee,
       vat,
       totalWithVat: calculatedFee + vat,
       hasLimit: limit > 0,
-      limitAmount: limit
+      limitAmount: limit,
+      isCustom: hasCustom,
+      maxLegalFee
     };
   };
 
@@ -273,80 +347,317 @@ export default function PropertyCalculator() {
       {activeTab === 'agent' && (
         <div className="space-y-6">
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="space-y-4">
+            <div className="space-y-5">
+              {/* Property types list selector */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">거래 유해 구분</label>
-                <div className="flex space-x-2">
+                <label className="block text-xs font-bold text-slate-800 mb-2 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                  부동산 매물 종류 선택
+                </label>
+                <div className="grid grid-cols-2 gap-2">
                   <button
-                    onClick={() => setDealType('sale')}
-                    className={`flex-1 py-2 px-3 border text-xs rounded-lg transition-colors font-bold ${dealType === 'sale' ? 'bg-white text-blue-700 border-blue-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                    onClick={() => { setPropertyType('house'); setNegotiatedRate(''); }}
+                    className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'house' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    아파트/주택 매매 (Sales)
+                    <span className="text-sm">🏠 주택 / 아파트</span>
+                    <span className="text-[10px] font-medium text-slate-400 mt-1">상한요율 0.3% ~ 0.7%</span>
                   </button>
                   <button
-                    onClick={() => setDealType('lease')}
-                    className={`flex-1 py-2 px-3 border text-xs rounded-lg transition-colors font-bold ${dealType === 'lease' ? 'bg-white text-blue-700 border-blue-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                    onClick={() => { setPropertyType('officetel_living'); setNegotiatedRate(''); }}
+                    className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'officetel_living' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    임대차 전세 & 월세 (Lease)
+                    <span className="text-sm">🏢 주거용 오피스텔</span>
+                    <span className="text-[10px] font-medium text-slate-400 mt-1">전용 85㎡이하 (매매0.5%/임대0.4%)</span>
+                  </button>
+                  <button
+                    onClick={() => { setPropertyType('officetel_business'); setNegotiatedRate(''); }}
+                    className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'officetel_business' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
+                  >
+                    <span className="text-sm">💼 일반 오피스텔</span>
+                    <span className="text-[10px] font-medium text-slate-400 mt-1">업무용 / 전용 85㎡ 초과 (상한 0.9%)</span>
+                  </button>
+                  <button
+                    onClick={() => { setPropertyType('commercial'); setNegotiatedRate(''); }}
+                    className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'commercial' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
+                  >
+                    <span className="text-sm">🏪 상가 / 오피스</span>
+                    <span className="text-[10px] font-medium text-slate-400 mt-1">점포, 상업 매장, 사무실 (상한 0.9%)</span>
+                  </button>
+                  <button
+                    onClick={() => { setPropertyType('land'); setNegotiatedRate(''); }}
+                    className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold col-span-2 flex flex-col justify-between ${propertyType === 'land' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
+                  >
+                    <span className="text-sm">🏔 토지 / 임야 / 기타주택외</span>
+                    <span className="text-[10px] font-medium text-slate-400 mt-1">농지, 임야, 잡종지, 주택 외 기타 자산 (상한 0.9%)</span>
                   </button>
                 </div>
               </div>
 
+              {/* Transaction category (sales vs lease) */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">거래 체결 보증금/금액 (원)</label>
-                <input
-                  type="number"
-                  value={dealAmount}
-                  onChange={(e) => setDealAmount(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
-                />
-                <div className="flex gap-1 mt-1.5">
-                  {[50000000, 100000000, 300000000, 600000000, 1000000000].map((val) => (
-                    <button
-                      key={val}
-                      onClick={() => setDealAmount(val)}
-                      className="bg-white border text-[10px] text-slate-600 py-0.5 px-2 rounded hover:bg-slate-100"
-                    >
-                      {(val / 100000000).toFixed(1)}억원
-                    </button>
-                  ))}
+                <label className="block text-xs font-bold text-slate-800 mb-1.5">거래 구분</label>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => setDealType('sale')}
+                    className={`flex-1 py-2.5 px-3 border text-xs rounded-lg transition-all font-bold ${dealType === 'sale' ? 'bg-white text-blue-700 border-blue-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                  >
+                    매매 / 교환
+                  </button>
+                  <button
+                    onClick={() => setDealType('lease')}
+                    className={`flex-1 py-2.5 px-3 border text-xs rounded-lg transition-all font-bold ${dealType === 'lease' ? 'bg-white text-blue-700 border-blue-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                  >
+                    임대차 (전세 또는 월세)
+                  </button>
                 </div>
+              </div>
+
+              {/* Lease category (Jeonse vs Monthly) */}
+              {dealType === 'lease' && (
+                <div>
+                  <label className="block text-xs font-bold text-slate-800 mb-1.5">보증금 임차 방식</label>
+                  <div className="flex space-x-2 bg-slate-200/60 p-1 rounded-lg">
+                    <button
+                      onClick={() => setLeaseType('jeonse')}
+                      className={`flex-1 py-1.5 px-3 text-xs rounded-md transition-all font-bold ${leaseType === 'jeonse' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                      전세 (보증금만 납부)
+                    </button>
+                    <button
+                      onClick={() => setLeaseType('monthly')}
+                      className={`flex-1 py-1.5 px-3 text-xs rounded-md transition-all font-bold ${leaseType === 'monthly' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                      월세 (보증금 + 월 임대료)
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Transaction Amount Inputs */}
+              <div className="space-y-4">
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="block text-xs font-bold text-slate-850">
+                      {dealType === 'sale' ? '매매 가액 (원)' : leaseType === 'jeonse' ? '전세 보증금 (원)' : '월세 보증금 (원)'}
+                    </label>
+                    <span className="text-xs text-blue-600 font-extrabold font-mono bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                      ➡ {formatKoreanPrice(deposit)}
+                    </span>
+                  </div>
+                  <input
+                    type="number"
+                    value={deposit === 0 ? '' : deposit}
+                    onChange={(e) => setDeposit(parseInt(e.target.value) || 0)}
+                    className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold text-slate-850 focus:border-blue-500 focus:outline-hidden"
+                    placeholder="예: 300000000"
+                  />
+                  <div className="flex flex-wrap gap-1 mt-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setDeposit(0)}
+                      className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                    >
+                      초기화
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeposit(prev => prev + 10000000)}
+                      className="bg-blue-50 text-blue-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-blue-100 border border-blue-100 transition-colors font-bold shrink-0"
+                    >
+                      +1천만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeposit(prev => prev + 50000000)}
+                      className="bg-blue-50 text-blue-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-blue-100 border border-blue-100 transition-colors font-bold shrink-0"
+                    >
+                      +5천만
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeposit(prev => prev + 100000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +1억
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDeposit(prev => prev + 500000000)}
+                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    >
+                      +5억
+                    </button>
+                  </div>
+                </div>
+
+                {dealType === 'lease' && leaseType === 'monthly' && (
+                  <div>
+                    <div className="flex justify-between items-center mb-1">
+                      <label className="block text-xs font-bold text-emerald-800 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
+                        월세액 / 월 차임 (Monthly Rent 원)
+                      </label>
+                      <span className="text-xs text-emerald-700 font-extrabold font-mono bg-emerald-55/70 px-2 py-0.5 rounded border border-emerald-100">
+                        ➡ {formatKoreanPrice(monthlyRent)}
+                      </span>
+                    </div>
+                    <input
+                      type="number"
+                      value={monthlyRent === 0 ? '' : monthlyRent}
+                      onChange={(e) => setMonthlyRent(parseInt(e.target.value) || 0)}
+                      className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold text-emerald-950 focus:border-emerald-500 focus:outline-hidden"
+                      placeholder="예: 500000"
+                    />
+                    <div className="flex flex-wrap gap-1 mt-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyRent(0)}
+                        className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                      >
+                        초기화
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyRent(prev => prev + 100000)}
+                        className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                      >
+                        +10만
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyRent(prev => prev + 300000)}
+                        className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                      >
+                        +30만
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyRent(prev => prev + 500000)}
+                        className="bg-emerald-50 text-emerald-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-emerald-100 border border-emerald-100 transition-colors font-bold shrink-0"
+                      >
+                        +50만
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMonthlyRent(prev => prev + 1000000)}
+                        className="bg-teal-50 text-teal-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-teal-100 border border-teal-105 transition-colors font-bold shrink-0"
+                      >
+                        +100만
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Negotiated Rate Input */}
+              <div className="pt-2">
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="text-xs font-bold text-slate-800">협의 중개수수료율 직접 대입 (%):</label>
+                  <span className="text-[10px] text-slate-400 font-medium">※ 미기재 시 법정상한 최고치 자동 적용</span>
+                </div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={negotiatedRate}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (/^\d*\.?\d*$/.test(val)) {
+                        setNegotiatedRate(val);
+                      }
+                    }}
+                    className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold text-slate-850 focus:border-amber-500 focus:outline-hidden pr-8"
+                    placeholder={`지방공시 법리상한: ${brokerageRes.maxRate}% 이내`}
+                  />
+                  <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-bold">%</span>
+                </div>
+                <p className="text-[10px] text-slate-400 mt-1">
+                  중개수수료는 협의 요율이 법정 한도요율보다 낮을 경우 낮은 요율이 최우선 적용됩니다. (높게 부과해도 상한선에서 자동차단됩니다)
+                </p>
               </div>
             </div>
 
             {/* Brokerage Result */}
             <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] bg-amber-500 text-white rounded px-2 py-0.5 font-bold uppercase">
-                  공식 법정 상한 요율표 결과
+                <span className="text-[10px] bg-amber-500 text-white rounded px-2.5 py-0.5 font-bold uppercase tracking-wider">
+                  지능형법정 상한 수수료 정판
                 </span>
                 
-                <div className="space-y-2 mt-4 text-xs text-slate-400">
+                <div className="space-y-2 mt-4 text-xs text-slate-400 border-b border-slate-800 pb-4">
                   <div className="flex justify-between">
-                    <span>적용된 법정 상한요율</span>
-                    <span className="text-white font-mono">{brokerageRes.rate}%</span>
+                    <span>선택 부동산 대분류</span>
+                    <span className="text-slate-100 font-bold">
+                      {propertyType === 'house' ? '🏠 주택 / 아파트' :
+                       propertyType === 'officetel_living' ? '🏢 주거형 오피스텔 (≤ 85㎡)' :
+                       propertyType === 'officetel_business' ? '💼 일반 오피스텔 (> 85㎡)' :
+                       propertyType === 'commercial' ? '🏪 상가 (상업 점포)' : '🏔 토지 / 임야 / 기타'}
+                    </span>
                   </div>
-                  {brokerageRes.hasLimit && (
-                    <div className="flex justify-between text-yellow-300 text-[11px]">
-                      <span>해당 구간 법정 수수료 리밋 한계</span>
-                      <span>{brokerageRes.limitAmount.toLocaleString()}원 상한제한</span>
+                  <div className="flex justify-between">
+                    <span>거래 유형</span>
+                    <span className="text-slate-100 font-semibold">
+                      {dealType === 'sale' ? '매매 / 교환 계약' : `임대차 (${leaseType === 'jeonse' ? '전세' : '월세'}) 계약`}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>최종 산출 거래 가액 (환산임차액)</span>
+                    <span className="text-yellow-400 font-extrabold font-mono text-[13px]">
+                      {brokerageRes.transactionAmount.toLocaleString()}원
+                    </span>
+                  </div>
+
+                  {dealType === 'lease' && leaseType === 'monthly' && (
+                    <div className="text-[10px] bg-slate-800/80 p-2.5 rounded-lg text-slate-300 leading-relaxed border border-slate-700/50 space-y-1">
+                      <strong className="text-yellow-300">💡 법정 월세 환산보증금 적용정보:</strong>
+                      <div className="font-mono">
+                        {deposit.toLocaleString()}원 + ({monthlyRent.toLocaleString()}원 × {brokerageRes.transactionAmount < 50000000 ? '70' : '100'})
+                      </div>
+                      {brokerageRes.transactionAmount < 50000000 ? (
+                        <span className="text-amber-400 block mt-0.5">※ 환산 결과가 5천만 원 미만 기준에 해당하여 법적 70배율 산식이 의무 적용되었습니다!</span>
+                      ) : (
+                        <span className="text-blue-300 block mt-0.5">※ 환산 결과가 5천만 원 이상이므로 표준 100배율 공식이 적용되었습니다.</span>
+                      )}
                     </div>
                   )}
+                </div>
+
+                <div className="space-y-2 mt-4 text-xs text-slate-400">
                   <div className="flex justify-between">
-                    <span>순수 부과 중개수수료</span>
-                    <span className="text-white font-mono">{brokerageRes.calculatedFee.toLocaleString()}원</span>
+                    <span>지자체 공시 최고 상한요율</span>
+                    <span className="text-slate-205 text-white font-semibold">{brokerageRes.maxRate}%</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>서비스 부가세 (VAT 10%)</span>
+                    <span>정밀 약정 적용요율</span>
+                    <span className={`font-mono font-bold ${brokerageRes.isCustom ? 'text-amber-450 text-amber-400' : 'text-white'}`}>
+                      {brokerageRes.appliedRate}% {brokerageRes.isCustom ? '(직접 협의요율)' : '(법리 최고한도)'}
+                    </span>
+                  </div>
+                  {brokerageRes.hasLimit && (
+                    <div className="flex justify-between text-yellow-300 text-[11px] bg-slate-800/50 p-2 rounded-lg border border-slate-700/20">
+                      <span>해당 구간 법정 수수료 제한 한도</span>
+                      <span className="font-bold">{brokerageRes.limitAmount.toLocaleString()}원 (상한제 차단)</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between pt-1.5 border-t border-slate-800/40">
+                    <span>순수 법정공식 중개료</span>
+                    <span className="text-white font-mono font-extrabold text-sm">{brokerageRes.calculatedFee.toLocaleString()}원</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>중개업 부가세 (법정 VAT 10%)</span>
                     <span className="font-mono text-slate-400">+{brokerageRes.vat.toLocaleString()}원</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-emerald-950 p-3.5 border border-emerald-900 rounded-lg text-center my-3">
-                <p className="text-[11px] text-emerald-400 font-bold">임대인/임차인 각각 지불할 복비 총합 (VAT포함)</p>
-                <p className="text-xl md:text-2xl font-extrabold text-emerald-300 font-mono mt-0.5">
-                  {brokerageRes.totalWithVat.toLocaleString()}원
+              <div className="mt-5">
+                <div className="bg-gradient-to-br from-emerald-950/80 to-slate-900 p-4 border border-emerald-900 rounded-lg text-center shadow-inner">
+                  <p className="text-[11px] text-emerald-400 font-bold">임대인/임차인 당사자 각각 지불할 복비 총액 (VAT 포함)</p>
+                  <p className="text-xl md:text-2xl font-extrabold text-emerald-300 font-mono mt-0.5">
+                    {brokerageRes.totalWithVat.toLocaleString()}원
+                  </p>
+                </div>
+                <p className="text-[9px] text-slate-500 mt-2 text-center leading-relaxed">
+                  ※ 일반과세사업 중개업소 기준 요금입니다. 간이과세중개업자인 경우 부가세 청구 비율이 상이하거나 생략(면세)될 수 있습니다.
                 </p>
               </div>
             </div>
@@ -360,13 +671,55 @@ export default function PropertyCalculator() {
           <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">취득 아파트 매매 가액 (원)</label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700">취득 아파트 매매 가액 (원)</label>
+                  <span className="text-xs text-red-600 font-extrabold font-mono bg-red-50 px-2 py-0.5 rounded border border-red-100">
+                    ➡ {formatKoreanPrice(taxAmount)}
+                  </span>
+                </div>
                 <input
                   type="number"
                   value={taxAmount}
                   onChange={(e) => setTaxAmount(parseInt(e.target.value) || 0)}
                   className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
                 />
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(0)}
+                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                  >
+                    초기화
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(prev => prev + 10000000)}
+                    className="bg-red-50/50 text-red-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-red-100 border border-red-100 transition-colors font-bold shrink-0"
+                  >
+                    +1천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(prev => prev + 50000000)}
+                    className="bg-red-50/50 text-red-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-red-100 border border-red-100 transition-colors font-bold shrink-0"
+                  >
+                    +5천만
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(prev => prev + 100000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +1억
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTaxAmount(prev => prev + 500000000)}
+                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                  >
+                    +5억
+                  </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
