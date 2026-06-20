@@ -37,9 +37,9 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       <Navigation currentCategory={currentCategory} onSelectCategory={handleSelectCategory} onNavigateToCalculator={handleNavigateToCalculator} />
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-grow max-w-7xl w-full mx-auto px-0 sm:px-6 lg:px-8 py-0 sm:py-6">
         {currentCategory === 'policy' ? (
-          <div className="space-y-6">
+          <div className="space-y-6 px-3 py-4 sm:px-0 sm:py-0">
             <AboutApp onNavigateToCalculator={handleNavigateToCalculator} />
             <PrivacyPolicy />
             <TermsOfService />
@@ -48,11 +48,11 @@ export default function App() {
           <UniversalCalculatorHub category={currentCategory} />
         )}
       </main>
-      <footer className="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12 font-sans">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <footer className="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-8 sm:mt-12 font-sans">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <p className="text-white font-bold text-sm tracking-tight">생활계산기 천국</p>
-            <p className="text-[10px] text-slate-500 mt-1">카테고리를 확장한 계산기 허브입니다. 각 계산기는 전용 입력폼과 계산식으로 구성되어 있습니다.</p>
+            <p className="text-[10px] text-slate-500 mt-1">모바일에서도 계산기 선택, 입력, 결과 확인이 편하도록 다시 정리했습니다.</p>
           </div>
           <button onClick={() => handleSelectCategory('policy')} className="text-slate-300 hover:text-white font-bold transition">이용안내 · 개인정보처리방침</button>
         </div>
