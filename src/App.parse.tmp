@@ -1,0 +1,2 @@
+const calc = new URLSearchParams(window.location.search).get('calc');
+console.log(calc);
