@@ -6,6 +6,20 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
 
+const categoryPrefixes: Array<[string, CategoryType]> = [
+  ['wage_', 'wage'],
+  ['life_', 'life'],
+  ['finance_', 'finance'],
+  ['property_', 'property'],
+  ['health_', 'health'],
+  ['auto_', 'auto'],
+  ['education_', 'education'],
+  ['business_', 'business'],
+  ['shopping_', 'shopping'],
+  ['unit_', 'unit'],
+  ['travel_', 'travel']
+];
+
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
 
@@ -15,12 +29,8 @@ export default function App() {
   };
 
   const handleNavigateToCalculator = (id: string) => {
-    if (id.startsWith('wage_')) setCurrentCategory('wage');
-    else if (id.startsWith('life_')) setCurrentCategory('life');
-    else if (id.startsWith('finance_')) setCurrentCategory('finance');
-    else if (id.startsWith('property_')) setCurrentCategory('property');
-    else if (id === 'policy') setCurrentCategory('policy');
-    else setCurrentCategory('insurance');
+    const match = categoryPrefixes.find(([prefix]) => id.startsWith(prefix));
+    setCurrentCategory(match ? match[1] : id === 'policy' ? 'policy' : 'insurance');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -42,7 +52,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <p className="text-white font-bold text-sm tracking-tight">생활계산기 천국</p>
-            <p className="text-[10px] text-slate-500 mt-1">100종 계산기는 각각 입력 항목과 계산식이 다른 전용 계산폼으로 구성되어 있습니다.</p>
+            <p className="text-[10px] text-slate-500 mt-1">카테고리를 확장한 계산기 허브입니다. 각 계산기는 전용 입력폼과 계산식으로 구성되어 있습니다.</p>
           </div>
           <button onClick={() => handleSelectCategory('policy')} className="text-slate-300 hover:text-white font-bold transition">이용안내 · 개인정보처리방침</button>
         </div>
