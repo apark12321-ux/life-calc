@@ -1,0 +1,6 @@
+{
+  "name": "생활계산기 천국",
+  "description": "2026년 기준 4대보험 계산기, 주휴수당, 임금 계산기, 예적금 이자 및 나이 계산 등 실생활에 유용한 고품격 모의 계산 및 정보 포털 서비스",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
