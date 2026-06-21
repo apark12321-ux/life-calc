@@ -25,9 +25,24 @@ export type CalculatorSpec = {
   note: string;
   mode: CalcMode;
   fields: Field[];
+  meta?: Record<string, string | number | boolean>;
 };
 
-export const categoryKeys: CalcCategory[] = ['insurance', 'wage', 'life', 'finance', 'property'];
+export const categoryKeys: CalcCategory[] = [
+  'insurance',
+  'wage',
+  'life',
+  'finance',
+  'property',
+  'health',
+  'auto',
+  'education',
+  'business',
+  'shopping',
+  'unit',
+  'travel',
+];
+
 export const categoryLabels: Record<CalcCategory, string> = {
   insurance: '4대보험',
   wage: '급여·퇴직금',
