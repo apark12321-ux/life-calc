@@ -36,12 +36,8 @@ export default function QualityCalculatorHub({ category, subCalculatorId = 'all'
 
   return (
     <section className="bg-white border border-slate-100 shadow-xs rounded-none sm:rounded-2xl px-3 py-4 sm:p-6 lg:p-8 overflow-hidden">
-      <div className="border-b border-slate-100 pb-4 sm:pb-6 mb-4 sm:mb-6">
-        <div className="max-w-3xl">
-          <p className="text-[12px] sm:text-sm font-black text-blue-600 mb-2">{categoryLabels[activeCategory]}</p>
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-slate-900 leading-tight">생활계산기 천국</h1>
-          <p className="text-[13px] sm:text-sm text-slate-500 mt-2 leading-relaxed break-keep">필요한 계산기를 선택하고 값을 입력하면 바로 결과를 확인할 수 있습니다.</p>
-        </div>
+      <div className="border-b border-slate-100 pb-4 sm:pb-5 mb-4 sm:mb-6">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight text-slate-900 leading-tight">생활계산기 천국</h1>
       </div>
 
       <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(360px,430px)] gap-4 sm:gap-6 items-start">
