@@ -9,7 +9,6 @@ const qty = (value: number, unit = '') => `${(Math.round((Number.isFinite(value)
 const pct = (value: number) => qty(value, '%');
 const row = (label: string, value: string, highlight = false): ResultRow => ({ label, value, highlight });
 const date = (raw: string) => new Date(`${raw}T00:00:00`);
-const dayMs = 24 * 60 * 60 * 1000;
 const clock = (minutes: number) => {
   const normalized = ((Math.round(minutes) % 1440) + 1440) % 1440;
   return `${String(Math.floor(normalized / 60)).padStart(2, '0')}:${String(normalized % 60).padStart(2, '0')}`;
@@ -54,8 +53,9 @@ export function calculate(spec: CalculatorSpec, values: Values): ResultRow[] {
     case 'loanPayment': {
       const monthlyRate = num(values, 'rate') / 100 / 12;
       const months = num(values, 'months');
-      const payment = monthlyRate ? num(values, 'principal') * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1) : div(num(values, 'principal'), months);
-      return [row('월 상환액', won(payment), true), row('총 상환액', won(payment * months)), row('총 이자', won(payment * months - num(values, 'principal'))];
+      const principal = num(values, 'principal');
+      const payment = monthlyRate ? principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1) : div(principal, months);
+      return [row('월 상환액', won(payment), true), row('총 상환액', won(payment * months)), row('총 이자', won(payment * months - principal))];
     }
     case 'dsr': {
       const total = num(values, 'annualDebtPayment') + num(values, 'otherDebtPayment');
