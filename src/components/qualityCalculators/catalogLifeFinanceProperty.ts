@@ -1,0 +1,11 @@
+import { CalculatorSpec, Field } from './model';
+const f = (key: string, label: string, unit: string, defaultValue: number | string, type: Field['type'] = 'number'): Field => ({ key, label, unit, defaultValue, type });
+
+export const lifeFinancePropertyCalculators: CalculatorSpec[] = [
+  { id: 'korean-age', name: '만 나이 계산기', category: 'life', icon: '🧭', mode: 'koreanAge', description: '생년월일과 기준일을 넣어 만 나이를 계산합니다.', formula: '기준일의 생일 경과 여부 반영', note: '서비스별로 별도 나이 기준을 둘 수 있습니다.', fields: [f('birth', '생년월일', '', '1990-01-01', 'date'), f('base', '기준일', '', '2026-06-20', 'date')] },
+  { id: 'electric-bill', name: '전기요금 계산기', category: 'life', icon: '🧭', mode: 'electricBill', description: '사용량, 기본요금, 단가, 부가세를 넣어 월 전기요금을 추정합니다.', formula: '기본요금 + 사용량 × 단가 + 부가세', note: '누진제와 조정액은 별도 적용될 수 있습니다.', fields: [f('usage', '사용량', 'kWh', 250), f('unitPrice', 'kWh 단가', '원', 120), f('baseFee', '기본요금', '원', 1600), f('vatRate', '부가세율', '%', 10)] },
+  { id: 'loan-amortization', name: '대출 원리금 상환 계산기', category: 'finance', icon: '💰', mode: 'loanPayment', description: '대출 원금, 금리, 기간으로 매월 원리금 균등 상환액을 계산합니다.', formula: '원리금균등 상환 공식', note: '거치기간과 중도상환수수료는 별도 확인이 필요합니다.', fields: [f('principal', '대출 원금', '원', 50000000), f('rate', '연 이율', '%', 4.5), f('months', '상환 기간', '개월', 120)] },
+  { id: 'dsr', name: 'DSR 계산기', category: 'finance', icon: '💰', mode: 'dsr', description: '연 소득 대비 연간 원리금 상환액 비율을 계산합니다.', formula: '연간 원리금 상환액 ÷ 연소득 × 100', note: '금융기관 심사는 대출 종류와 규제 기준에 따라 달라집니다.', fields: [f('annualIncome', '연 소득', '원', 50000000), f('annualDebtPayment', '연간 원리금 상환액', '원', 12000000), f('otherDebtPayment', '기타 대출 연상환액', '원', 3000000)] },
+  { id: 'acquisition-tax', name: '취득세 계산기', category: 'property', icon: '🏠', mode: 'acquisitionTax', description: '취득가액과 세율을 넣어 취득세 예상액을 계산합니다.', formula: '취득가액 × 적용 세율', note: '주택 수, 지역, 면적, 취득 원인에 따라 세율이 달라질 수 있습니다.', fields: [f('price', '취득가액', '원', 500000000), f('taxRate', '취득세율', '%', 1.1), f('extraRate', '농특세·교육세율', '%', 0.2)] },
+  { id: 'price-per-pyeong', name: '평당가 계산기', category: 'property', icon: '🏠', mode: 'pricePerPyeong', description: '거래금액과 면적으로 평당 가격을 계산합니다.', formula: '거래금액 ÷ 평수', note: '비교 시 전용면적 기준인지 공급면적 기준인지 통일해야 합니다.', fields: [f('price', '거래금액', '원', 600000000), f('area', '면적', '평', 30)] },
+];
