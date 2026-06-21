@@ -1,0 +1,9 @@
+import { CalculatorSpec, Field } from './model';
+const f = (key: string, label: string, unit: string, defaultValue: number | string, type: Field['type'] = 'number'): Field => ({ key, label, unit, defaultValue, type });
+
+export const insuranceWageCalculators: CalculatorSpec[] = [
+  { id: 'national-pension', name: '국민연금 부담액 계산기', category: 'insurance', icon: '🛡️', mode: 'pension', description: '월 보수에 상·하한 기준소득을 적용해 근로자와 사업주 부담액을 나눠 계산합니다.', formula: '적용 기준소득 × 부담률', note: '기준소득월액과 요율은 적용 시점에 따라 달라질 수 있습니다.', fields: [f('income', '월 보수', '원', 3000000), f('employeeRate', '근로자 부담률', '%', 4.75), f('employerRate', '사업주 부담률', '%', 4.75), f('minIncome', '하한 기준소득', '원', 410000), f('maxIncome', '상한 기준소득', '원', 6590000)] },
+  { id: 'freelancer-net', name: '프리랜서 3.3% 실수령액 계산기', category: 'insurance', icon: '🛡️', mode: 'freelancerNet', description: '프리랜서 지급액에서 원천징수액을 제한 실수령액을 계산합니다.', formula: '계약금액 - 원천징수액', note: '종합소득세 신고 결과에 따라 환급 또는 추가 납부가 생길 수 있습니다.', fields: [f('gross', '계약 금액', '원', 1000000), f('incomeTax', '소득세', '%', 3), f('localTax', '지방소득세', '%', 0.3)] },
+  { id: 'weekly-holiday-pay', name: '주휴수당 계산기', category: 'wage', icon: '💼', mode: 'weeklyHolidayPay', description: '시급과 주 근무시간으로 주휴수당 발생 여부와 예상 금액을 계산합니다.', formula: '시급 × 주휴 인정 시간', note: '통상 주 15시간 이상 등 요건을 충족해야 발생합니다.', fields: [f('hourly', '시급', '원', 10320), f('weeklyHours', '주 근무시간', '시간', 20), f('workDays', '주 근무일수', '일', 5)] },
+  { id: 'severance-pay', name: '퇴직금 계산기', category: 'wage', icon: '💼', mode: 'severancePay', description: '최근 3개월 임금과 계속근로일수로 예상 퇴직금을 계산합니다.', formula: '1일 평균임금 × 30일 × 계속근로일수 ÷ 365', note: '상여금, 연차수당, 제외 기간에 따라 실제 금액은 달라질 수 있습니다.', fields: [f('threeMonthWage', '최근 3개월 임금 합계', '원', 9000000), f('threeMonthDays', '최근 3개월 일수', '일', 92), f('serviceDays', '계속근로일수', '일', 1095), f('annualBonus', '연간 상여금', '원', 0)] },
+];
