@@ -2,13 +2,7 @@ import { CategoryType } from '../../types';
 
 export type CalcCategory = Exclude<CategoryType, 'policy'>;
 export type FieldType = 'number' | 'date' | 'select';
-export type CalcMode =
-  | 'pension' | 'freelancerNet' | 'weeklyHolidayPay' | 'severancePay'
-  | 'koreanAge' | 'electricBill' | 'loanPayment' | 'dsr'
-  | 'acquisitionTax' | 'pricePerPyeong' | 'bmi' | 'runningPace'
-  | 'fuelCost' | 'parkingFee' | 'averageScore' | 'gpa'
-  | 'breakEven' | 'marginRate' | 'discountPrice' | 'bundleUnitPrice'
-  | 'cmToInch' | 'kgToLb' | 'travelBudget' | 'timeZone';
+export type CalcMode = string;
 
 export type Field = {
   key: string;
@@ -33,7 +27,7 @@ export type CalculatorSpec = {
   fields: Field[];
 };
 
-export const categoryKeys: CalcCategory[] = ['insurance', 'wage', 'life', 'finance', 'property', 'health', 'auto', 'education', 'business', 'shopping', 'unit', 'travel'];
+export const categoryKeys: CalcCategory[] = ['insurance', 'wage', 'life', 'finance', 'property'];
 export const categoryLabels: Record<CalcCategory, string> = {
   insurance: '4대보험',
   wage: '급여·퇴직금',
