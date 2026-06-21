@@ -1,10 +1,6 @@
-import { insuranceWageCalculators } from './catalogInsuranceWage';
-import { lifeFinancePropertyCalculators } from './catalogLifeFinanceProperty';
+import { koreaEssentialCalculators } from './catalogKoreaEssential';
 
-export const calculatorCatalog = [
-  ...insuranceWageCalculators,
-  ...lifeFinancePropertyCalculators,
-];
+export const calculatorCatalog = koreaEssentialCalculators;
 
 export { calculate, defaultValues } from './logic';
 export { categoryKeys, categoryLabels } from './model';
