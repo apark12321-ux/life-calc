@@ -1,108 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Entry Hub -->
-  <url>
-    <loc>https://life-calc.kr/</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <!-- 4대사회보험 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=insurance</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 주휴수당 / 최저임금 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=wage_hourly</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 연봉 실수령액 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=wage_salary</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 퇴직금 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=wage_retirement</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 실업급여 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=wage_unemployment</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 만나이 및 전통 띠 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=life_age</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 미래 디데이 & 기념일 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=life_dday</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 학번 / 입학졸업 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=life_school</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 예적금 만기 이자수령액 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=finance_savings</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 대출 원리금 상환 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=finance_loan</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <!-- 아파트 평수 제곱미터 환산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=property_size</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 부동산 중개수수료/복비 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=property_agent</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 부동산 취득세율 계산기 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=property_tax</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <!-- 개인정보방침 및 약관 안내 -->
-  <url>
-    <loc>https://life-calc.kr/?calc=policy</loc>
-    <lastmod>2026-06-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
+<url><loc>https://life-calc.kr/</loc></url>
+<url><loc>https://life-calc.kr/category/insurance</loc></url>
+<url><loc>https://life-calc.kr/category/wage</loc></url>
+<url><loc>https://life-calc.kr/category/life</loc></url>
+<url><loc>https://life-calc.kr/category/finance</loc></url>
+<url><loc>https://life-calc.kr/category/property</loc></url>
+<url><loc>https://life-calc.kr/category/health</loc></url>
+<url><loc>https://life-calc.kr/category/auto</loc></url>
+<url><loc>https://life-calc.kr/category/education</loc></url>
+<url><loc>https://life-calc.kr/category/business</loc></url>
+<url><loc>https://life-calc.kr/category/shopping</loc></url>
+<url><loc>https://life-calc.kr/category/unit</loc></url>
+<url><loc>https://life-calc.kr/category/travel</loc></url>
+<url><loc>https://life-calc.kr/calculators/insurance_national_pension</loc></url>
+<url><loc>https://life-calc.kr/calculators/insurance_health_premium</loc></url>
+<url><loc>https://life-calc.kr/calculators/insurance_longterm_care</loc></url>
+<url><loc>https://life-calc.kr/calculators/insurance_employee_total</loc></url>
+<url><loc>https://life-calc.kr/calculators/insurance_freelancer_33</loc></url>
+<url><loc>https://life-calc.kr/calculators/wage_weekly_holiday_pay</loc></url>
+<url><loc>https://life-calc.kr/calculators/wage_severance_pay</loc></url>
+<url><loc>https://life-calc.kr/calculators/wage_hourly_monthly</loc></url>
+<url><loc>https://life-calc.kr/calculators/wage_overtime_pay</loc></url>
+<url><loc>https://life-calc.kr/calculators/wage_annual_leave_pay</loc></url>
+<url><loc>https://life-calc.kr/calculators/life_korean_age</loc></url>
+<url><loc>https://life-calc.kr/calculators/life_date_diff</loc></url>
+<url><loc>https://life-calc.kr/calculators/life_dday</loc></url>
+<url><loc>https://life-calc.kr/calculators/life_electric_bill</loc></url>
+<url><loc>https://life-calc.kr/calculators/life_split_bill</loc></url>
+<url><loc>https://life-calc.kr/calculators/finance_loan_payment</loc></url>
+<url><loc>https://life-calc.kr/calculators/finance_interest_only</loc></url>
+<url><loc>https://life-calc.kr/calculators/finance_simple_interest</loc></url>
+<url><loc>https://life-calc.kr/calculators/finance_dsr</loc></url>
+<url><loc>https://life-calc.kr/calculators/finance_monthly_savings</loc></url>
+<url><loc>https://life-calc.kr/calculators/property_acquisition_tax</loc></url>
+<url><loc>https://life-calc.kr/calculators/property_price_per_pyeong</loc></url>
+<url><loc>https://life-calc.kr/calculators/property_brokerage_fee</loc></url>
+<url><loc>https://life-calc.kr/calculators/property_ltv</loc></url>
+<url><loc>https://life-calc.kr/calculators/property_rent_conversion</loc></url>
+<url><loc>https://life-calc.kr/calculators/health_bmi</loc></url>
+<url><loc>https://life-calc.kr/calculators/health_bmr</loc></url>
+<url><loc>https://life-calc.kr/calculators/health_water</loc></url>
+<url><loc>https://life-calc.kr/calculators/health_running_pace</loc></url>
+<url><loc>https://life-calc.kr/calculators/health_protein</loc></url>
+<url><loc>https://life-calc.kr/calculators/auto_fuel_cost</loc></url>
+<url><loc>https://life-calc.kr/calculators/auto_parking_fee</loc></url>
+<url><loc>https://life-calc.kr/calculators/auto_car_loan</loc></url>
+<url><loc>https://life-calc.kr/calculators/auto_commute_cost</loc></url>
+<url><loc>https://life-calc.kr/calculators/auto_average_speed</loc></url>
+<url><loc>https://life-calc.kr/calculators/education_average_score</loc></url>
+<url><loc>https://life-calc.kr/calculators/education_gpa</loc></url>
+<url><loc>https://life-calc.kr/calculators/education_attendance</loc></url>
+<url><loc>https://life-calc.kr/calculators/education_final_needed</loc></url>
+<url><loc>https://life-calc.kr/calculators/education_study_hours</loc></url>
+<url><loc>https://life-calc.kr/calculators/business_break_even</loc></url>
+<url><loc>https://life-calc.kr/calculators/business_margin_rate</loc></url>
+<url><loc>https://life-calc.kr/calculators/business_vat</loc></url>
+<url><loc>https://life-calc.kr/calculators/business_roas</loc></url>
+<url><loc>https://life-calc.kr/calculators/business_conversion_rate</loc></url>
+<url><loc>https://life-calc.kr/calculators/shopping_discount_price</loc></url>
+<url><loc>https://life-calc.kr/calculators/shopping_bundle_unit</loc></url>
+<url><loc>https://life-calc.kr/calculators/shopping_point_discount</loc></url>
+<url><loc>https://life-calc.kr/calculators/shopping_free_shipping_gap</loc></url>
+<url><loc>https://life-calc.kr/calculators/shopping_unit_compare</loc></url>
+<url><loc>https://life-calc.kr/calculators/unit_cm_inch</loc></url>
+<url><loc>https://life-calc.kr/calculators/unit_kg_lb</loc></url>
+<url><loc>https://life-calc.kr/calculators/unit_pyeong_m2</loc></url>
+<url><loc>https://life-calc.kr/calculators/unit_m2_pyeong</loc></url>
+<url><loc>https://life-calc.kr/calculators/unit_celsius_fahrenheit</loc></url>
+<url><loc>https://life-calc.kr/calculators/travel_budget</loc></url>
+<url><loc>https://life-calc.kr/calculators/travel_timezone</loc></url>
+<url><loc>https://life-calc.kr/calculators/travel_exchange</loc></url>
+<url><loc>https://life-calc.kr/calculators/travel_route_time</loc></url>
+<url><loc>https://life-calc.kr/calculators/travel_dday</loc></url>
+<url><loc>https://life-calc.kr/about</loc></url>
+<url><loc>https://life-calc.kr/contact</loc></url>
+<url><loc>https://life-calc.kr/privacy</loc></url>
+<url><loc>https://life-calc.kr/terms</loc></url>
 </urlset>
