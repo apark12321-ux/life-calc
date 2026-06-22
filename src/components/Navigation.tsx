@@ -4,14 +4,14 @@ import { CategoryType } from '../types';
 interface NavigationProps {
   currentCategory: CategoryType;
   onSelectCategory: (cat: CategoryType) => void;
-  onNavigateToCalculator: (subId: string) => void;
+  onOpenPage: (page: 'about' | 'contact' | 'privacy' | 'terms') => void;
 }
 
-const categories: Array<{ id: CategoryType; label: string }> = [
+const categories: Array<{ id: Exclude<CategoryType, 'policy'>; label: string }> = [
   { id: 'insurance', label: '4대보험' },
   { id: 'wage', label: '급여·퇴직금' },
   { id: 'life', label: '생활·달력' },
-  { id: 'finance', label: '금융·예적금' },
+  { id: 'finance', label: '금융·대출' },
   { id: 'property', label: '부동산·세금' },
   { id: 'health', label: '건강·운동' },
   { id: 'auto', label: '자동차·교통' },
@@ -20,18 +20,22 @@ const categories: Array<{ id: CategoryType; label: string }> = [
   { id: 'shopping', label: '쇼핑·소비' },
   { id: 'unit', label: '단위변환' },
   { id: 'travel', label: '여행·해외' },
-  { id: 'policy', label: '안내·약관' },
 ];
 
-export default function Navigation({ currentCategory, onSelectCategory }: NavigationProps) {
+export default function Navigation({ currentCategory, onSelectCategory, onOpenPage }: NavigationProps) {
   return (
     <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center h-14 sm:h-16">
+        <div className="flex items-center justify-between gap-3 h-14 sm:h-16">
           <button type="button" className="flex items-center gap-2 min-w-0" onClick={() => onSelectCategory('insurance')}>
             <span className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-black text-sm shadow-xs shrink-0">C</span>
             <span className="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 truncate">생활계산기 <span className="text-blue-600">천국</span></span>
           </button>
+          <div className="hidden sm:flex items-center gap-3 text-xs font-bold text-slate-500">
+            <button type="button" onClick={() => onOpenPage('about')} className="hover:text-slate-900 transition">소개</button>
+            <button type="button" onClick={() => onOpenPage('contact')} className="hover:text-slate-900 transition">문의</button>
+            <button type="button" onClick={() => onOpenPage('privacy')} className="hover:text-slate-900 transition">개인정보</button>
+          </div>
         </div>
       </div>
       <div className="bg-slate-50 border-t border-slate-100 overflow-x-auto whitespace-nowrap scrollbar-none">
