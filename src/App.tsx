@@ -7,6 +7,7 @@ import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
 import ContactPage from './components/ContactPage';
 import { calculatorCatalog, categoryKeys } from './components/qualityCalculators';
+import { calculatorPath, findCalculatorBySlugOrId } from './components/qualityCalculators/slug';
 
 type PageType = 'calculator' | 'about' | 'contact' | 'privacy' | 'terms';
 
@@ -38,7 +39,7 @@ const pageDescriptions: Record<Exclude<PageType, 'calculator'>, string> = {
 };
 
 const isCategory = (value: string): value is Exclude<CategoryType, 'policy'> => categoryKeys.includes(value as any);
-const findCalculator = (id?: string) => calculatorCatalog.find((item) => item.id === id);
+const findCalculator = (value?: string | null) => findCalculatorBySlugOrId(calculatorCatalog, value);
 
 const setMetaTag = (selector: string, attr: string, value: string) => {
   let element = document.head.querySelector(selector) as HTMLMetaElement | HTMLLinkElement | null;
@@ -61,8 +62,8 @@ function routeFromLocation(): RouteState {
   const segments = path.split('/').filter(Boolean);
 
   if (segments[0] === 'calculators' && segments[1]) {
-    const id = decodeURIComponent(segments[1]);
-    const calculator = findCalculator(id);
+    const slugOrId = decodeURIComponent(segments[1]);
+    const calculator = findCalculator(slugOrId);
     if (calculator) return { page: 'calculator', category: calculator.category, calculatorId: calculator.id };
   }
 
@@ -123,7 +124,7 @@ export default function App() {
   const handleNavigateToCalculator = (id: string) => {
     const calculator = findCalculator(id);
     if (!calculator) return;
-    pushRoute({ page: 'calculator', category: calculator.category, calculatorId: calculator.id }, `/calculators/${calculator.id}`);
+    pushRoute({ page: 'calculator', category: calculator.category, calculatorId: calculator.id }, calculatorPath(calculator));
   };
 
   const handleOpenPage = (page: Exclude<PageType, 'calculator'>) => {
