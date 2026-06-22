@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { ArrowRight, RotateCcw, Search } from 'lucide-react';
 import { CategoryType } from '../types';
 import { calculate, calculatorCatalog, categoryKeys, categoryLabels, defaultValues, Values } from './qualityCalculators';
+import { calculatorPath } from './qualityCalculators/slug';
 
 type Props = { category: CategoryType; subCalculatorId?: string; onNavigateToCalculator?: (id: string) => void };
 
@@ -37,14 +38,15 @@ export default function QualityCalculatorHub({ category, subCalculatorId, onNavi
   useEffect(() => {
     const title = `${selected.name} | 생활계산기 천국`;
     const description = `${selected.description} 입력값을 기준으로 계산 결과와 주의사항을 확인할 수 있습니다.`;
-    const url = `https://life-calc.kr/calculators/${selected.id}`;
+    const canonicalPath = calculatorPath(selected);
+    const url = `https://life-calc.kr${canonicalPath}`;
     document.title = title;
     ensureMeta('meta[name="description"]', 'content', description);
     ensureMeta('meta[property="og:title"]', 'content', title);
     ensureMeta('meta[property="og:description"]', 'content', description);
     ensureMeta('meta[property="og:url"]', 'content', url);
     ensureMeta('link[rel="canonical"]', 'href', subCalculatorId ? url : `https://life-calc.kr/category/${activeCategory}`);
-  }, [selected.id, selected.name, selected.description, activeCategory, subCalculatorId]);
+  }, [selected, activeCategory, subCalculatorId]);
 
   const filtered = useMemo(() => available.filter((item) => !query || `${item.name} ${item.description} ${item.formula}`.toLowerCase().includes(query.toLowerCase())), [available, query]);
   const result = calculate(selected, values);
@@ -80,8 +82,8 @@ export default function QualityCalculatorHub({ category, subCalculatorId, onNavi
         </aside>
         <div className="order-2 lg:order-1 min-w-0 space-y-4">
           <div className="relative"><Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" /><input value={query} onChange={(event: any) => setQuery(event.target.value)} placeholder="계산기 검색: 주휴수당, 대출, 취득세..." className="w-full min-h-11 rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-4 text-base sm:text-sm font-semibold text-slate-700 focus:outline-hidden focus:ring-2 focus:ring-blue-500" /></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[520px] lg:max-h-[760px] overflow-y-auto pr-0 sm:pr-1">{filtered.map((item) => { const active = item.id === selected.id; return <a key={item.id} href={`/calculators/${item.id}`} onClick={(event) => { event.preventDefault(); choose(item.id); }} className={`text-left rounded-2xl border p-4 min-h-[136px] transition-all touch-manipulation ${active ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'}`}><div className="flex items-start justify-between gap-2"><span className="text-2xl leading-none">{item.icon}</span><span className={`text-[10px] rounded-full px-2 py-0.5 font-black whitespace-nowrap ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'}`}>{categoryLabels[item.category]}</span></div><h2 className="mt-3 text-[15px] sm:text-sm font-black leading-snug break-keep">{item.name}</h2><p className={`mt-1.5 text-[12px] leading-relaxed break-keep ${active ? 'text-blue-50' : 'text-slate-500'}`}>{item.description}</p></a>; })}</div>
-          <article className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4 text-slate-700 leading-relaxed"><h2 className="text-lg font-black text-slate-900">{selected.name} 사용 방법</h2><p className="text-sm break-keep">필요한 값을 입력하면 {mainResult?.label || '계산 결과'}을 바로 확인할 수 있습니다. 결과는 입력값을 기준으로 산출됩니다.</p>{exampleResult && <p className="text-sm bg-white border border-slate-200 rounded-xl p-3 break-keep">예시: 기본값으로 계산하면 <strong>{exampleResult.label}</strong>은 <strong>{exampleResult.value}</strong>입니다.</p>}<div><h2 className="text-base font-black text-slate-900 mb-2">관련 계산기</h2><div className="grid sm:grid-cols-2 gap-2">{related.map((item) => <a key={item.id} href={`/calculators/${item.id}`} onClick={(event) => { event.preventDefault(); choose(item.id); }} className="bg-white border border-slate-200 hover:border-blue-300 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 hover:text-blue-700 transition break-keep">{item.name}</a>)}</div></div></article>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[520px] lg:max-h-[760px] overflow-y-auto pr-0 sm:pr-1">{filtered.map((item) => { const active = item.id === selected.id; return <a key={item.id} href={calculatorPath(item)} onClick={(event) => { event.preventDefault(); choose(item.id); }} className={`text-left rounded-2xl border p-4 min-h-[136px] transition-all touch-manipulation ${active ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-white border-slate-200 hover:border-blue-300 hover:shadow-sm'}`}><div className="flex items-start justify-between gap-2"><span className="text-2xl leading-none">{item.icon}</span><span className={`text-[10px] rounded-full px-2 py-0.5 font-black whitespace-nowrap ${active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'}`}>{categoryLabels[item.category]}</span></div><h2 className="mt-3 text-[15px] sm:text-sm font-black leading-snug break-keep">{item.name}</h2><p className={`mt-1.5 text-[12px] leading-relaxed break-keep ${active ? 'text-blue-50' : 'text-slate-500'}`}>{item.description}</p></a>; })}</div>
+          <article className="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4 text-slate-700 leading-relaxed"><h2 className="text-lg font-black text-slate-900">{selected.name} 사용 방법</h2><p className="text-sm break-keep">필요한 값을 입력하면 {mainResult?.label || '계산 결과'}을 바로 확인할 수 있습니다. 결과는 입력값을 기준으로 산출됩니다.</p>{exampleResult && <p className="text-sm bg-white border border-slate-200 rounded-xl p-3 break-keep">예시: 기본값으로 계산하면 <strong>{exampleResult.label}</strong>은 <strong>{exampleResult.value}</strong>입니다.</p>}<div><h2 className="text-base font-black text-slate-900 mb-2">관련 계산기</h2><div className="grid sm:grid-cols-2 gap-2">{related.map((item) => <a key={item.id} href={calculatorPath(item)} onClick={(event) => { event.preventDefault(); choose(item.id); }} className="bg-white border border-slate-200 hover:border-blue-300 rounded-xl px-3 py-3 text-sm font-bold text-slate-700 hover:text-blue-700 transition break-keep">{item.name}</a>)}</div></div></article>
         </div>
       </div>
     </section>
