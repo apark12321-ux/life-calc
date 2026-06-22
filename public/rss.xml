@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>생활계산기 천국 (life-calc.kr) 업데이트 피드</title>
+    <title>생활계산기 천국 업데이트</title>
     <link>https://life-calc.kr</link>
-    <description>2026년 정부 법정 요율 완벽 반영, 아르바이트 최저임금, 주휴수당, 4대 사회보험, 예적금 이자 및 부동산 중개수수료/취득세 최적화 계산 안내</description>
+    <description>생활에 필요한 계산기를 주제별로 정리한 업데이트 피드입니다.</description>
     <language>ko</language>
     <lastBuildDate>Sat, 20 Jun 2026 00:00:00 +0900</lastBuildDate>
     <atom:link href="https://life-calc.kr/rss.xml" rel="self" type="application/rss+xml" />
-    
+
     <item>
-      <title>2026년 최저임금 반영 주휴수당 및 최저시급 모의 계산 업데이트</title>
-      <link>https://life-calc.kr/?calc=wage_hourly</link>
-      <description><![CDATA[2026년 공식 최저시급 10,320원을 표준 반영한 주휴수당 계산 엔진이 업데이트 되었습니다. 주 15시간 근무 시 발생하는 유급 주휴수당의 법적 계산 조건 및 만근 수령액 정보를 투명하게 환산해 드립니다.]]></description>
+      <title>주휴수당 계산기</title>
+      <link>https://life-calc.kr/calculators/주휴수당-계산기</link>
+      <description><![CDATA[시급과 주 근무시간을 입력하면 예상 주휴수당을 확인할 수 있습니다.]]></description>
       <pubDate>Thu, 18 Jun 2026 12:00:00 +0900</pubDate>
-      <guid>https://life-calc.kr/?calc=wage_hourly</guid>
+      <guid>https://life-calc.kr/calculators/주휴수당-계산기</guid>
     </item>
 
     <item>
-      <title>2026년 개정 보수월액 기준 4대 사회보험 요율 고정표 적용</title>
-      <link>https://life-calc.kr/?calc=insurance</link>
-      <description><![CDATA[국민연금, 건강보험(장기요양포함), 고용보험 및 산재보험에 입각한 회사 측 및 근로자 측 부담 보수월액 부담금 배분 연산이 2026년 현행 가이드 규격으로 업데이트되었습니다. 비과세 수당 제외 기준의 정액 공제를 모의해 보세요.]]></description>
+      <title>국민연금 부담액 계산기</title>
+      <link>https://life-calc.kr/calculators/국민연금-부담액-계산기</link>
+      <description><![CDATA[월 보수를 입력하면 국민연금 근로자 부담액과 사업주 부담액을 나누어 확인할 수 있습니다.]]></description>
       <pubDate>Wed, 17 Jun 2026 10:00:00 +0900</pubDate>
-      <guid>https://life-calc.kr/?calc=insurance</guid>
+      <guid>https://life-calc.kr/calculators/국민연금-부담액-계산기</guid>
     </item>
 
     <item>
-      <title>개정된 만나이 통일법 및 사주 명리학 입춘(立春) 기준 전통 띠 산정법 안내</title>
-      <link>https://life-calc.kr/?calc=life_age</link>
-      <description><![CDATA[대한민국 사법 행정 가이드인 양력 만나이 전용 계산 방침에 발맞춘 만나이 연산 및 음력 사주 상 신년의 실질 기점인 '입춘(양력 2월 4일 전후)' 기준 띠 계산기를 지원합니다. 연초에 흔히 발생하는 띠 오류를 바로잡아 보세요.]]></description>
+      <title>만 나이 계산기</title>
+      <link>https://life-calc.kr/calculators/만-나이-계산기</link>
+      <description><![CDATA[생년월일과 기준일을 입력하면 만 나이를 계산할 수 있습니다.]]></description>
       <pubDate>Tue, 16 Jun 2026 09:00:00 +0900</pubDate>
-      <guid>https://life-calc.kr/?calc=life_age</guid>
+      <guid>https://life-calc.kr/calculators/만-나이-계산기</guid>
     </item>
 
     <item>
-      <title>예·적금 만기 세후 이자수령액 및 고령자 비과세 종합저축 최적화 가이드</title>
-      <link>https://life-calc.kr/?calc=finance_savings</link>
-      <description><![CDATA[일반 이자과세 15.4% 세율 조건과 고령층(만 65세 이상) 등이 적용받는 비과세 혜택 구성의 단순 및 복리 저축 만기 실수령액을 제공합니다. 현금 운용의 극대화를 위한 복리 수령액 변화를 즉각 점검하십시오.]]></description>
+      <title>적금 만기금액 계산기</title>
+      <link>https://life-calc.kr/calculators/적금-만기금액-계산기</link>
+      <description><![CDATA[월 납입액, 금리, 기간을 입력하면 적금 만기금액을 추정할 수 있습니다.]]></description>
       <pubDate>Mon, 15 Jun 2026 14:00:00 +0900</pubDate>
-      <guid>https://life-calc.kr/?calc=finance_savings</guid>
+      <guid>https://life-calc.kr/calculators/적금-만기금액-계산기</guid>
     </item>
 
     <item>
-      <title>주택 매매 생애 첫 구매 취득세 200만 원 한도 전액 감세 규격 모의 업데이트</title>
-      <link>https://life-calc.kr/?calc=property_tax</link>
-      <description><![CDATA[생애 첫 내집 마련을 할 때 부과되는 아파트 및 부동산 취득세, 지방교육세, 농어촌특별세 최신 버전을 제공합니다. 부부 합산 소득 및 거래가액 조건에서 최고 200만 원까지 전액 감세 처리되는 요건을 원클릭으로 계산하십시오.]]></description>
+      <title>취득세 계산기</title>
+      <link>https://life-calc.kr/calculators/취득세-계산기</link>
+      <description><![CDATA[취득가액과 세율을 입력하면 예상 취득세를 계산할 수 있습니다.]]></description>
       <pubDate>Sun, 14 Jun 2026 15:30:00 +0900</pubDate>
-      <guid>https://life-calc.kr/?calc=property_tax</guid>
+      <guid>https://life-calc.kr/calculators/취득세-계산기</guid>
     </item>
   </channel>
 </rss>
