@@ -5,3 +5,156 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
+
+@media print {
+  /* Hide all interactive, navigation, ads, and helper elements */
+  .no-print,
+  nav,
+  header,
+  footer,
+  aside,
+  button,
+  select,
+  input,
+  textarea,
+  .adsbygoogle,
+  iframe,
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Reset global spacing and colors for clear black-on-white printing */
+  body, html {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force computational screen block to expand to full print width */
+  .print-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+    grid-column: span 4 / span 4 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Optimize layout card for print */
+  .bg-white {
+    background: #ffffff !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  /* Style results tables perfectly */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+  }
+
+  th, td {
+    border: 1px solid #cbd5e1 !important;
+    padding: 8px 12px !important;
+    color: #000000 !important;
+    background: none !important;
+    font-size: 10pt !important;
+  }
+
+  th {
+    background-color: #f1f5f9 !important;
+    font-weight: bold !important;
+    text-align: left !important;
+  }
+
+  /* Maintain distinct readability for employee vs employer parts */
+  .bg-blue-50\/30, .bg-blue-50\/50, .text-blue-700, .text-blue-600 {
+    color: #1e3a8a !important; /* Dark corporate navy blue */
+    background-color: #eff6ff !important;
+  }
+
+  .bg-emerald-50\/30, .bg-emerald-50\/10, .text-emerald-700 {
+    color: #065f46 !important; /* Dark emerald green */
+    background-color: #f0fdf4 !important;
+  }
+
+  .bg-slate-800 {
+    background-color: #1e293b !important;
+    color: #ffffff !important;
+  }
+
+  .bg-slate-900 {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+  }
+
+  .bg-blue-900 {
+    background-color: #1e3a8a !important;
+    color: #ffffff !important;
+  }
+
+  .bg-emerald-950 {
+    background-color: #022c22 !important;
+    color: #ffffff !important;
+  }
+
+  /* Prevent awkward page-breaking within structural blocks or table rows */
+  tr, .print-card {
+    page-break-inside: avoid !important;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid !important;
+    color: #0f172a !important;
+    margin-top: 10px !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Clean print-only header formatting */
+  .print-only-header {
+    display: block !important;
+    border-bottom: 2px solid #0f172a !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+  }
+
+  .print-only-header h2 {
+    font-size: 16pt !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+  }
+
+  .print-only-header p {
+    font-size: 9pt !important;
+    color: #475569 !important;
+    margin-top: 4px !important;
+  }
+
+  /* Clean print-only footer formatting */
+  .print-only-footer {
+    display: block !important;
+    border-top: 1px solid #e2e8f0 !important;
+    padding-top: 10px !important;
+    margin-top: 40px !important;
+    text-align: center !important;
+    font-size: 8pt !important;
+    color: #64748b !important;
+  }
+}
+
+/* Ensure print-only elements are completely hidden on normal screen preview */
+@media screen {
+  .print-only-header,
+  .print-only-footer {
+    display: none !important;
+  }
+}

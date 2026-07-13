@@ -95,8 +95,14 @@ export default function InsuranceCalculator() {
 
   return (
     <div className="bg-white rounded-2xl shadow-xs border border-slate-100 p-4 md:p-8">
+      {/* Print Only Header */}
+      <div className="print-only-header">
+        <h2>4대사회보험료 모의계산 결과 보고서</h2>
+        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+      </div>
+
       {/* App Header style header */}
-      <div className="border-b border-slate-100 pb-5 mb-6">
+      <div className="border-b border-slate-100 pb-5 mb-6 no-print">
         <div className="flex items-center space-x-3 mb-2">
           <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
             <CalcIcon className="w-6 h-6" />
@@ -109,7 +115,7 @@ export default function InsuranceCalculator() {
       </div>
 
       {/* Tabs */}
-      <div className="flex bg-slate-100 p-1 rounded-xl mb-6 overflow-x-auto whitespace-nowrap scrollbar-none">
+      <div className="flex bg-slate-100 p-1 rounded-xl mb-6 overflow-x-auto whitespace-nowrap scrollbar-none no-print">
         <button
           onClick={() => setTab('all')}
           className={`flex-1 min-w-[70px] text-center py-2.5 px-3 rounded-lg text-xs font-semibold transition-all duration-150 ${tab === 'all' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-950'}`}
@@ -143,7 +149,7 @@ export default function InsuranceCalculator() {
       </div>
 
       {/* Warning/Info base notice box */}
-      <div className="bg-amber-50 border border-amber-100 rounded-xl p-3.5 mb-6 flex items-start space-x-3 text-amber-900">
+      <div className="bg-amber-50 border border-amber-100 rounded-xl p-3.5 mb-6 flex items-start space-x-3 text-amber-900 no-print">
         <Info className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
         <div className="text-xs space-y-1">
           <p className="font-semibold text-amber-950">2026년 최신 보험료율 완벽 반영</p>
@@ -220,7 +226,7 @@ export default function InsuranceCalculator() {
           </div>
         </div>
 
-        <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-200/60">
+        <div className="flex items-center justify-end space-x-2 pt-2 border-t border-slate-200/60 no-print">
           <button
             onClick={handleReset}
             className="flex items-center space-x-1 px-3 py-2 bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 rounded-lg text-xs font-medium transition-all"
@@ -357,7 +363,7 @@ export default function InsuranceCalculator() {
       </div>
 
       {/* Rich-text block for user guidance */}
-      <div className="mt-8 border-t border-slate-100 pt-8 space-y-6">
+      <div className="mt-8 border-t border-slate-100 pt-8 space-y-6 no-print">
         <h2 className="text-sm font-bold text-slate-900 flex items-center mb-4">
           <BookOpen className="w-4 h-4 text-indigo-600 mr-1.5" />
           4대보험 및 급여 수령액 관련 상세 가이드

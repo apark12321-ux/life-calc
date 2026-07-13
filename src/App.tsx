@@ -154,7 +154,7 @@ export default function App() {
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         {/* Dynamic Navigation Breadcrumb & Quick Info Bar */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs">
+        <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs no-print">
           <div className="flex items-center space-x-2 text-xs text-slate-500">
             <span>스마트 계산 허브</span>
             <span>➔</span>
@@ -179,7 +179,7 @@ export default function App() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
           
           {/* LEFT: Core Computational Screen Workspace (3 cols) */}
-          <div className="lg:col-span-3 space-y-6">
+          <div className="lg:col-span-3 space-y-6 print-full-width">
             
             {/* Conditional Renderer based on state category */}
             {currentCategory === 'insurance' && (
@@ -212,7 +212,7 @@ export default function App() {
             )}
 
             {/* SEO Core Guide Block - Highlight for First-time Visitors */}
-            <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-6 md:p-8 space-y-4 shadow-sm relative overflow-hidden">
+            <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-6 md:p-8 space-y-4 shadow-sm relative overflow-hidden no-print">
               <div className="absolute right-[-20px] bottom-[-20px] opacity-10 pointer-events-none">
                 <LayoutGrid className="w-64 h-64" />
               </div>
@@ -259,7 +259,7 @@ export default function App() {
           </div>
 
           {/* RIGHT: High Value Widgets & Informational Metrics Panel (1 col) */}
-          <div className="space-y-6">
+          <div className="space-y-6 no-print">
             
             {/* National Financial Indicator Widget */}
             <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-4">

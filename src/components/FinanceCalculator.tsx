@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Landmark, TrendingUp, HelpCircle, RefreshCw, BookOpen, Receipt, AlignJustify } from 'lucide-react';
+import { Landmark, TrendingUp, HelpCircle, RefreshCw, BookOpen, Receipt, AlignJustify, Printer } from 'lucide-react';
 
 export default function FinanceCalculator() {
   const [activeTab, setActiveTab] = useState<'savings' | 'loan'>('savings');
@@ -179,9 +179,15 @@ export default function FinanceCalculator() {
 
   return (
     <div className="bg-white rounded-2xl shadow-xs border border-slate-100 p-4 md:p-8">
+      {/* Print Only Header */}
+      <div className="print-only-header">
+        <h2>금융 및 예적금·대출 이자 모의계산 결과 보고서 ({activeTab === 'savings' ? '예금 & 적금 이자수익' : '대출 상환이자'})</h2>
+        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+      </div>
+
       {/* App Header */}
-      <div className="border-b border-slate-100 pb-5 mb-6">
-        <div className="flex items-center space-x-3 mb-2">
+      <div className="border-b border-slate-100 pb-5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print">
+        <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
             <Landmark className="w-6 h-6" />
           </div>
@@ -190,10 +196,17 @@ export default function FinanceCalculator() {
             <p className="text-xs text-slate-500 mt-0.5">자산을 불리기 위한 예적금 수령 액수부터 대출 상환 방식별 월 원리금 균등 비용 하락치를 정교하게 비교해 드립니다.</p>
           </div>
         </div>
+        <button
+          onClick={() => window.print()}
+          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-all self-end sm:self-center"
+        >
+          <Printer className="w-3.5 h-3.5" />
+          <span>결과 인쇄 (PDF)</span>
+        </button>
       </div>
 
       {/* Internal Sub Navigation */}
-      <div className="grid grid-cols-2 gap-2 mb-6">
+      <div className="grid grid-cols-2 gap-2 mb-6 no-print">
         <button
           onClick={() => setActiveTab('savings')}
           className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'savings' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
@@ -556,7 +569,7 @@ export default function FinanceCalculator() {
       )}
 
       {/* SEO Compliance Rich Text Information */}
-      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans">
+      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans no-print">
         <h2 className="text-sm font-bold text-slate-950 flex items-center mb-1">
           <BookOpen className="w-4 h-4 text-amber-600 mr-2" />
           예적금 과세제도 및 대출 상환 공학적 비법서

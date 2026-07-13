@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, Calculator as CalcIcon, RefreshCw, AlertCircle, TrendingUp, DollarSign, Calendar, Landmark, BookOpen } from 'lucide-react';
+import { HelpCircle, Calculator as CalcIcon, RefreshCw, AlertCircle, TrendingUp, DollarSign, Calendar, Landmark, BookOpen, Printer } from 'lucide-react';
 
 export default function WageCalculator() {
   const [activeSubTab, setActiveSubTab] = useState<'hourly' | 'salary' | 'retirement' | 'unemployment'>('hourly');
@@ -182,9 +182,15 @@ export default function WageCalculator() {
 
   return (
     <div className="bg-white rounded-2xl shadow-xs border border-slate-100 p-4 md:p-8">
+      {/* Print Only Header */}
+      <div className="print-only-header">
+        <h2>종합 임금 계산 결과 보고서 ({activeSubTab === 'hourly' ? '시급 & 주휴수당' : activeSubTab === 'salary' ? '연봉 실수령액' : activeSubTab === 'retirement' ? '퇴직금 예산' : '실업급여 모의'})</h2>
+        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+      </div>
+
       {/* App Header */}
-      <div className="border-b border-slate-100 pb-5 mb-6">
-        <div className="flex items-center space-x-3 mb-2">
+      <div className="border-b border-slate-100 pb-5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print">
+        <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
             <DollarSign className="w-6 h-6" />
           </div>
@@ -193,10 +199,17 @@ export default function WageCalculator() {
             <p className="text-xs text-slate-500 mt-0.5">시급 환산부터 연봉 실수령액, 퇴직금 예측, 실업급여까지 근로생활에 꼭 필요한 보수 계산을 원스톱으로 제공합니다.</p>
           </div>
         </div>
+        <button
+          onClick={() => window.print()}
+          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-all self-end sm:self-center"
+        >
+          <Printer className="w-3.5 h-3.5" />
+          <span>결과 인쇄 (PDF)</span>
+        </button>
       </div>
 
       {/* Internal Sub Navigation */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 no-print">
         <button
           onClick={() => setActiveSubTab('hourly')}
           className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeSubTab === 'hourly' ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
@@ -688,7 +701,7 @@ export default function WageCalculator() {
       )}
 
       {/* Detailed Rich Text Guide Information */}
-      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans">
+      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans no-print">
         <h2 className="text-sm font-bold text-slate-950 flex items-center mb-1">
           <BookOpen className="w-4 h-4 text-emerald-600 mr-2" />
           임금(급여) 산출공식 및 주휴수당 세무 가이드
