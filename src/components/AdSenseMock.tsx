@@ -12,7 +12,7 @@ export default function AdSenseMock({ slotId, type, height = 'h-[100px]' }: AdSe
   const [copied, setCopied] = useState(false);
 
   // Read configured publisher ID from Vite env
-  const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-8884323201509376";
+  const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-9552509372228899";
 
   useEffect(() => {
     // If we have an active AdSense window object, try to push
@@ -99,7 +99,7 @@ export default function AdSenseMock({ slotId, type, height = 'h-[100px]' }: AdSe
           </div>
           <p className="text-xs font-semibold text-slate-600 font-sans">{getLabel()}</p>
           <p className="text-[10px] text-slate-400 mt-1">
-            {pubId === "pub-8884323201509376" 
+            {pubId === "pub-9552509372228899" 
               ? "기본 데모 퍼블리셔 환경입니다. 사이트 설정에서 승인된 본인의 퍼블리셔 ID를 입력해 사용 가능합니다." 
               : `자신의 퍼블리셔 ID(${pubId})가 정상 적용되었습니다.`}
           </p>

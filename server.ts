@@ -237,7 +237,7 @@ async function startServer() {
   // Serve ads.txt dynamically supporting customization
   app.get("/ads.txt", (req, res) => {
     try {
-      const pubId = process.env.VITE_ADSENSE_PUBLISHER_ID || "pub-8884323201509376";
+      const pubId = process.env.VITE_ADSENSE_PUBLISHER_ID || "pub-9552509372228899";
       res.header("Content-Type", "text/plain; charset=utf-8");
       res.send(`google.com, ${pubId}, DIRECT, f08c47fec0942fa0`);
     } catch (err) {
