@@ -12,64 +12,9 @@ import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
 import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon } from 'lucide-react';
 
-interface Indicator {
-  closePrice: string;
-  compareToPreviousClosePrice: string;
-  fluctuationsRatio: string;
-  direction: string;
-  directionText: string;
-}
-
-interface FinancialIndicatorState {
-  kospi: Indicator;
-  usdkrw: Indicator;
-  cd91: Indicator;
-}
-
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
   const [subCalculatorId, setSubCalculatorId] = useState<string>('all');
-  const [financialIndicators, setFinancialIndicators] = useState<FinancialIndicatorState | null>(null);
-  const [loadingIndicators, setLoadingIndicators] = useState(true);
-
-  useEffect(() => {
-    let active = true;
-    async function fetchIndicators() {
-      try {
-        const res = await fetch("/api/financial-indicators");
-        const json = await res.json();
-        if (json.success && active) {
-          setFinancialIndicators({
-            kospi: json.kospi,
-            usdkrw: json.usdkrw,
-            cd91: json.cd91
-          });
-          setLoadingIndicators(false);
-          return;
-        }
-      } catch (err) {
-        console.error("Failed to load real-time financial indicators, using local fallback:", err);
-      }
-
-      // Robust client-side fallback to prevent ever showing error state to the end user
-      if (active) {
-        setFinancialIndicators({
-          kospi: { closePrice: "2,696.63", compareToPreviousClosePrice: "25.03", fluctuationsRatio: "0.92", direction: "FALLING", directionText: "▼" },
-          usdkrw: { closePrice: "1,380.00", compareToPreviousClosePrice: "1.50", fluctuationsRatio: "0.11", direction: "RISING", directionText: "▲" },
-          cd91: { closePrice: "3.55", compareToPreviousClosePrice: "0.00", fluctuationsRatio: "0.00", direction: "UNCHANGED", directionText: "-" }
-        });
-        setLoadingIndicators(false);
-      }
-    }
-
-    fetchIndicators();
-    // Poll every 30 seconds for live updates
-    const timer = setInterval(fetchIndicators, 30000);
-    return () => {
-      active = false;
-      clearInterval(timer);
-    };
-  }, []);
 
   // Unified navigation router helper
   const handleNavigateToCalculator = (id: string) => {
@@ -261,70 +206,70 @@ export default function App() {
           {/* RIGHT: High Value Widgets & Informational Metrics Panel (1 col) */}
           <div className="space-y-6 no-print">
             
-            {/* National Financial Indicator Widget */}
+            {/* 2026 Statutory Economic & Tax Standards Index Widget */}
             <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-4">
               <div className="flex items-center justify-between border-b pb-2.5">
                 <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <LayoutGrid className="w-4 h-4 text-blue-600" />
-                  실시간 주요 경제 지표
+                  <LayoutGrid className="w-4 h-4 text-emerald-600" />
+                  2026년 법정 경제·세무 기준 지표
                 </span>
-                <span className="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-full font-extrabold uppercase tracking-wider animate-pulse flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>
-                  LIVE
+                <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded-full font-extrabold tracking-wider flex items-center gap-1">
+                  공식 고시
                 </span>
               </div>
-              
-              {loadingIndicators ? (
-                <div className="py-4 text-center text-xs text-slate-400 font-medium animate-pulse">
-                  실시간 금융 데이터 조회 중...
-                </div>
-              ) : financialIndicators ? (
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-0.5">
-                    <span className="text-xs text-slate-500 font-medium">코스피 지수 (KOSPI)</span>
-                    <div className="text-xs font-extrabold flex items-center gap-1.5">
-                      <span className="text-slate-800">{financialIndicators.kospi.closePrice}</span>
-                      <span className={`text-[10px] font-bold ${
-                        financialIndicators.kospi.direction === "RISING" ? "text-red-500" :
-                        financialIndicators.kospi.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
-                      }`}>
-                        {financialIndicators.kospi.directionText} {financialIndicators.kospi.compareToPreviousClosePrice} ({financialIndicators.kospi.fluctuationsRatio}%)
-                      </span>
-                    </div>
+
+              <div className="space-y-3">
+                {/* 1. Minimum Wage */}
+                <div className="flex justify-between items-center py-0.5">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-800 font-semibold">2026년 최저시급</span>
+                    <span className="text-[10px] text-slate-400">전년 대비 1.7% 인상</span>
                   </div>
-                  <div className="flex justify-between items-center py-0.5">
-                    <span className="text-xs text-slate-500 font-medium">원/달러 환율 (USD/KRW)</span>
-                    <div className="text-xs font-extrabold flex items-center gap-1.5">
-                      <span className="text-slate-800">{financialIndicators.usdkrw.closePrice}원</span>
-                      <span className={`text-[10px] font-bold ${
-                        financialIndicators.usdkrw.direction === "RISING" ? "text-red-500" :
-                        financialIndicators.usdkrw.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
-                      }`}>
-                        {financialIndicators.usdkrw.directionText} {financialIndicators.usdkrw.compareToPreviousClosePrice} ({financialIndicators.usdkrw.fluctuationsRatio}%)
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center py-0.5">
-                    <span className="text-xs text-slate-500 font-medium">CD금리 (91일물 기준)</span>
-                    <div className="text-xs font-extrabold flex items-center gap-1.5">
-                      <span className="text-slate-800">{financialIndicators.cd91.closePrice}%</span>
-                      <span className={`text-[10px] font-bold ${
-                        financialIndicators.cd91.direction === "RISING" ? "text-red-500" :
-                        financialIndicators.cd91.direction === "FALLING" ? "text-blue-500" : "text-slate-500"
-                      }`}>
-                        {financialIndicators.cd91.directionText} {financialIndicators.cd91.compareToPreviousClosePrice}
-                      </span>
-                    </div>
+                  <div className="text-right">
+                    <span className="text-xs font-extrabold text-slate-900 block">10,320원</span>
+                    <span className="text-[9px] text-emerald-600 font-bold">주휴수당 환산 시 12,384원</span>
                   </div>
                 </div>
-              ) : (
-                <div className="py-4 text-center text-xs text-red-500 font-medium">
-                  금융 정보 수신 실패
+
+                {/* 2. Base Interest Rate */}
+                <div className="flex justify-between items-center py-0.5 border-t border-slate-50 pt-2">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-800 font-semibold">한은 기준금리</span>
+                    <span className="text-[10px] text-slate-400">한국은행 기준 연이율</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-extrabold text-slate-900 block">3.25%</span>
+                    <span className="text-[9px] text-slate-500">2026년 상반기 기준</span>
+                  </div>
                 </div>
-              )}
-              
-              <p className="text-[10px] text-slate-400 font-medium pt-1 border-t border-slate-100">
-                ※ 위 지표는 네이버 금융 연계 실시간 지표이며, 보조 연산 및 경제 참고자료입니다.
+
+                {/* 3. General Interest Tax */}
+                <div className="flex justify-between items-center py-0.5 border-t border-slate-50 pt-2">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-800 font-semibold">이자소득 과세율</span>
+                    <span className="text-[10px] text-slate-400">소득세 14% + 지방소득세 1.4%</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-extrabold text-slate-900 block">15.4%</span>
+                    <span className="text-[9px] text-blue-600 font-bold">세금우대 시 9.5%</span>
+                  </div>
+                </div>
+
+                {/* 4. Four Major Insurances */}
+                <div className="flex justify-between items-start py-0.5 border-t border-slate-50 pt-2">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-slate-800 font-semibold">4대보험 요율 합계</span>
+                    <span className="text-[10px] text-slate-400">국민·건강·요양·고용</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-extrabold text-slate-900 block">19.22%</span>
+                    <span className="text-[9px] text-slate-500">근로자 본인 부담: 9.39%</span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-slate-400 font-medium pt-1.5 border-t border-slate-100 leading-relaxed">
+                ※ 본 서비스의 모든 연산기는 위 2026년도 공식 법정 세율 및 고시 경제 기준을 완전히 적용하여 계산합니다.
               </p>
             </div>
 
