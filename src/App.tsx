@@ -18,6 +18,22 @@ export default function App() {
 
   // Unified navigation router helper
   const handleNavigateToCalculator = (id: string) => {
+    // If navigating to a policy sub-section, handle routing & smooth anchor scrolling
+    if (id === 'privacy' || id === 'terms' || id === 'about' || id === 'policy') {
+      setCurrentCategory('policy');
+      setSubCalculatorId('all');
+      setTimeout(() => {
+        const targetId = id === 'privacy' ? 'privacy-policy' : id === 'terms' ? 'terms-of-service' : id === 'about' ? 'about-portal' : 'about-portal';
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 150);
+      return;
+    }
+
     // Determine target category based on prefix/id
     if (id.startsWith('wage_')) {
       setCurrentCategory('wage');
@@ -325,28 +341,31 @@ export default function App() {
             <div className="space-y-1">
               <p className="text-white font-bold text-sm tracking-tight">생활계산기 천국 portal</p>
               <p className="text-[10px] text-slate-500">
-                © 2026 Life Calculator Network. All Rights Reserved. 본 계산서는 모의용 자료이며 실무 세법에 따른 결과는 반드시 전문가에게 위송받으십시오.
+                © 2026 Life Calculator Network. All Rights Reserved. | 제안 및 오류 제보: <a href="mailto:apark12321@gmail.com" className="text-slate-400 hover:text-white underline transition">apark12321@gmail.com</a>
+              </p>
+              <p className="text-[10px] text-slate-600">
+                본 계산서 결과는 모의용 자료이며 세무적/법적 행정 증빙자료로 간주될 수 없으므로, 정확한 의무 수치는 반드시 전문가 및 관공서에 위송해 검증하십시오.
               </p>
             </div>
 
             {/* Compliance Footer Navigation Shortcuts */}
             <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-300">
               <button
-                onClick={() => handleNavigateToCalculator('policy')}
+                onClick={() => handleNavigateToCalculator('privacy')}
                 className="hover:text-amber-400 transition"
               >
                 개인정보처리방침 (Privacy Policy)
               </button>
               <span className="text-slate-700">|</span>
               <button
-                onClick={() => handleNavigateToCalculator('policy')}
+                onClick={() => handleNavigateToCalculator('terms')}
                 className="hover:text-amber-400 transition"
               >
                 서비스 이용약관 (Terms)
               </button>
               <span className="text-slate-700">|</span>
               <button
-                onClick={() => handleNavigateToCalculator('policy')}
+                onClick={() => handleNavigateToCalculator('about')}
                 className="hover:text-amber-400 transition"
               >
                 사이트 소개 & 사이트맵

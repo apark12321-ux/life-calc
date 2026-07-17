@@ -3,7 +3,7 @@ import { Shield, BookOpen, Clock, Globe } from 'lucide-react';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="bg-white rounded-2xl shadow-xs border border-slate-100 p-5 md:p-8 space-y-6 text-slate-700 leading-relaxed font-sans text-xs md:text-sm">
+    <div id="privacy-policy" className="bg-white rounded-2xl shadow-xs border border-slate-100 p-5 md:p-8 space-y-6 text-slate-700 leading-relaxed font-sans text-xs md:text-sm">
       {/* Page Header */}
       <div className="border-b border-slate-100 pb-5">
         <div className="flex items-center space-x-3 mb-2">
