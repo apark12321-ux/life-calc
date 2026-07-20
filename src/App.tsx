@@ -10,11 +10,61 @@ import PropertyCalculator from './components/PropertyCalculator';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
-import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon } from 'lucide-react';
+import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock } from 'lucide-react';
 
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
   const [subCalculatorId, setSubCalculatorId] = useState<string>('all');
+  const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
+  const [cookieDetails, setCookieDetails] = useState<boolean>(false);
+  const [analyticsConsent, setAnalyticsConsent] = useState<boolean>(true);
+  const [adConsent, setAdConsent] = useState<boolean>(true);
+
+  // Initialize and check cookie consent state
+  useEffect(() => {
+    try {
+      const consent = localStorage.getItem('life_calc_cookie_consent');
+      if (!consent) {
+        // High quality delay for banner display
+        const timer = setTimeout(() => {
+          setShowCookieBanner(true);
+        }, 1200);
+        return () => clearTimeout(timer);
+      }
+    } catch (e) {
+      console.warn('Cookie consent check failed:', e);
+    }
+  }, []);
+
+  const handleAcceptAllCookies = () => {
+    try {
+      localStorage.setItem('life_calc_cookie_consent', 'all_granted');
+      setShowCookieBanner(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDeclineAllCookies = () => {
+    try {
+      localStorage.setItem('life_calc_cookie_consent', 'all_denied');
+      setShowCookieBanner(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleSaveCustomCookies = () => {
+    try {
+      const consentType = (analyticsConsent && adConsent) ? 'all_granted' : (!analyticsConsent && !adConsent) ? 'all_denied' : 'custom';
+      localStorage.setItem('life_calc_cookie_consent', consentType);
+      localStorage.setItem('life_calc_analytics_consent', String(analyticsConsent));
+      localStorage.setItem('life_calc_ad_consent', String(adConsent));
+      setShowCookieBanner(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   // Unified navigation router helper
   const handleNavigateToCalculator = (id: string) => {
@@ -379,6 +429,131 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Interactive & Compliant Cookie Consent Banner */}
+      {showCookieBanner && (
+        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-800 z-[9999] p-5 space-y-4 animate-fade-in font-sans no-print">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-2.5">
+              <div className="p-2 bg-blue-650/30 text-blue-400 rounded-xl border border-blue-500/20">
+                <Cookie className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
+                  맞춤형 개인 정보 및 쿠키 설정 안내
+                </h4>
+                <p className="text-[10px] text-slate-400 mt-0.5">ePrivacy Directive & Google Consent Mode v2 준수</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setShowCookieBanner(false)}
+              className="text-slate-400 hover:text-white transition p-1"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          {!cookieDetails ? (
+            <>
+              <p className="text-[11px] text-slate-300 leading-relaxed font-normal">
+                본 웹 서비스는 구글 애드센스 맞춤형 광고 게재 및 방문자 편의 분석을 위해 브라우저 쿠키를 활용하고 있습니다. 귀하는 광고 및 분석용 쿠키 저장을 거부하실 권리가 있으며, 동의 시 더욱 원활한 맞춤 연산 피드백을 수령하실 수 있습니다.
+              </p>
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <button
+                  onClick={handleDeclineAllCookies}
+                  className="px-3 py-2 bg-slate-800 hover:bg-slate-750 text-slate-300 font-bold text-xs rounded-xl border border-slate-750 transition cursor-pointer"
+                >
+                  필수 쿠키만 허용
+                </button>
+                <button
+                  onClick={handleAcceptAllCookies}
+                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition cursor-pointer"
+                >
+                  모두 수락 및 동의
+                </button>
+              </div>
+              <div className="flex justify-center border-t border-slate-800/80 pt-2.5">
+                <button
+                  onClick={() => setCookieDetails(true)}
+                  className="flex items-center space-x-1 text-[10px] text-slate-400 hover:text-white transition font-medium"
+                >
+                  <Settings className="w-3 h-3" />
+                  <span>쿠키 옵션 개별 설정 및 정책 보기</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            <div className="space-y-3 pt-1">
+              {/* Preferences list */}
+              <div className="space-y-2 text-[11px]">
+                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
+                  <div className="space-y-0.5 pr-2">
+                    <p className="font-bold text-slate-200 flex items-center gap-1">
+                      <Lock className="w-3.5 h-3.5 text-blue-400" />
+                      <span>필수 쿠키 (Strictly Necessary)</span>
+                    </p>
+                    <p className="text-[9px] text-slate-400">시스템 연산 구동 및 로컬 테마, 기본 설정 보존 목적 (필수)</p>
+                  </div>
+                  <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-500/10 px-2 py-0.5 rounded">활성</span>
+                </div>
+
+                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
+                  <div className="space-y-0.5 pr-2">
+                    <p className="font-bold text-slate-200 flex items-center gap-1">
+                      <Shield className="w-3.5 h-3.5 text-blue-400" />
+                      <span>맞춤 광고 쿠키 (Google AdSense)</span>
+                    </p>
+                    <p className="text-[9px] text-slate-400">구글 파트너십 관심사 반영 타겟 맞춤 광고 노출 목적</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={adConsent}
+                      onChange={(e) => setAdConsent(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-8 h-4 bg-slate-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+
+                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
+                  <div className="space-y-0.5 pr-2">
+                    <p className="font-bold text-slate-200 flex items-center gap-1">
+                      <Info className="w-3.5 h-3.5 text-blue-400" />
+                      <span>분석용 웹로그 쿠키 (Analytics)</span>
+                    </p>
+                    <p className="text-[9px] text-slate-400">페이지별 이용 흐름 집계 및 대기 정밀 버그 트래킹 목적</p>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={analyticsConsent}
+                      onChange={(e) => setAnalyticsConsent(e.target.checked)}
+                      className="sr-only peer"
+                    />
+                    <div className="w-8 h-4 bg-slate-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center pt-2 gap-2 border-t border-slate-800/80">
+                <button
+                  onClick={() => setCookieDetails(false)}
+                  className="text-[10px] text-slate-400 hover:text-white transition font-medium"
+                >
+                  ➔ 이전 화면으로 돌아가기
+                </button>
+                <button
+                  onClick={handleSaveCustomCookies}
+                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition cursor-pointer"
+                >
+                  선택한 설정 저장하기
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
