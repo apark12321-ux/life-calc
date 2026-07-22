@@ -10,7 +10,8 @@ import PropertyCalculator from './components/PropertyCalculator';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
-import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock } from 'lucide-react';
+import AeoGuide from './components/AeoGuide';
+import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock, Sparkles } from 'lucide-react';
 
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
@@ -221,6 +222,9 @@ export default function App() {
                 <TermsOfService />
               </div>
             )}
+
+            {/* SEO/AEO/GEO Knowledge Hub Guide Component */}
+            <AeoGuide onNavigateToCalculator={handleNavigateToCalculator} />
 
             {/* SEO Core Guide Block - Highlight for First-time Visitors */}
             <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-6 md:p-8 space-y-4 shadow-sm relative overflow-hidden no-print">

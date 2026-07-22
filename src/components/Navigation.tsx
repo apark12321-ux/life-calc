@@ -115,26 +115,40 @@ export default function Navigation({ currentCategory, onSelectCategory, onNaviga
 
       {/* Primary Category Selector Header */}
       <div className="bg-slate-50 border-t border-slate-100 overflow-x-auto whitespace-nowrap scrollbar-none flex">
-        <div className="max-w-7xl mx-auto px-4 flex space-x-1 sm:space-x-4">
-          {[
-            { id: 'insurance', label: '🛡️ 4대보험', icon: Calculator },
-            { id: 'wage', label: '⏱ 급여 & 퇴직금', icon: Compass },
-            { id: 'life', label: '🎂 생활 & 달력', icon: Compass },
-            { id: 'finance', label: '💰 금융 & 예적금', icon: Calculator },
-            { id: 'property', label: '🏠 부동산 & 세금', icon: Calculator },
-            { id: 'policy', label: 'ℹ️ 안내 & 약관', icon: Shield }
-          ].map((cat) => {
-            const isActive = currentCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                onClick={() => onSelectCategory(cat.id as CategoryType)}
-                className={`py-3.5 px-3 md:px-5 text-sm font-bold border-b-2 transition-all transition-colors inline-flex items-center space-x-1.5 ${isActive ? 'border-blue-600 text-blue-600 bg-white font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-350'}`}
-              >
-                <span>{cat.label}</span>
-              </button>
-            );
-          })}
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between w-full">
+          <div className="flex space-x-1 sm:space-x-3">
+            {[
+              { id: 'insurance', label: '🛡️ 4대보험', icon: Calculator },
+              { id: 'wage', label: '⏱ 급여 & 퇴직금', icon: Compass },
+              { id: 'life', label: '🎂 생활 & 달력', icon: Compass },
+              { id: 'finance', label: '💰 금융 & 예적금', icon: Calculator },
+              { id: 'property', label: '🏠 부동산 & 세금', icon: Calculator },
+              { id: 'policy', label: 'ℹ️ 안내 & 약관', icon: Shield }
+            ].map((cat) => {
+              const isActive = currentCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => onSelectCategory(cat.id as CategoryType)}
+                  className={`py-3.5 px-3 md:px-4 text-xs md:text-sm font-bold border-b-2 transition-all transition-colors inline-flex items-center space-x-1.5 cursor-pointer ${isActive ? 'border-blue-600 text-blue-600 bg-white font-extrabold' : 'border-transparent text-slate-500 hover:text-slate-900 hover:border-slate-350'}`}
+                >
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => {
+              const el = document.getElementById('aeo-knowledge-hub');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}
+            className="hidden lg:inline-flex items-center space-x-1 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-xs rounded-lg border border-indigo-200 transition my-auto cursor-pointer"
+          >
+            <span>✨ 2026 AI 검색 지식 가이드 (AEO)</span>
+          </button>
         </div>
       </div>
     </nav>
