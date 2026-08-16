@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar, Heart, GraduationCap, RefreshCw, BookOpen, Clock, PartyPopper, Printer } from 'lucide-react';
+import { Calendar, RefreshCw, BookOpen, Clock, PartyPopper, Printer } from 'lucide-react';
 
 export default function LifeCalculator() {
   const [activeTab, setActiveTab] = useState<'age' | 'dday' | 'school'>('age');
@@ -45,7 +45,6 @@ export default function LifeCalculator() {
     const yeonAge = todayYear - birthYear;
 
     // Zodiac sign based on birth year
-    // traditional zodiac runs on 12-year cycles. Year % 12 yields the index
     const zodiacIndex = birthYear % 12;
     const zodiacName = zodiacs[zodiacIndex];
     const zodiacIcon = zodiacSigns[zodiacIndex];
@@ -124,47 +123,47 @@ export default function LifeCalculator() {
     <div className="bg-white rounded-2xl shadow-xs border border-slate-100 p-4 md:p-8">
       {/* Print Only Header */}
       <div className="print-only-header">
-        <h2>생활 및 날짜 모의계산 결과 보고서 ({activeTab === 'age' ? '만나이 & 띠' : activeTab === 'dday' ? '날짜 & 디데이' : '학번 & 입학졸업'})</h2>
+        <h2>생활 및 날짜 모의계산 결과 보고서</h2>
         <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
       </div>
 
       {/* App Header */}
       <div className="border-b border-slate-100 pb-5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl">
-            <Calendar className="w-6 h-6" />
+          <div className="p-3 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100">
+            <Calendar className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">생활 & 날짜 계산기 (만나이/디데이/학번)</h1>
-            <p className="text-xs text-slate-500 mt-0.5">애매한 만나이 계산부터 다가올 커플 100일 기념일 계산, 평생 기억할 학번 분석까지 간편하게 모의해 보세요.</p>
+            <h1 className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">생활 & 날짜 계산기 (만나이/디데이/학번)</h1>
+            <p className="font-body text-xs sm:text-sm text-slate-600 mt-1">애매한 만나이 계산부터 다가올 커플 100일 기념일 계산, 평생 기억할 학번 분석까지 간편하게 모의해 보세요.</p>
           </div>
         </div>
         <button
           onClick={() => window.print()}
-          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-all self-end sm:self-center"
+          className="font-display flex items-center justify-center space-x-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-all self-end sm:self-center cursor-pointer"
         >
-          <Printer className="w-3.5 h-3.5" />
+          <Printer className="w-4 h-4" />
           <span>결과 인쇄 (PDF)</span>
         </button>
       </div>
 
       {/* Internal Sub Navigation */}
-      <div className="grid grid-cols-3 gap-2 mb-6 no-print">
+      <div className="grid grid-cols-3 gap-2.5 mb-6 no-print">
         <button
           onClick={() => setActiveTab('age')}
-          className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'age' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
+          className={`font-display py-3 px-2 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'age' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
           🎂 만나이 & 띠
         </button>
         <button
           onClick={() => setActiveTab('dday')}
-          className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'dday' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
+          className={`font-display py-3 px-2 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'dday' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
           💖 날짜 & 디데이
         </button>
         <button
           onClick={() => setActiveTab('school')}
-          className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'school' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
+          className={`font-display py-3 px-2 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'school' ? 'bg-indigo-600 text-white border-indigo-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
           🎓 학번 & 입학졸업
         </button>
@@ -173,64 +172,64 @@ export default function LifeCalculator() {
       {/* Tab Case 1: Age & Zodiac */}
       {activeTab === 'age' && (
         <div className="space-y-6">
-          <div className="p-5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="p-5 md:p-6 bg-slate-50 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xs">
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">출생 연월일 입력</label>
+                <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-2">출생 연월일 입력</label>
                 <input
                   type="date"
                   value={birthDate}
                   onChange={(e) => setBirthDate(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold text-slate-800"
+                  className="font-num w-full bg-white border border-slate-300 rounded-xl py-3 px-4 text-base sm:text-lg font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">기준년월일 (기본: 오늘 날짜)</label>
+                <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-2">기준년월일 (기본: 오늘 날짜)</label>
                 <input
                   type="date"
                   value={baseDate}
                   onChange={(e) => setBaseDate(e.target.value)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                  className="font-num w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3.5 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
             </div>
 
             {/* Results */}
             {ageRes && (
-              <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between">
+              <div className="bg-slate-900 text-white rounded-2xl p-5 md:p-6 flex flex-col justify-between shadow-xs">
                 <div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] bg-indigo-500 text-white rounded px-2 py-0.5 font-bold">만나이 산정법 결과</span>
-                    <span className="text-xl">{ageRes.zodiacIcon}</span>
+                    <span className="font-display text-xs bg-indigo-500 text-white rounded-lg px-2.5 py-1 font-extrabold">만나이 산정법 결과</span>
+                    <span className="text-2xl">{ageRes.zodiacIcon}</span>
                   </div>
                   
                   <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-                    <div className="bg-slate-800 p-2 rounded-lg border border-slate-700">
-                      <p className="text-[9px] text-slate-400">만 나이 (법적)</p>
-                      <p className="text-base font-extrabold text-blue-300">{ageRes.manAge}세</p>
+                    <div className="bg-slate-800 p-2.5 rounded-xl border border-slate-700">
+                      <p className="font-display text-xs text-slate-400 font-medium">만 나이 (법적)</p>
+                      <p className="font-num text-lg sm:text-xl font-black text-blue-300 mt-0.5">{ageRes.manAge}세</p>
                     </div>
-                    <div className="bg-slate-800 p-2 rounded-lg border border-slate-700">
-                      <p className="text-[9px] text-slate-400">전통 세는나이</p>
-                      <p className="text-base font-bold text-slate-300">{ageRes.koreanAge}세</p>
+                    <div className="bg-slate-800 p-2.5 rounded-xl border border-slate-700">
+                      <p className="font-display text-xs text-slate-400 font-medium">전통 세는나이</p>
+                      <p className="font-num text-lg sm:text-xl font-bold text-slate-200 mt-0.5">{ageRes.koreanAge}세</p>
                     </div>
-                    <div className="bg-slate-800 p-2 rounded-lg border border-slate-700">
-                      <p className="text-[9px] text-slate-400">회복 연 나이</p>
-                      <p className="text-base font-bold text-slate-300">{ageRes.yeonAge}세</p>
+                    <div className="bg-slate-800 p-2.5 rounded-xl border border-slate-700">
+                      <p className="font-display text-xs text-slate-400 font-medium">회복 연 나이</p>
+                      <p className="font-num text-lg sm:text-xl font-bold text-slate-200 mt-0.5">{ageRes.yeonAge}세</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-indigo-950/60 p-3.5 border border-indigo-900 rounded-lg my-3 space-y-1.5">
-                  <p className="text-xs font-bold text-indigo-300">당신의 띠: <span className="text-white text-sm">{ageRes.zodiacName}</span></p>
-                  <p className="text-[10px] text-slate-300 leading-relaxed">
+                <div className="bg-indigo-950/80 p-4 border border-indigo-900 rounded-2xl my-3 space-y-1.5 shadow-2xs">
+                  <p className="font-heading text-xs sm:text-sm font-bold text-indigo-300">당신의 띠: <span className="text-white text-sm sm:text-base font-extrabold">{ageRes.zodiacName}</span></p>
+                  <p className="font-body text-xs text-slate-300 leading-relaxed">
                     전통적으로 연도가 바뀌는 기준은 양력 1월 1일이 아닌, 동양 세시풍속 입춘(立春)이나 음력 설날을 기점으로 하므로, 1~2월생은 상황에 따라 이전 해의 띠를 따르게 될 수 있습니다.
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-2 text-xs text-rose-400">
-                  <PartyPopper className="w-4 h-4 flex-shrink-0 text-rose-500" />
-                  <span>익일 다음 생일까지 남은 기한: <strong className="font-mono text-sm underline">{ageRes.daysToBirthday}일</strong> 남음</span>
+                <div className="flex items-center space-x-2 text-xs sm:text-sm text-rose-300 font-bold">
+                  <PartyPopper className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span>익일 다음 생일까지 남은 기한: <strong className="font-num text-sm sm:text-base underline text-rose-200 font-black">{ageRes.daysToBirthday}일</strong> 남음</span>
                 </div>
               </div>
             )}
@@ -241,60 +240,60 @@ export default function LifeCalculator() {
       {/* Tab Case 2: D-day anniversary */}
       {activeTab === 'dday' && (
         <div className="space-y-6">
-          <div className="p-5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="p-5 md:p-6 bg-slate-50 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xs">
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">시작일 (기준일)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">시작일 (기준일)</label>
                   <input
                     type="date"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-num w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">목표일 (D-Day)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">목표일 (D-Day)</label>
                   <input
                     type="date"
                     value={targetDate}
                     onChange={(e) => setTargetDate(e.target.value)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-num w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-750 mb-1.5">기준일로부터 며칠 뒤 날짜 계산 (예: 사귄 지 🤍00일)</label>
+                <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-2">기준일로부터 며칠 뒤 날짜 계산 (예: 사귄 지 🤍00일)</label>
                 <div className="flex items-center space-x-2">
                   <input
                     type="number"
                     value={dayOffset}
                     onChange={(e) => setDayOffset(parseInt(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-sm font-bold text-slate-800"
+                    className="font-num w-full bg-white border border-slate-300 rounded-xl py-3 px-4 text-base sm:text-lg font-extrabold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                   />
-                  <span className="text-xs text-slate-600 font-bold whitespace-nowrap">일 되는 날</span>
+                  <span className="font-display text-xs sm:text-sm text-slate-700 font-bold whitespace-nowrap">일 되는 날</span>
                 </div>
               </div>
             </div>
 
             {/* Render Dday result */}
             {ddayRes && (
-              <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between">
+              <div className="bg-slate-900 text-white rounded-2xl p-5 md:p-6 flex flex-col justify-between shadow-xs">
                 <div>
-                  <span className="text-[10px] bg-indigo-500 text-white rounded px-2 py-0.5 font-bold">D-Day 핵심 간격보고</span>
+                  <span className="font-display text-xs bg-indigo-500 text-white rounded-lg px-2.5 py-1 font-extrabold">D-Day 핵심 간격보고</span>
                   <div className="my-5 text-center">
-                    <p className="text-[10px] text-slate-400">두 날짜 사이의 순수 간격</p>
-                    <p className="text-3xl font-extrabold text-blue-300 font-mono mt-1">
+                    <p className="font-display text-xs text-slate-400">두 날짜 사이의 순수 간격</p>
+                    <p className="font-num text-3xl sm:text-4xl font-black text-blue-300 mt-1 tracking-tight">
                       {ddayRes.diffDays === 0 ? '오늘 (D-Day)' : ddayRes.diffDays > 0 ? `D- ${ddayRes.diffDays}일` : `D+ ${Math.abs(ddayRes.diffDays)}일`}
                     </p>
-                    <p className="text-[10px] text-slate-500 mt-0.5">총 {Math.abs(ddayRes.diffDays).toLocaleString()}일 경과 상태</p>
+                    <p className="font-num text-xs text-slate-400 mt-1">총 {Math.abs(ddayRes.diffDays).toLocaleString()}일 경과 상태</p>
                   </div>
                 </div>
 
-                <div className="bg-indigo-950 p-4 border border-indigo-900 rounded-lg">
-                  <p className="text-[10px] text-indigo-400 font-bold">기념일 환산: 기준일 포함 {dayOffset}일째 날</p>
-                  <p className="text-base font-extrabold text-white mt-1 font-mono">
+                <div className="bg-indigo-950/80 p-4 border border-indigo-900 rounded-2xl shadow-2xs">
+                  <p className="font-heading text-xs text-indigo-300 font-bold">기념일 환산: 기준일 포함 {dayOffset}일째 날</p>
+                  <p className="font-num text-lg sm:text-xl font-black text-white mt-1">
                     {ddayRes.offsetDate}
                   </p>
                 </div>
@@ -307,24 +306,24 @@ export default function LifeCalculator() {
       {/* Tab Case 3: Student School Entry & Graduation */}
       {activeTab === 'school' && (
         <div className="space-y-6">
-          <div className="p-5 bg-slate-50 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="p-5 md:p-6 bg-slate-50 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xs">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">본인 출생년도 입력 (학제 역산)</label>
+              <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-2">본인 출생년도 입력 (학제 역산)</label>
               <div className="flex items-center space-x-2">
                 <input
                   type="number"
                   value={schoolBirthYear}
                   onChange={(e) => setSchoolBirthYear(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold text-slate-800"
+                  className="font-num w-full bg-white border border-slate-300 rounded-xl py-3 px-4 text-base sm:text-lg font-extrabold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                 />
-                <span className="text-xs text-slate-600 font-bold whitespace-nowrap">년생</span>
+                <span className="font-display text-xs sm:text-sm text-slate-700 font-bold whitespace-nowrap">년생</span>
               </div>
-              <div className="flex flex-wrap gap-1 mt-2.5">
+              <div className="flex flex-wrap gap-1.5 mt-2.5">
                 {[1980, 1990, 1995, 2000, 2005, 2010].map((y) => (
                   <button
                     key={y}
                     onClick={() => setSchoolBirthYear(y)}
-                    className="bg-white hover:bg-slate-100 text-slate-600 border text-[10px] py-1 px-2 rounded font-medium transition-colors"
+                    className="font-display bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 hover:border-slate-300 text-xs py-1.5 px-3 rounded-lg font-bold transition-colors cursor-pointer shadow-2xs"
                   >
                     {y}년생
                   </button>
@@ -332,27 +331,27 @@ export default function LifeCalculator() {
               </div>
             </div>
 
-            <div className="bg-slate-900 text-white rounded-xl p-5 space-y-3">
-              <span className="text-[10px] bg-emerald-500 text-white rounded px-2 py-0.5 font-bold block w-fit">
+            <div className="bg-slate-900 text-white rounded-2xl p-5 md:p-6 space-y-3.5 shadow-xs">
+              <span className="font-display text-xs bg-emerald-500 text-white rounded-lg px-2.5 py-1 font-extrabold block w-fit">
                 학력 입학/졸업 히스토리 (8세 초교 입학 기준)
               </span>
               
-              <div className="space-y-2 text-xs">
-                <div className="flex justify-between border-b border-slate-800 pb-1.5">
-                  <span className="text-slate-400">초등학교</span>
-                  <span className="font-mono text-slate-200">{schoolRes.elementaryEntry}년 입학 ~ {schoolRes.elementaryGrad}년 졸업</span>
+              <div className="space-y-2.5 text-xs sm:text-sm">
+                <div className="flex justify-between border-b border-slate-800 pb-2">
+                  <span className="font-body text-slate-400">초등학교</span>
+                  <span className="font-num text-slate-200 font-bold">{schoolRes.elementaryEntry}년 입학 ~ {schoolRes.elementaryGrad}년 졸업</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-800 pb-1.5">
-                  <span className="text-slate-400">중학교</span>
-                  <span className="font-mono text-slate-200">{schoolRes.middleEntry}년 입학 ~ {schoolRes.middleGrad}년 졸업</span>
+                <div className="flex justify-between border-b border-slate-800 pb-2">
+                  <span className="font-body text-slate-400">중학교</span>
+                  <span className="font-num text-slate-200 font-bold">{schoolRes.middleEntry}년 입학 ~ {schoolRes.middleGrad}년 졸업</span>
                 </div>
-                <div className="flex justify-between border-b border-slate-800 pb-1.5">
-                  <span className="text-slate-400">고등학교</span>
-                  <span className="font-mono text-slate-200">{schoolRes.highEntry}년 입학 ~ {schoolRes.highGrad}년 졸업</span>
+                <div className="flex justify-between border-b border-slate-800 pb-2">
+                  <span className="font-body text-slate-400">고등학교</span>
+                  <span className="font-num text-slate-200 font-bold">{schoolRes.highEntry}년 입학 ~ {schoolRes.highGrad}년 졸업</span>
                 </div>
-                <div className="flex justify-between text-indigo-300">
-                  <span>대학교 (학번 기준)</span>
-                  <span className="font-mono font-bold text-white">{schoolRes.univEntry}년 입학 ({schoolRes.univEntry % 100}학번)</span>
+                <div className="flex justify-between text-indigo-300 pt-1">
+                  <span className="font-heading font-extrabold">대학교 (학번 기준)</span>
+                  <span className="font-num font-black text-white text-sm sm:text-base">{schoolRes.univEntry}년 입학 ({schoolRes.univEntry % 100}학번)</span>
                 </div>
               </div>
             </div>
@@ -361,24 +360,24 @@ export default function LifeCalculator() {
       )}
 
       {/* SEO Compliance Rich Text Information */}
-      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans no-print">
-        <h2 className="text-sm font-bold text-slate-950 flex items-center mb-1">
-          <BookOpen className="w-4 h-4 text-indigo-600 mr-2" />
+      <div className="pt-8 border-t border-slate-200 mt-8 space-y-5 text-slate-700 leading-relaxed no-print">
+        <h2 className="font-heading text-base sm:text-lg md:text-xl font-black text-slate-950 flex items-center mb-1">
+          <BookOpen className="w-5 h-5 text-indigo-600 mr-2" />
           만 나이 통일법 및 띠 산출기준 학설 완벽 가이드
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-100">
-            <h3 className="font-bold text-slate-900">1. 개정된 소위 &apos;만 나이 통일법&apos; 총정리</h3>
-            <p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="bg-slate-50 p-5 rounded-2xl space-y-2.5 border border-slate-200 shadow-2xs">
+            <h3 className="font-heading font-extrabold text-slate-900 text-sm sm:text-base">1. 개정된 소위 &apos;만 나이 통일법&apos; 총정리</h3>
+            <p className="font-body text-xs sm:text-sm text-slate-600 leading-relaxed">
               동양의 세는나이(태어나자마자 1세가 되고 해가 바뀌면 바로 나이를 먹는 방식) 문화를 타파하고, 법적 행정상의 연령 계산을 명문화하기 위해 대한민국은 2023년 정식적인 만나이를 전면화하였습니다. 
               이에 따라 출생 당시 0세로 시작해 매년 본인의 연도별 양력 생일이 지날 때마다 딱 1살씩 합산되도록 기준이 명확화되었습니다.
             </p>
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-100">
-            <h3 className="font-bold text-slate-900">2. 띠 계산에서 흔히 오인하는 기준점 요술</h3>
-            <p>
+          <div className="bg-slate-50 p-5 rounded-2xl space-y-2.5 border border-slate-200 shadow-2xs">
+            <h3 className="font-heading font-extrabold text-slate-900 text-sm sm:text-base">2. 띠 계산에서 흔히 오인하는 기준점 요술</h3>
+            <p className="font-body text-xs sm:text-sm text-slate-600 leading-relaxed">
               많은 대중이 양력 또는 음력 1월 1일이 되면 띠가 바뀐다고 착각합니다. 하지만 정통 역학 및 사주 명리학 서적에 기술된 띠 체인징 포인트는 바로 24절기의 최초 시작인 <strong>입춘(立春, 보통 양력 2월 4일 전후)</strong>입니다. 
               입춘 이전인 대략 양력 1월이나 2월 초순에 출생한 아기들은 연도와 무관하게 전년도의 상징 띠 신수로 기재되어 해석하는 것이 철학적으로 정확합니다.
             </p>

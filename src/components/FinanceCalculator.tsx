@@ -188,34 +188,34 @@ export default function FinanceCalculator() {
       {/* App Header */}
       <div className="border-b border-slate-100 pb-5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 no-print">
         <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
-            <Landmark className="w-6 h-6" />
+          <div className="p-3 bg-amber-50 text-amber-600 rounded-2xl border border-amber-100">
+            <Landmark className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">금융 & 이자 계산기 (예금/적금/대출이자)</h1>
-            <p className="text-xs text-slate-500 mt-0.5">자산을 불리기 위한 예적금 수령 액수부터 대출 상환 방식별 월 원리금 균등 비용 하락치를 정교하게 비교해 드립니다.</p>
+            <h1 className="font-heading text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">금융 & 이자 계산기 (예금/적금/대출이자)</h1>
+            <p className="font-body text-xs sm:text-sm text-slate-600 mt-1">자산을 불리기 위한 예적금 수령 액수부터 대출 상환 방식별 월 원리금 균등 비용 하락치를 정교하게 비교해 드립니다.</p>
           </div>
         </div>
         <button
           onClick={() => window.print()}
-          className="flex items-center justify-center space-x-1.5 px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-xs transition-all self-end sm:self-center"
+          className="font-display flex items-center justify-center space-x-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs sm:text-sm font-bold shadow-xs transition-all self-end sm:self-center cursor-pointer"
         >
-          <Printer className="w-3.5 h-3.5" />
+          <Printer className="w-4 h-4" />
           <span>결과 인쇄 (PDF)</span>
         </button>
       </div>
 
       {/* Internal Sub Navigation */}
-      <div className="grid grid-cols-2 gap-2 mb-6 no-print">
+      <div className="grid grid-cols-2 gap-2.5 mb-6 no-print">
         <button
           onClick={() => setActiveTab('savings')}
-          className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'savings' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
+          className={`font-display py-3 px-3 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'savings' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
           💰 예금 & 적금 이자수익
         </button>
         <button
           onClick={() => setActiveTab('loan')}
-          className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'loan' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
+          className={`font-display py-3 px-3 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'loan' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
           💳 대출 이자 & 상환 스케줄
         </button>
@@ -224,20 +224,20 @@ export default function FinanceCalculator() {
       {/* Content Savings Type */}
       {activeTab === 'savings' && (
         <div className="space-y-6">
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-slate-50 p-5 md:p-6 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xs">
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">세무 구분 분류</label>
+                <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-2">세무 구분 분류</label>
                 <div className="flex space-x-2">
                   <button
                     onClick={() => setSavingsType('deposit')}
-                    className={`flex-1 py-2 px-3 border text-xs rounded-lg transition-colors font-bold ${savingsType === 'deposit' ? 'bg-white text-indigo-700 border-indigo-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                    className={`font-display flex-1 py-2.5 px-3 border text-xs sm:text-sm rounded-xl transition-colors font-extrabold cursor-pointer ${savingsType === 'deposit' ? 'bg-white text-indigo-700 border-indigo-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
                   >
                     목돈 정기예금
                   </button>
                   <button
                     onClick={() => setSavingsType('savings')}
-                    className={`flex-1 py-2 px-3 border text-xs rounded-lg transition-colors font-bold ${savingsType === 'savings' ? 'bg-white text-indigo-700 border-indigo-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
+                    className={`font-display flex-1 py-2.5 px-3 border text-xs sm:text-sm rounded-xl transition-colors font-extrabold cursor-pointer ${savingsType === 'savings' ? 'bg-white text-indigo-700 border-indigo-300 shadow-xs' : 'bg-slate-100 text-slate-600 border-transparent hover:bg-slate-200'}`}
                   >
                     매달 정기적금
                   </button>
@@ -245,11 +245,11 @@ export default function FinanceCalculator() {
               </div>
 
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-bold text-slate-700">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700">
                     {savingsType === 'deposit' ? '예치 원금 (원)' : '매달 적립금액 (원/월)'}
                   </label>
-                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                  <span className="font-num text-xs sm:text-sm text-indigo-700 font-extrabold bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200">
                     ➡ {formatKoreanPrice(principal)}
                   </span>
                 </div>
@@ -257,81 +257,81 @@ export default function FinanceCalculator() {
                   type="number"
                   value={principal === 0 ? '' : principal}
                   onChange={(e) => setPrincipal(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
+                  className="font-num w-full bg-white border border-slate-300 rounded-xl py-3 px-4 text-base sm:text-lg font-extrabold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                 />
                 
                 {savingsType === 'deposit' ? (
-                  <div className="flex flex-wrap gap-1 mt-1.5">
+                  <div className="flex flex-wrap gap-1.5 mt-2.5">
                     <button
                       type="button"
                       onClick={() => setPrincipal(0)}
-                      className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                      className="font-display bg-slate-100 text-slate-600 text-xs py-1.5 px-3 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       초기화
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 1000000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +100만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 5000000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +500만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 10000000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +1천만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 50000000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +5천만
                     </button>
                   </div>
                 ) : (
-                  <div className="flex flex-wrap gap-1 mt-1.5">
+                  <div className="flex flex-wrap gap-1.5 mt-2.5">
                     <button
                       type="button"
                       onClick={() => setPrincipal(0)}
-                      className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                      className="font-display bg-slate-100 text-slate-600 text-xs py-1.5 px-3 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       초기화
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 100000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +10만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 300000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +30만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 500000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +50만
                     </button>
                     <button
                       type="button"
                       onClick={() => setPrincipal(prev => prev + 1000000)}
-                      className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                      className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                     >
                       +100만
                     </button>
@@ -341,21 +341,21 @@ export default function FinanceCalculator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">연 이율 (%)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">연 이율 (%)</label>
                   <input
                     type="number"
                     step="0.1"
                     value={interestRate}
                     onChange={(e) => setInterestRate(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-num w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5 font-sans">예장 기간 (개월)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">약정 기간 (개월)</label>
                   <select
                     value={termMonths}
                     onChange={(e) => setTermMonths(parseInt(e.target.value) || 12)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-display w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
                     {[6, 12, 24, 36, 60].map((m) => (
                       <option key={m} value={m}>{m}개월</option>
@@ -366,22 +366,22 @@ export default function FinanceCalculator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">이자 산출 방식</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1">이자 산출 방식</label>
                   <select
                     value={compoundType}
                     onChange={(e) => setCompoundType(e.target.value as 'simple' | 'compound')}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-display w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
                     <option value="simple">단리 계산</option>
                     <option value="compound">연/월복리 계산</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">우대세 과세 방법</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1">우대세 과세 방법</label>
                   <select
                     value={taxType}
                     onChange={(e) => setTaxType(e.target.value as 'normal' | 'favored' | 'free')}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-display w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-medium text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
                     <option value="normal">일반과세 (15.4%)</option>
                     <option value="favored">세금우대 (9.5%)</option>
@@ -392,37 +392,37 @@ export default function FinanceCalculator() {
             </div>
 
             {/* Savings Result Output */}
-            <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between">
+            <div className="bg-slate-900 text-white rounded-2xl p-5 md:p-6 flex flex-col justify-between shadow-xs">
               <div>
-                <span className="text-[10px] bg-amber-500 text-white rounded px-2 py-0.5 font-bold uppercase">
+                <span className="font-display text-xs bg-amber-500 text-white rounded-lg px-2.5 py-1 font-extrabold uppercase tracking-wide inline-block">
                   이자 소득 결과 종합진단
                 </span>
                 
-                <div className="space-y-2 mt-4 text-xs text-slate-400 border-b border-slate-800 pb-3">
+                <div className="space-y-2.5 mt-5 text-xs sm:text-sm text-slate-300 border-b border-slate-800 pb-4">
                   <div className="flex justify-between">
-                    <span>총 납입 누적원금</span>
-                    <span className="text-slate-200 font-mono font-bold">{savingsRes.totalPrincipal.toLocaleString()}원</span>
+                    <span className="font-body">총 납입 누적원금</span>
+                    <span className="font-num text-white font-bold">{savingsRes.totalPrincipal.toLocaleString()}원</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>세전 총 약정이자</span>
-                    <span className="text-slate-200 font-mono font-semibold">+{savingsRes.preTaxInterest.toLocaleString()}원</span>
+                    <span className="font-body">세전 총 약정이자</span>
+                    <span className="font-num text-amber-300 font-bold">+{savingsRes.preTaxInterest.toLocaleString()}원</span>
                   </div>
                   <div className="flex justify-between text-rose-400">
-                    <span>원천징수 이자 소득세</span>
-                    <span className="font-mono">-{savingsRes.taxAmount.toLocaleString()}원</span>
+                    <span className="font-body">원천징수 이자 소득세</span>
+                    <span className="font-num font-bold">-{savingsRes.taxAmount.toLocaleString()}원</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-emerald-950 p-4 border border-emerald-900 rounded-lg text-center my-3">
-                <p className="text-[11px] text-emerald-400 font-bold">만기 해지 시 내 통장에 꽂히는 세후 최종수령액</p>
-                <p className="text-2xl font-extrabold text-emerald-300 font-mono mt-1">
+              <div className="bg-emerald-950/80 p-5 border border-emerald-800 rounded-2xl text-center my-4 shadow-2xs">
+                <p className="font-heading text-xs sm:text-sm text-emerald-300 font-extrabold">만기 해지 시 내 통장에 꽂히는 세후 최종수령액</p>
+                <p className="font-num text-2xl sm:text-3xl font-black text-emerald-200 mt-1.5 tracking-tight">
                   {savingsRes.totalPayout.toLocaleString()}원
                 </p>
-                <p className="text-[9px] text-emerald-500 mt-1">순수 수령 세후 이자: {savingsRes.postTaxInterest.toLocaleString()}원</p>
+                <p className="font-num text-xs text-emerald-400 mt-1 font-bold">순수 수령 세후 이자: {savingsRes.postTaxInterest.toLocaleString()}원</p>
               </div>
 
-              <p className="text-[9px] text-slate-450 leading-relaxed text-right">
+              <p className="font-body text-xs text-slate-400 leading-relaxed text-right">
                 ※ 위 계산은 연 시계산에 입각한 소정의 오차가 있을 수 있으며 실제 금융기관 만기 수령 통계 일자와 다를 수 있습니다.
               </p>
             </div>
@@ -433,12 +433,12 @@ export default function FinanceCalculator() {
       {/* Loan interest Repayment layout */}
       {activeTab === 'loan' && (
         <div className="space-y-6">
-          <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="space-y-3">
+          <div className="bg-slate-50 p-5 md:p-6 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-2xs">
+            <div className="space-y-4">
               <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-xs font-bold text-slate-700 font-sans">대출 신청 원금액 (원)</label>
-                  <span className="text-xs text-indigo-600 font-extrabold font-mono bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
+                <div className="flex justify-between items-center mb-2">
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700">대출 신청 원금액 (원)</label>
+                  <span className="font-num text-xs sm:text-sm text-indigo-700 font-extrabold bg-indigo-50 px-2.5 py-0.5 rounded-lg border border-indigo-200">
                     ➡ {formatKoreanPrice(loanPrincipal)}
                   </span>
                 </div>
@@ -446,41 +446,41 @@ export default function FinanceCalculator() {
                   type="number"
                   value={loanPrincipal === 0 ? '' : loanPrincipal}
                   onChange={(e) => setLoanPrincipal(parseInt(e.target.value) || 0)}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2.5 px-3 text-sm font-bold focus:outline-hidden"
+                  className="font-num w-full bg-white border border-slate-300 rounded-xl py-3 px-4 text-base sm:text-lg font-extrabold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                 />
-                <div className="flex flex-wrap gap-1 mt-1.5">
+                <div className="flex flex-wrap gap-1.5 mt-2.5">
                   <button
                     type="button"
                     onClick={() => setLoanPrincipal(0)}
-                    className="bg-slate-100 text-slate-600 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0"
+                    className="font-display bg-slate-100 text-slate-600 text-xs py-1.5 px-3 rounded-lg hover:bg-slate-200 transition-colors font-bold shrink-0 cursor-pointer"
                   >
                     초기화
                   </button>
                   <button
                     type="button"
                     onClick={() => setLoanPrincipal(prev => prev + 5000000)}
-                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                   >
                     +500만
                   </button>
                   <button
                     type="button"
                     onClick={() => setLoanPrincipal(prev => prev + 10000000)}
-                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                   >
                     +1천만
                   </button>
                   <button
                     type="button"
                     onClick={() => setLoanPrincipal(prev => prev + 50000000)}
-                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                   >
                     +5천만
                   </button>
                   <button
                     type="button"
                     onClick={() => setLoanPrincipal(prev => prev + 100000000)}
-                    className="bg-indigo-50 text-indigo-700 text-[10px] md:text-xs py-1.5 px-2.5 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0"
+                    className="font-display bg-indigo-50 text-indigo-700 text-xs py-1.5 px-3 rounded-lg hover:bg-indigo-100 border border-indigo-100 transition-colors font-bold shrink-0 cursor-pointer"
                   >
                     +1억
                   </button>
@@ -489,21 +489,21 @@ export default function FinanceCalculator() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">연 고정금리 (%)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">연 고정금리 (%)</label>
                   <input
                     type="number"
                     step="0.1"
                     value={loanRate}
                     onChange={(e) => setLoanRate(parseFloat(e.target.value) || 0)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-num w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-bold text-slate-900 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">상환 약정 기간 (개월)</label>
+                  <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">상환 약정 기간 (개월)</label>
                   <select
                     value={loanTerm}
                     onChange={(e) => setLoanTerm(parseInt(e.target.value) || 24)}
-                    className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs"
+                    className="font-display w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                   >
                     {[12, 24, 36, 60, 120, 240, 360].map((t) => (
                       <option key={t} value={t}>{t}개월</option>
@@ -513,11 +513,11 @@ export default function FinanceCalculator() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">거치 상환 방식 종류</label>
+                <label className="font-display block text-xs sm:text-sm font-bold text-slate-700 mb-1.5">거치 상환 방식 종류</label>
                 <select
                   value={repaymentType}
                   onChange={(e) => setRepaymentType(e.target.value as 'equal_both' | 'equal_principal' | 'maturity')}
-                  className="w-full bg-white border border-slate-300 rounded-lg py-2 px-3 text-xs font-semibold text-slate-700"
+                  className="font-display w-full bg-white border border-slate-300 rounded-xl py-2.5 px-3 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                 >
                   <option value="equal_both">원리금균등 분할상환 (원금+이자를 매달 동일비율)</option>
                   <option value="equal_principal">원금균등 분할상환 (원금 동일, 이자는 차감식)</option>
@@ -527,39 +527,39 @@ export default function FinanceCalculator() {
             </div>
 
             {/* Loan calculations overall side frame */}
-            <div className="bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between">
+            <div className="bg-slate-900 text-white rounded-2xl p-5 md:p-6 flex flex-col justify-between shadow-xs">
               <div>
-                <span className="text-[10px] bg-red-500 text-white rounded px-2 py-0.5 font-bold uppercase">
+                <span className="font-display text-xs bg-rose-600 text-white rounded-lg px-2.5 py-1 font-extrabold uppercase tracking-wide inline-block">
                   금융 부채 이자 지출 결과
                 </span>
                 
-                <div className="space-y-2 mt-4 text-xs text-slate-400">
+                <div className="space-y-2.5 mt-5 text-xs sm:text-sm text-slate-300">
                   <div className="flex justify-between">
-                    <span>빌린 원금 총액</span>
-                    <span className="text-white font-mono">{loanPrincipal.toLocaleString()}원</span>
+                    <span className="font-body">빌린 원금 총액</span>
+                    <span className="font-num text-white font-bold">{loanPrincipal.toLocaleString()}원</span>
                   </div>
-                  <div className="flex justify-between text-yellow-300">
-                    <span>중기 납입 총 이자 합산액</span>
-                    <span className="font-mono">+{loanRes.totalInterest.toLocaleString()}원</span>
+                  <div className="flex justify-between text-amber-300">
+                    <span className="font-body">약정 총 이자 합산액</span>
+                    <span className="font-num font-bold">+{loanRes.totalInterest.toLocaleString()}원</span>
                   </div>
-                  <div className="flex justify-between border-t border-slate-800 pt-1.5 text-white font-bold">
-                    <span>만기까지 총 원금+이자 합산액</span>
-                    <span className="font-mono">{loanRes.totalPayout.toLocaleString()}원</span>
+                  <div className="flex justify-between border-t border-slate-800 pt-2.5 text-white font-extrabold text-sm sm:text-base">
+                    <span className="font-heading">만기까지 총 상환액</span>
+                    <span className="font-num font-black text-amber-400">{loanRes.totalPayout.toLocaleString()}원</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 bg-slate-950 p-3 rounded-lg border border-slate-800">
-                <span className="text-[10px] text-slate-400 block mb-2">📊 월별 납입 스케줄 시뮬레이션 (최대 6회 예증)</span>
-                <div className="space-y-1.5 font-mono text-[9px] max-h-[105px] overflow-y-auto pr-1">
+              <div className="mt-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                <span className="font-display text-xs text-slate-400 font-bold block mb-2">📊 월별 납입 스케줄 시뮬레이션 (최대 6회 예증)</span>
+                <div className="space-y-2 font-num text-xs max-h-[120px] overflow-y-auto pr-1">
                   {loanRes.schedule.map((item) => (
-                    <div key={item.month} className="flex justify-between text-slate-300 border-b border-slate-900 pb-1">
-                      <span>{item.month}회차</span>
-                      <span>납입: {item.payment.toLocaleString()}원 (이자: {item.interestRepayment.toLocaleString()}원, 잔액: {item.remaining.toLocaleString()}원)</span>
+                    <div key={item.month} className="flex justify-between text-slate-300 border-b border-slate-900 pb-1.5">
+                      <span className="font-bold text-amber-300">{item.month}회차</span>
+                      <span>납입: {item.payment.toLocaleString()}원 (이자: {item.interestRepayment.toLocaleString()}원)</span>
                     </div>
                   ))}
                   {loanTerm > 7 && (
-                    <p className="text-slate-500 text-center py-1 font-sans text-[8px]">...중간 회차 스케줄은 안정 상략되었습니다...</p>
+                    <p className="font-body text-slate-500 text-center py-1 text-xs">...중간 회차 스케줄은 안정 상략되었습니다...</p>
                   )}
                 </div>
               </div>
@@ -569,24 +569,24 @@ export default function FinanceCalculator() {
       )}
 
       {/* SEO Compliance Rich Text Information */}
-      <div className="pt-8 border-t border-slate-100 mt-8 space-y-5 text-xs text-slate-600 leading-relaxed font-sans no-print">
-        <h2 className="text-sm font-bold text-slate-950 flex items-center mb-1">
-          <BookOpen className="w-4 h-4 text-amber-600 mr-2" />
+      <div className="pt-8 border-t border-slate-200 mt-8 space-y-5 text-slate-700 leading-relaxed no-print">
+        <h2 className="font-heading text-base sm:text-lg md:text-xl font-black text-slate-950 flex items-center mb-1">
+          <BookOpen className="w-5 h-5 text-amber-600 mr-2" />
           예적금 과세제도 및 대출 상환 공학적 비법서
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-100">
-            <h3 className="font-bold text-slate-900">1. 대한민국의 금융소득 종합과세 및 이자 세율</h3>
-            <p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="bg-slate-50 p-5 rounded-2xl space-y-2.5 border border-slate-200 shadow-2xs">
+            <h3 className="font-heading font-extrabold text-slate-900 text-sm sm:text-base">1. 대한민국의 금융소득 종합과세 및 이자 세율</h3>
+            <p className="font-body text-xs sm:text-sm text-slate-600 leading-relaxed">
               일반 개인이 금융기관에 예·적금을 가입하고 만기 시 약정 이자를 수령할 때는 기본적으로 <strong>15.4%</strong>의 세율이 적용됩니다. 이는 국세인 소득세 14%와 지방세인 지방소득세 1.4% 취합 구조입니다. 
               최근에는 만 65세 이상 고령자를 대상으로 하는 비과세종합저축 한도로 예치하는 등의 다양한 합법 절세 조약이 활발히 기능하고 있습니다.
             </p>
           </div>
 
-          <div className="bg-slate-50 p-4 rounded-xl space-y-2 border border-slate-100">
-            <h3 className="font-bold text-slate-900">2. 대출 상환 방식 비교의 치명적 차이</h3>
-            <p>
+          <div className="bg-slate-50 p-5 rounded-2xl space-y-2.5 border border-slate-200 shadow-2xs">
+            <h3 className="font-heading font-extrabold text-slate-900 text-sm sm:text-base">2. 대출 상환 방식 비교의 치명적 차이</h3>
+            <p className="font-body text-xs sm:text-sm text-slate-600 leading-relaxed">
               원리금균등은 매월 내는 페이량이 고정되어 계획소비가 수월하지만 원금 감소 속도가 상대적으로 느립니다. 
               반면, 원금균등은 원금을 항상 균등 비율로 까 내려가므로 뒤로 갈수록 이자가 정량 하락하여 궁극적인 <strong>총 이자 지출액을 가장 아낄 수 있는 실속 방식</strong>입니다. 
               만기일시는 부채 상환 동안 이자만 가볍게 내지만 원금을 통째로 갚아야 하는 신용 리스크가 있습니다.

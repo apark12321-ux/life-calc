@@ -1,10 +1,55 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/sun-typeface/suit@2/fonts/variable/woff2/SUIT-Variable.css');
+@import url('https://cdn.jsdelivr.net/gh/moonspam/NanumSquareNeo@master/nanumsquareneo.css');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Plus Jakarta Sans", system-ui, -system-ui, sans-serif;
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
+  --font-heading: "NanumSquareNeo", "SUIT Variable", "Pretendard Variable", -apple-system, sans-serif;
+  --font-display: "SUIT Variable", "NanumSquareNeo", "Plus Jakarta Sans", "Pretendard Variable", sans-serif;
+  --font-num: "Outfit", "Plus Jakarta Sans", "Pretendard Variable", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom Typography Utility Classes */
+.font-heading {
+  font-family: "NanumSquareNeo", "SUIT Variable", "Pretendard Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-display {
+  font-family: "SUIT Variable", "NanumSquareNeo", "Plus Jakarta Sans", "Pretendard Variable", sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-body {
+  font-family: "Pretendard Variable", "Pretendard", "Noto Sans KR", -apple-system, sans-serif;
+  letter-spacing: -0.018em;
+}
+
+.font-num {
+  font-family: "Outfit", "Plus Jakarta Sans", "Pretendard Variable", sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+}
+
+.font-mono-calc {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Dynamic Font Scaling Controller */
+html[data-font-size="normal"] {
+  font-size: 16px;
+}
+
+html[data-font-size="large"] {
+  font-size: 17.5px;
+}
+
+html[data-font-size="xlarge"] {
+  font-size: 19px;
 }
 
 /* Global Typography & Font Readability Enhancements */
@@ -13,9 +58,19 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  letter-spacing: -0.022em;
+  letter-spacing: -0.02em;
   word-break: keep-all;
   overflow-wrap: break-word;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+/* Headings default contrast & tracking */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "NanumSquareNeo", "SUIT Variable", "Pretendard Variable", sans-serif;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+  color: #0f172a;
 }
 
 /* Text Selection Styling */
