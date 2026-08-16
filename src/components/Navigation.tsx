@@ -52,7 +52,8 @@ export default function Navigation({ currentCategory, onSelectCategory, onNaviga
     { id: 'finance_loan', category: 'finance' as CategoryType, keywords: ['대출', '원리금균등', '원금균등', '만기일시', '이자계산', '상환'] },
     { id: 'property_size', category: 'property' as CategoryType, keywords: ['평수', '제곱미터', 'm2', '평', '면적', '변환', '국민평형'] },
     { id: 'property_agent', category: 'property' as CategoryType, keywords: ['중개수수료', '복비', '부동산', '매매', '임대차', '전세', '월세'] },
-    { id: 'property_tax', category: 'property' as CategoryType, keywords: ['취득세', '지방세', '취득세율', '생애첫주택', '교육세'] }
+    { id: 'property_tax', category: 'property' as CategoryType, keywords: ['취득세', '지방세', '취득세율', '생애첫주택', '교육세'] },
+    { id: 'magazine', category: 'magazine' as CategoryType, keywords: ['포스팅', '칼럼', '매거진', '블로그', '자동발행', '가이드', '게시글', '지식'] }
   ];
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -206,6 +207,7 @@ export default function Navigation({ currentCategory, onSelectCategory, onNaviga
               { id: 'life', label: '🎂 생활 & 달력', sub: '만나이·D-Day' },
               { id: 'finance', label: '💰 금융 & 예적금', sub: '이자·대출상환' },
               { id: 'property', label: '🏠 부동산 & 세금', sub: '평수·복비·취득세' },
+              { id: 'magazine', label: '📢 자동발행 칼럼', sub: '1일1포스팅' },
               { id: 'policy', label: 'ℹ️ 안내 & 약관', sub: '개인정보·소개' }
             ].map((cat) => {
               const isActive = currentCategory === cat.id;

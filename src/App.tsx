@@ -7,11 +7,13 @@ import WageCalculator from './components/WageCalculator';
 import LifeCalculator from './components/LifeCalculator';
 import FinanceCalculator from './components/FinanceCalculator';
 import PropertyCalculator from './components/PropertyCalculator';
+import AutoPostingMagazine from './components/AutoPostingMagazine';
+import LatestPostsWidget from './components/LatestPostsWidget';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import AboutApp from './components/AboutApp';
 import AeoGuide from './components/AeoGuide';
-import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock, Sparkles } from 'lucide-react';
+import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock, Sparkles, Newspaper } from 'lucide-react';
 
 export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
@@ -101,9 +103,12 @@ export default function App() {
     } else if (id === 'insurance') {
       setCurrentCategory('insurance');
       setSubCalculatorId('all');
+    } else if (id === 'magazine' || id.startsWith('post-') || id === 'post') {
+      setCurrentCategory('magazine');
+      setSubCalculatorId('all');
     } else {
       // Direct category or safety fallback
-      const foundItem = ['insurance', 'wage', 'life', 'finance', 'property', 'policy'].includes(id);
+      const foundItem = ['insurance', 'wage', 'life', 'finance', 'property', 'magazine', 'policy'].includes(id);
       if (foundItem) {
         setCurrentCategory(id as CategoryType);
         setSubCalculatorId('all');
@@ -119,14 +124,17 @@ export default function App() {
     setSubCalculatorId('all');
   };
 
-  // Parse deep link URL parameters (calc, s, subId, category) on initial load
+  // Parse deep link URL parameters (calc, s, subId, category, post) on initial load
   useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
       const calcId = params.get('calc') || params.get('s') || params.get('subId');
       const cat = params.get('c') || params.get('category');
+      const postId = params.get('post');
       
-      if (calcId) {
+      if (postId) {
+        handleNavigateToCalculator('magazine');
+      } else if (calcId) {
         handleNavigateToCalculator(calcId);
       } else if (cat) {
         handleSelectCategory(cat as CategoryType);
@@ -214,6 +222,10 @@ export default function App() {
               <PropertyCalculator />
             )}
 
+            {currentCategory === 'magazine' && (
+              <AutoPostingMagazine onNavigateToCalculator={handleNavigateToCalculator} />
+            )}
+
             {currentCategory === 'policy' && (
               <div className="space-y-6">
                 {/* Embedded Legal Documents inside dynamic viewport */}
@@ -276,6 +288,12 @@ export default function App() {
           {/* RIGHT: High Value Widgets & Informational Metrics Panel (1 col) */}
           <div className="space-y-6 no-print">
             
+            {/* Live Automated Posting Sidebar Widget */}
+            <LatestPostsWidget
+              onNavigateToMagazine={() => handleSelectCategory('magazine')}
+              onNavigateToCalculator={handleNavigateToCalculator}
+            />
+
             {/* 2026 Statutory Economic & Tax Standards Index Widget */}
             <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-4">
               <div className="flex items-center justify-between border-b pb-2.5">
