@@ -1,34 +1,67 @@
 import React, { useState, useEffect } from 'react';
-import { CategoryType } from './types';
-import Navigation from './components/Navigation';
-import AdSenseMock from './components/AdSenseMock';
-import InsuranceCalculator from './components/InsuranceCalculator';
-import WageCalculator from './components/WageCalculator';
-import LifeCalculator from './components/LifeCalculator';
-import FinanceCalculator from './components/FinanceCalculator';
-import PropertyCalculator from './components/PropertyCalculator';
-import AutoPostingMagazine from './components/AutoPostingMagazine';
-import LatestPostsWidget from './components/LatestPostsWidget';
+import { CategoryType, PostItem } from './types';
+import { ALL_BLOG_POSTS } from './data/postsData';
+import BlogHeader from './components/BlogHeader';
+import BlogSidebar from './components/BlogSidebar';
+import BlogHome from './components/BlogHome';
+import BlogPostView from './components/BlogPostView';
+import CalculatorsHub from './components/CalculatorsHub';
+import AboutApp from './components/AboutApp';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
-import AboutApp from './components/AboutApp';
-import AeoGuide from './components/AeoGuide';
-import { ShieldCheck, Info, FileText, LayoutGrid, HeartHandshake, ExternalLink, Moon, Cookie, Check, X, Shield, Settings, Lock, Sparkles, Newspaper } from 'lucide-react';
+import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles } from 'lucide-react';
 
 export default function App() {
-  const [currentCategory, setCurrentCategory] = useState<CategoryType>('insurance');
-  const [subCalculatorId, setSubCalculatorId] = useState<string>('all');
+  const [currentCategory, setCurrentCategory] = useState<CategoryType>('all');
+  const [selectedPost, setSelectedPost] = useState<PostItem | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('insurance');
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
-  const [cookieDetails, setCookieDetails] = useState<boolean>(false);
-  const [analyticsConsent, setAnalyticsConsent] = useState<boolean>(true);
-  const [adConsent, setAdConsent] = useState<boolean>(true);
+  const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
 
-  // Initialize and check cookie consent state
+  // Parse deep link parameters on mount
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const postId = params.get('post');
+      const cat = params.get('cat') || params.get('c') || params.get('category');
+      const calcId = params.get('calc') || params.get('s');
+
+      if (postId) {
+        const found = ALL_BLOG_POSTS.find(p => p.id === postId);
+        if (found) {
+          setSelectedPost(found);
+          setCurrentCategory(found.category);
+        }
+      } else if (calcId) {
+        setCurrentCategory('calculators');
+        setActiveCalculatorSubId(calcId);
+      } else if (cat && ['insurance', 'wage', 'finance', 'property', 'life', 'calculators', 'about', 'privacy', 'terms'].includes(cat)) {
+        setCurrentCategory(cat as CategoryType);
+      }
+    } catch (e) {
+      console.warn('URL parsing failed:', e);
+    }
+  }, []);
+
+  // Track scroll position for "Back to top" button
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Cookie consent banner logic
   useEffect(() => {
     try {
       const consent = localStorage.getItem('life_calc_cookie_consent');
       if (!consent) {
-        // High quality delay for banner display
         const timer = setTimeout(() => {
           setShowCookieBanner(true);
         }, 1200);
@@ -39,7 +72,7 @@ export default function App() {
     }
   }, []);
 
-  const handleAcceptAllCookies = () => {
+  const handleAcceptCookies = () => {
     try {
       localStorage.setItem('life_calc_cookie_consent', 'all_granted');
       setShowCookieBanner(false);
@@ -48,7 +81,7 @@ export default function App() {
     }
   };
 
-  const handleDeclineAllCookies = () => {
+  const handleDeclineCookies = () => {
     try {
       localStorage.setItem('life_calc_cookie_consent', 'all_denied');
       setShowCookieBanner(false);
@@ -57,525 +90,262 @@ export default function App() {
     }
   };
 
-  const handleSaveCustomCookies = () => {
-    try {
-      const consentType = (analyticsConsent && adConsent) ? 'all_granted' : (!analyticsConsent && !adConsent) ? 'all_denied' : 'custom';
-      localStorage.setItem('life_calc_cookie_consent', consentType);
-      localStorage.setItem('life_calc_analytics_consent', String(analyticsConsent));
-      localStorage.setItem('life_calc_ad_consent', String(adConsent));
-      setShowCookieBanner(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  // Unified navigation router helper
-  const handleNavigateToCalculator = (id: string) => {
-    // If navigating to a policy sub-section, handle routing & smooth anchor scrolling
-    if (id === 'privacy' || id === 'terms' || id === 'about' || id === 'policy') {
-      setCurrentCategory('policy');
-      setSubCalculatorId('all');
-      setTimeout(() => {
-        const targetId = id === 'privacy' ? 'privacy-policy' : id === 'terms' ? 'terms-of-service' : id === 'about' ? 'about-portal' : 'about-portal';
-        const el = document.getElementById(targetId);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      }, 150);
-      return;
-    }
-
-    // Determine target category based on prefix/id
-    if (id.startsWith('wage_')) {
-      setCurrentCategory('wage');
-      setSubCalculatorId(id);
-    } else if (id.startsWith('life_')) {
-      setCurrentCategory('life');
-      setSubCalculatorId(id);
-    } else if (id.startsWith('finance_')) {
-      setCurrentCategory('finance');
-      setSubCalculatorId(id);
-    } else if (id.startsWith('property_')) {
-      setCurrentCategory('property');
-      setSubCalculatorId(id);
-    } else if (id === 'insurance') {
-      setCurrentCategory('insurance');
-      setSubCalculatorId('all');
-    } else if (id === 'magazine' || id.startsWith('post-') || id === 'post') {
-      setCurrentCategory('magazine');
-      setSubCalculatorId('all');
-    } else {
-      // Direct category or safety fallback
-      const foundItem = ['insurance', 'wage', 'life', 'finance', 'property', 'magazine', 'policy'].includes(id);
-      if (foundItem) {
-        setCurrentCategory(id as CategoryType);
-        setSubCalculatorId('all');
-      }
-    }
-
-    // Scroll smoothly to top of workspace
+  // Category navigation handler
+  const handleSelectCategory = (cat: CategoryType) => {
+    setCurrentCategory(cat);
+    setSelectedPost(null);
+    setSearchQuery('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleSelectCategory = (cat: CategoryType) => {
-    setCurrentCategory(cat);
-    setSubCalculatorId('all');
+  // Post selection handler
+  const handleSelectPost = (post: PostItem) => {
+    setSelectedPost(post);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Parse deep link URL parameters (calc, s, subId, category, post) on initial load
-  useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const calcId = params.get('calc') || params.get('s') || params.get('subId');
-      const cat = params.get('c') || params.get('category');
-      const postId = params.get('post');
-      
-      if (postId) {
-        handleNavigateToCalculator('magazine');
-      } else if (calcId) {
-        handleNavigateToCalculator(calcId);
-      } else if (cat) {
-        handleSelectCategory(cat as CategoryType);
-      }
-    } catch (e) {
-      console.error("Deep link search params parsing failed:", e);
-    }
-  }, []);
+  // Navigate to calculator tool
+  const handleNavigateToCalculator = (calcId: string) => {
+    setCurrentCategory('calculators');
+    setActiveCalculatorSubId(calcId);
+    setSelectedPost(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  // Dynamically inject Google AdSense core script
-  useEffect(() => {
-    try {
-      const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-9552509372228899";
-      const existingScript = document.querySelector(`script[src*="adsbygoogle.js"]`);
-      if (!existingScript) {
-        const script = document.createElement("script");
-        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${pubId}`;
-        script.async = true;
-        script.crossOrigin = "anonymous";
-        document.head.appendChild(script);
-      }
-    } catch (e) {
-      console.error("AdSense script injection failed:", e);
-    }
-  }, []);
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans transition-colors duration-200">
-      {/* Prime Header & Navigation Bar */}
-      <Navigation
+    <div className="min-h-screen bg-slate-50 flex flex-col font-body text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+      
+      {/* 1. Top Header & Navigation */}
+      <BlogHeader
         currentCategory={currentCategory}
         onSelectCategory={handleSelectCategory}
-        onNavigateToCalculator={handleNavigateToCalculator}
+        onSearch={(q) => {
+          setSearchQuery(q);
+          if (selectedPost) setSelectedPost(null);
+          if (currentCategory === 'calculators' || currentCategory === 'about' || currentCategory === 'privacy' || currentCategory === 'terms') {
+            setCurrentCategory('all');
+          }
+        }}
+        searchQuery={searchQuery}
       />
 
-      {/* Main Content Outer Container */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        {/* Dynamic Navigation Breadcrumb & Quick Info Bar */}
-        <div className="bg-white border border-slate-200 rounded-xl p-3.5 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs no-print">
-          <div className="flex items-center space-x-2 text-xs text-slate-500">
-            <span>스마트 계산 허브</span>
-            <span>➔</span>
-            <span className="font-semibold text-blue-600 capitalize">{currentCategory} 캘린더</span>
-            {subCalculatorId !== 'all' && (
-              <>
-                <span>➔</span>
-                <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-mono font-bold text-[10px] uppercase">
-                  {subCalculatorId}
-                </span>
-              </>
-            )}
+      {/* 2. Main Content Container (2-Column Blog Layout) */}
+      <div className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Dynamic layout: If calculators or full-width page, render full width; otherwise, classic 2-column blog layout */}
+        {currentCategory === 'calculators' ? (
+          <CalculatorsHub
+            initialTab={activeCalculatorSubId}
+            onBackToBlog={() => handleSelectCategory('all')}
+          />
+        ) : currentCategory === 'privacy' ? (
+          <div className="max-w-4xl mx-auto">
+            <PrivacyPolicy onBack={() => handleSelectCategory('all')} />
           </div>
-
-          <div className="flex items-center space-x-1.5 text-xs text-blue-600 font-semibold bg-blue-50/70 border border-blue-105 py-1 px-2.5 rounded-lg w-fit">
-            <ShieldCheck className="w-4 h-4 text-blue-500" />
-            <span>2026 정부 법정 요율 실시간 완벽 적용 완료</span>
+        ) : currentCategory === 'terms' ? (
+          <div className="max-w-4xl mx-auto">
+            <TermsOfService onBack={() => handleSelectCategory('all')} />
           </div>
-        </div>
-
-        {/* Ultimate Workspace Panel layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
-          
-          {/* LEFT: Core Computational Screen Workspace (3 cols) */}
-          <div className="lg:col-span-3 space-y-6 print-full-width">
-            
-            {/* Conditional Renderer based on state category */}
-            {currentCategory === 'insurance' && (
-              <InsuranceCalculator />
-            )}
-
-            {currentCategory === 'wage' && (
-              <WageCalculator />
-            )}
-
-            {currentCategory === 'life' && (
-              <LifeCalculator />
-            )}
-
-            {currentCategory === 'finance' && (
-              <FinanceCalculator />
-            )}
-
-            {currentCategory === 'property' && (
-              <PropertyCalculator />
-            )}
-
-            {currentCategory === 'magazine' && (
-              <AutoPostingMagazine onNavigateToCalculator={handleNavigateToCalculator} />
-            )}
-
-            {currentCategory === 'policy' && (
-              <div className="space-y-6">
-                {/* Embedded Legal Documents inside dynamic viewport */}
-                <AboutApp onNavigateToCalculator={handleNavigateToCalculator} />
-                <PrivacyPolicy />
-                <TermsOfService />
-              </div>
-            )}
-
-            {/* SEO/AEO/GEO Knowledge Hub Guide Component */}
-            <AeoGuide onNavigateToCalculator={handleNavigateToCalculator} />
-
-            {/* SEO Core Guide Block - Highlight for First-time Visitors */}
-            <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 text-white rounded-2xl p-6 md:p-8 space-y-4 shadow-sm relative overflow-hidden no-print">
-              <div className="absolute right-[-20px] bottom-[-20px] opacity-10 pointer-events-none">
-                <LayoutGrid className="w-64 h-64" />
-              </div>
-
-              <div className="max-w-2xl relative z-10">
-                <span className="bg-blue-550/30 text-blue-300 font-bold text-[10px] px-2.5 py-1 rounded-full border border-blue-400/20 uppercase tracking-widest">
-                  PORTAL VALUE MISSION
-                </span>
-                <h2 className="text-xl md:text-2xl font-black mt-2 tracking-tight">
-                  왜 &apos;생활계산기 천국&apos; 계산 결과를 신뢰할 수 있나요?
-                </h2>
-                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                  인터넷에 수많은 계산기가 존재하지만, 대부분 몇 년 전 법령 수율을 고수한 채 방치되거나 복잡한 광고 배너 피로감만 가중시킵니다. 
-                  저희는 아르바이트 고용수정 최저임금안, 4대 사회보험 법정 가치 상한 리스크, 생애 첫 집 매입 감세 개정률까지 2026년 기준치를 정기 검수하여 반영하고 있습니다.
-                  또한, 방문자 개인 정보를 전혀 백업하지 않는 <strong>프라이버시 친화형 연산엔진</strong>으로 안심하고 사용하실 수 있습니다.
-                </p>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-800/80 mt-4">
-                  <button
-                    onClick={() => handleNavigateToCalculator('insurance')}
-                    className="flex items-center justify-between text-[11px] bg-slate-800/80 hover:bg-slate-750 p-2.5 rounded-lg border border-slate-700/60 font-semibold transition"
-                  >
-                    <span>🛡️ 4대보험 바로가기</span>
-                    <span>➔</span>
-                  </button>
-                  <button
-                    onClick={() => handleNavigateToCalculator('wage_hourly')}
-                    className="flex items-center justify-between text-[11px] bg-slate-800/80 hover:bg-slate-750 p-2.5 rounded-lg border border-slate-700/60 font-semibold transition"
-                  >
-                    <span>⏱ 주휴수당 바로가기</span>
-                    <span>➔</span>
-                  </button>
-                  <button
-                    onClick={() => handleNavigateToCalculator('property_tax')}
-                    className="flex items-center justify-between text-[11px] bg-slate-800/80 hover:bg-slate-750 p-2.5 rounded-lg border border-slate-700/60 font-semibold transition"
-                  >
-                    <span>🏛 취득세 바로가기</span>
-                    <span>➔</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* RIGHT: High Value Widgets & Informational Metrics Panel (1 col) */}
-          <div className="space-y-6 no-print">
-            
-            {/* Live Automated Posting Sidebar Widget */}
-            <LatestPostsWidget
-              onNavigateToMagazine={() => handleSelectCategory('magazine')}
+        ) : currentCategory === 'about' ? (
+          <div className="max-w-4xl mx-auto">
+            <AboutApp
+              onSelectCategory={handleSelectCategory}
               onNavigateToCalculator={handleNavigateToCalculator}
             />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            {/* Main Column (8 cols on lg) */}
+            <main className="lg:col-span-8 space-y-8">
+              {selectedPost ? (
+                <BlogPostView
+                  post={selectedPost}
+                  onSelectPost={handleSelectPost}
+                  onSelectCategory={handleSelectCategory}
+                  onNavigateToCalculator={handleNavigateToCalculator}
+                />
+              ) : (
+                <BlogHome
+                  currentCategory={currentCategory}
+                  onSelectCategory={handleSelectCategory}
+                  onSelectPost={handleSelectPost}
+                  searchQuery={searchQuery}
+                  onClearSearch={() => setSearchQuery('')}
+                />
+              )}
+            </main>
 
-            {/* 2026 Statutory Economic & Tax Standards Index Widget */}
-            <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b pb-2.5">
-                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                  <LayoutGrid className="w-4 h-4 text-emerald-600" />
-                  2026년 법정 경제·세무 기준 지표
-                </span>
-                <span className="text-[10px] bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded-full font-extrabold tracking-wider flex items-center gap-1">
-                  공식 고시
+            {/* Sidebar Column (4 cols on lg) */}
+            <div className="lg:col-span-4 no-print">
+              <BlogSidebar
+                onSelectPost={handleSelectPost}
+                onSelectCategory={handleSelectCategory}
+                onNavigateToCalculator={handleNavigateToCalculator}
+                activePost={selectedPost}
+              />
+            </div>
+
+          </div>
+        )}
+      </div>
+
+      {/* 3. Footer */}
+      <footer className="bg-slate-900 text-slate-400 mt-16 border-t border-slate-800 text-xs leading-relaxed font-body">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-slate-800">
+            
+            {/* Col 1: Brand & Bio */}
+            <div className="md:col-span-2 space-y-3">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-sm">
+                  <BookOpen className="w-4 h-4 text-white" />
+                </div>
+                <span className="font-heading text-lg font-black text-white">
+                  생활금융 실전 가이드
                 </span>
               </div>
-
-              <div className="space-y-3">
-                {/* 1. Minimum Wage */}
-                <div className="flex justify-between items-center py-0.5">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-slate-800 font-semibold">2026년 최저시급</span>
-                    <span className="text-[10px] text-slate-400">전년 대비 1.7% 인상</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-extrabold text-slate-900 block">10,320원</span>
-                    <span className="text-[9px] text-emerald-600 font-bold">주휴수당 환산 시 12,384원</span>
-                  </div>
-                </div>
-
-                {/* 2. Base Interest Rate */}
-                <div className="flex justify-between items-center py-0.5 border-t border-slate-50 pt-2">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-slate-800 font-semibold">한은 기준금리</span>
-                    <span className="text-[10px] text-slate-400">한국은행 기준 연이율</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-extrabold text-slate-900 block">3.25%</span>
-                    <span className="text-[9px] text-slate-500">2026년 상반기 기준</span>
-                  </div>
-                </div>
-
-                {/* 3. General Interest Tax */}
-                <div className="flex justify-between items-center py-0.5 border-t border-slate-50 pt-2">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-slate-800 font-semibold">이자소득 과세율</span>
-                    <span className="text-[10px] text-slate-400">소득세 14% + 지방소득세 1.4%</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-extrabold text-slate-900 block">15.4%</span>
-                    <span className="text-[9px] text-blue-600 font-bold">세금우대 시 9.5%</span>
-                  </div>
-                </div>
-
-                {/* 4. Four Major Insurances */}
-                <div className="flex justify-between items-start py-0.5 border-t border-slate-50 pt-2">
-                  <div className="flex flex-col">
-                    <span className="text-xs text-slate-800 font-semibold">4대보험 요율 합계</span>
-                    <span className="text-[10px] text-slate-400">국민·건강·요양·고용</span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xs font-extrabold text-slate-900 block">19.22%</span>
-                    <span className="text-[9px] text-slate-500">근로자 본인 부담: 9.39%</span>
-                  </div>
-                </div>
-              </div>
-
-              <p className="text-[10px] text-slate-400 font-medium pt-1.5 border-t border-slate-100 leading-relaxed">
-                ※ 본 서비스의 모든 연산기는 위 2026년도 공식 법정 세율 및 고시 경제 기준을 완전히 적용하여 계산합니다.
+              <p className="text-slate-400 text-xs max-w-md leading-relaxed">
+                2026년 대한민국 4대사회보험, 급여·퇴직금, 연봉 실수령액, 부동산 세무 및 금융 재테크 실전 정보와 무료 모의 계산기를 제공합니다.
+              </p>
+              <p className="text-slate-500 text-[11px]">
+                공식 이메일: <span className="font-mono text-slate-300">contact@life-calc.kr</span>
               </p>
             </div>
 
-            {/* 2026 Policy Briefing Card */}
-            <div className="bg-blue-600 text-white rounded-2xl p-5 space-y-3.5 shadow-sm relative overflow-hidden">
-              <div className="absolute right-[-10px] bottom-[-10px] opacity-10 pointer-events-none">
-                <ShieldCheck className="w-24 h-24 text-white" />
-              </div>
-              <h3 className="text-xs font-extrabold text-blue-100 uppercase tracking-wider">2026 정책 브리핑 고지</h3>
-              <p className="text-xs font-black text-white leading-relaxed">
-                2026년 최저시급 10,320원 공식 고시 및 상시 근로자 4대 사회보험 법정 가이드 수율 기준 변경 고지.
-              </p>
-              <p className="text-[11px] text-blue-100 leading-relaxed font-sans">
-                최종 이직확인서 정지 및 신설 수당, 연령별 만나이 개정령이 전체 연산 허브 모듈에 완벽하게 내장되었습니다. 별도의 업데이트 없이 365일 실시간 상시 모의 연산이 가능합니다.
-              </p>
-              <div className="pt-2.5 border-t border-white/20 text-center">
-                <span className="inline-flex items-center gap-1 text-[11px] text-white font-extrabold">
-                  🛡️ 2026 대한민국 최신 법안 규격 지배적 적용
-                </span>
-              </div>
-            </div>
-
-            {/* Direct legal checklist to please manual Google quality testers */}
-            <div className="bg-white rounded-2xl shadow-xs border border-slate-200 p-5 space-y-3 text-xs text-slate-600">
-              <p className="font-extrabold text-slate-850 border-b pb-2 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-blue-500" />
-                포털 이용자 개인정보 안심 보장
-              </p>
-              <ul className="space-y-2 text-[11px] text-slate-600">
-                <li className="flex items-start gap-1.5">
-                  <span className="text-blue-500 font-bold mt-0.5">✔</span>
-                  <span><strong>무저장 원칙</strong>: 계산 데이터는 절대 서버로 매칭 수집되지 않고 브라우저 Local State 영역에서 구동 후 즉시 연산 소멸됩니다.</span>
+            {/* Col 2: Category Quick Links */}
+            <div className="space-y-2">
+              <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
+                칼럼 카테고리
+              </h4>
+              <ul className="space-y-1.5 text-xs text-slate-400">
+                <li>
+                  <button onClick={() => handleSelectCategory('insurance')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🛡️ 4대사회보험 칼럼
+                  </button>
                 </li>
-                <li className="flex items-start gap-1.5">
-                  <span className="text-blue-500 font-bold mt-0.5">✔</span>
-                  <span><strong>법적 기준 고수</strong>: 2026년 대한민국 행정 사법 규격과 최신 국세법 자문을 준수하여 수치를 최적 고도화 하였습니다.</span>
+                <li>
+                  <button onClick={() => handleSelectCategory('wage')} className="hover:text-indigo-400 transition cursor-pointer">
+                    ⏱ 급여·수당·노무
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('finance')} className="hover:text-indigo-400 transition cursor-pointer">
+                    💰 금융·예적금·대출
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('property')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🏠 부동산·세금·청약
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('life')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🎂 생활·법률·행정
+                  </button>
                 </li>
               </ul>
-              <p className="text-[10px] text-slate-400 pt-1.5 border-t border-slate-100 leading-relaxed">
-                본 웹 서비스는 무분별한 낚시성 정보 유도 배너를 배제하며, 오직 검색 신뢰성과 연산 가치 증진의 투명 원칙만을 준수합니다.
-              </p>
+            </div>
+
+            {/* Col 3: Policy & Calculators */}
+            <div className="space-y-2">
+              <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
+                서비스 안내 및 도구
+              </h4>
+              <ul className="space-y-1.5 text-xs text-slate-400">
+                <li>
+                  <button onClick={() => handleSelectCategory('about')} className="hover:text-indigo-400 transition cursor-pointer">
+                    ℹ️ 블로그 소개
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('calculators')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🧮 실생활 모의 계산기
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('privacy')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🔒 개인정보처리방침
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('terms')} className="hover:text-indigo-400 transition cursor-pointer">
+                    📄 이용약관 및 면책조항
+                  </button>
+                </li>
+              </ul>
             </div>
 
           </div>
-        </div>
-      </main>
 
-      {/* Standard Universal Footing Content for Maximum Legitimacy */}
-      <footer className="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12 font-sans">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between border-b border-slate-800 pb-5 gap-4">
-            <div className="space-y-1">
-              <p className="text-white font-bold text-sm tracking-tight">생활계산기 천국 portal</p>
-              <p className="text-[10px] text-slate-500">
-                © 2026 Life Calculator Network. All Rights Reserved. | 제안 및 오류 제보: <a href="mailto:apark12321@gmail.com" className="text-slate-400 hover:text-white underline transition">apark12321@gmail.com</a>
-              </p>
-              <p className="text-[10px] text-slate-600">
-                본 계산서 결과는 모의용 자료이며 세무적/법적 행정 증빙자료로 간주될 수 없으므로, 정확한 의무 수치는 반드시 전문가 및 관공서에 위송해 검증하십시오.
-              </p>
-            </div>
-
-            {/* Compliance Footer Navigation Shortcuts */}
-            <div className="flex flex-wrap gap-4 text-xs font-semibold text-slate-300">
-              <button
-                onClick={() => handleNavigateToCalculator('privacy')}
-                className="hover:text-amber-400 transition"
-              >
-                개인정보처리방침 (Privacy Policy)
-              </button>
-              <span className="text-slate-700">|</span>
-              <button
-                onClick={() => handleNavigateToCalculator('terms')}
-                className="hover:text-amber-400 transition"
-              >
-                서비스 이용약관 (Terms)
-              </button>
-              <span className="text-slate-700">|</span>
-              <button
-                onClick={() => handleNavigateToCalculator('about')}
-                className="hover:text-amber-400 transition"
-              >
-                사이트 소개 & 사이트맵
-              </button>
+          {/* Bottom Copyright & Disclaimer */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
+            <p>
+              &copy; 2026 생활금융 실전 가이드. All rights reserved. 본 웹사이트의 모든 글과 데이터는 참고용이며, 개별 세무·법률 분쟁에 대한 법적 효력을 갖지 않습니다.
+            </p>
+            <div className="flex items-center space-x-3 text-slate-400">
+              <button onClick={() => handleSelectCategory('privacy')} className="hover:underline cursor-pointer">개인정보처리방침</button>
+              <span>·</span>
+              <button onClick={() => handleSelectCategory('terms')} className="hover:underline cursor-pointer">이용약관</button>
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-[10px] text-slate-500 gap-2">
-            <p>생활 속 유용한 세무, 보험, 주거 관련 이자 계산을 위해 법안을 상시 갱신하는 모의 연산 시스템입니다.</p>
-            <p className="font-mono">VER 1.2.6 // KOREAN STATUTORY COMPLIANT</p>
-          </div>
         </div>
       </footer>
 
-      {/* Interactive & Compliant Cookie Consent Banner */}
+      {/* 4. Scroll To Top Floating Button */}
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 p-3 bg-slate-900/90 hover:bg-indigo-600 text-white rounded-2xl shadow-lg transition-all duration-200 z-30 cursor-pointer backdrop-blur-xs no-print"
+          title="맨 위로 이동"
+        >
+          <ChevronUp className="w-5 h-5" />
+        </button>
+      )}
+
+      {/* 5. Non-intrusive Cookie Consent Banner */}
       {showCookieBanner && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white rounded-2xl shadow-2xl border border-slate-800 z-[9999] p-5 space-y-4 animate-fade-in font-sans no-print">
-          <div className="flex items-start justify-between">
-            <div className="flex items-center space-x-2.5">
-              <div className="p-2 bg-blue-650/30 text-blue-400 rounded-xl border border-blue-500/20">
-                <Cookie className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
-                  맞춤형 개인 정보 및 쿠키 설정 안내
-                </h4>
-                <p className="text-[10px] text-slate-400 mt-0.5">ePrivacy Directive & Google Consent Mode v2 준수</p>
-              </div>
+        <div className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md bg-white border border-slate-200 rounded-3xl p-5 shadow-2xl z-50 animate-in fade-in slide-in-from-bottom duration-300 no-print space-y-3">
+          <div className="flex items-start space-x-3">
+            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl shrink-0 mt-0.5">
+              <Cookie className="w-5 h-5" />
             </div>
-            <button 
-              onClick={() => setShowCookieBanner(false)}
-              className="text-slate-400 hover:text-white transition p-1"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            <div className="space-y-1">
+              <h4 className="font-heading text-xs sm:text-sm font-black text-slate-900">
+                쿠키 사용 및 개인정보 안내
+              </h4>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                본 블로그는 원활한 서비스 제공 및 구글 맞춤형 광고 게재를 위해 최소한의 쿠키를 사용합니다.
+              </p>
+            </div>
           </div>
 
-          {!cookieDetails ? (
-            <>
-              <p className="text-[11px] text-slate-300 leading-relaxed font-normal">
-                본 웹 서비스는 구글 애드센스 맞춤형 광고 게재 및 방문자 편의 분석을 위해 브라우저 쿠키를 활용하고 있습니다. 귀하는 광고 및 분석용 쿠키 저장을 거부하실 권리가 있으며, 동의 시 더욱 원활한 맞춤 연산 피드백을 수령하실 수 있습니다.
-              </p>
-              <div className="grid grid-cols-2 gap-2 pt-1">
-                <button
-                  onClick={handleDeclineAllCookies}
-                  className="px-3 py-2 bg-slate-800 hover:bg-slate-750 text-slate-300 font-bold text-xs rounded-xl border border-slate-750 transition cursor-pointer"
-                >
-                  필수 쿠키만 허용
-                </button>
-                <button
-                  onClick={handleAcceptAllCookies}
-                  className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition cursor-pointer"
-                >
-                  모두 수락 및 동의
-                </button>
-              </div>
-              <div className="flex justify-center border-t border-slate-800/80 pt-2.5">
-                <button
-                  onClick={() => setCookieDetails(true)}
-                  className="flex items-center space-x-1 text-[10px] text-slate-400 hover:text-white transition font-medium"
-                >
-                  <Settings className="w-3 h-3" />
-                  <span>쿠키 옵션 개별 설정 및 정책 보기</span>
-                </button>
-              </div>
-            </>
-          ) : (
-            <div className="space-y-3 pt-1">
-              {/* Preferences list */}
-              <div className="space-y-2 text-[11px]">
-                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
-                  <div className="space-y-0.5 pr-2">
-                    <p className="font-bold text-slate-200 flex items-center gap-1">
-                      <Lock className="w-3.5 h-3.5 text-blue-400" />
-                      <span>필수 쿠키 (Strictly Necessary)</span>
-                    </p>
-                    <p className="text-[9px] text-slate-400">시스템 연산 구동 및 로컬 테마, 기본 설정 보존 목적 (필수)</p>
-                  </div>
-                  <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-500/10 px-2 py-0.5 rounded">활성</span>
-                </div>
-
-                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
-                  <div className="space-y-0.5 pr-2">
-                    <p className="font-bold text-slate-200 flex items-center gap-1">
-                      <Shield className="w-3.5 h-3.5 text-blue-400" />
-                      <span>맞춤 광고 쿠키 (Google AdSense)</span>
-                    </p>
-                    <p className="text-[9px] text-slate-400">구글 파트너십 관심사 반영 타겟 맞춤 광고 노출 목적</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={adConsent}
-                      onChange={(e) => setAdConsent(e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-8 h-4 bg-slate-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between bg-slate-800/60 p-2.5 rounded-lg border border-slate-800">
-                  <div className="space-y-0.5 pr-2">
-                    <p className="font-bold text-slate-200 flex items-center gap-1">
-                      <Info className="w-3.5 h-3.5 text-blue-400" />
-                      <span>분석용 웹로그 쿠키 (Analytics)</span>
-                    </p>
-                    <p className="text-[9px] text-slate-400">페이지별 이용 흐름 집계 및 대기 정밀 버그 트래킹 목적</p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={analyticsConsent}
-                      onChange={(e) => setAnalyticsConsent(e.target.checked)}
-                      className="sr-only peer"
-                    />
-                    <div className="w-8 h-4 bg-slate-700 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-blue-600"></div>
-                  </label>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center pt-2 gap-2 border-t border-slate-800/80">
-                <button
-                  onClick={() => setCookieDetails(false)}
-                  className="text-[10px] text-slate-400 hover:text-white transition font-medium"
-                >
-                  ➔ 이전 화면으로 돌아가기
-                </button>
-                <button
-                  onClick={handleSaveCustomCookies}
-                  className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition cursor-pointer"
-                >
-                  선택한 설정 저장하기
-                </button>
-              </div>
-            </div>
-          )}
+          <div className="flex items-center justify-end space-x-2 pt-1">
+            <button
+              type="button"
+              onClick={handleDeclineCookies}
+              className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition cursor-pointer"
+            >
+              거부
+            </button>
+            <button
+              type="button"
+              onClick={handleAcceptCookies}
+              className="px-4 py-1.5 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl text-xs font-bold transition cursor-pointer"
+            >
+              동의 및 계속
+            </button>
+          </div>
         </div>
       )}
+
     </div>
   );
 }

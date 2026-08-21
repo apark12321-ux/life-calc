@@ -7,10 +7,12 @@ interface AdSenseProps {
 }
 
 export default function AdSenseMock({ slotId, type = 'banner', className = '' }: AdSenseProps) {
+  const isApproved = import.meta.env.VITE_ADSENSE_APPROVED === 'true';
   const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-9552509372228899";
   const isPushed = useRef(false);
 
   useEffect(() => {
+    if (!isApproved) return;
     // Only push once per component mount
     if (isPushed.current) return;
     try {
@@ -21,7 +23,11 @@ export default function AdSenseMock({ slotId, type = 'banner', className = '' }:
     } catch (e) {
       console.warn("AdSense push execution skipped or ad blocker detected:", e);
     }
-  }, [slotId]);
+  }, [isApproved, slotId]);
+
+  if (!isApproved) {
+    return null;
+  }
 
   const getSlotLayout = () => {
     switch (type) {

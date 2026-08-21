@@ -1,0 +1,518 @@
+import React, { useState } from 'react';
+import { PostItem, CategoryType } from '../types';
+import { ALL_BLOG_POSTS, CATEGORY_META, INITIAL_BLOG_COMMENTS } from '../data/postsData';
+import { 
+  Calendar, Clock, User, Share2, Printer, ChevronRight, ChevronLeft, 
+  Sparkles, ShieldCheck, ArrowRight, ExternalLink, MessageSquare, Send, Check, Heart, Bookmark, BookOpen,
+  List
+} from 'lucide-react';
+import TableOfContents from './TableOfContents';
+
+interface BlogPostViewProps {
+  post: PostItem;
+  onSelectPost: (post: PostItem) => void;
+  onSelectCategory: (cat: CategoryType) => void;
+  onNavigateToCalculator: (calcId: string) => void;
+}
+
+export default function BlogPostView({
+  post,
+  onSelectPost,
+  onSelectCategory,
+  onNavigateToCalculator
+}: BlogPostViewProps) {
+  const [copied, setCopied] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(Math.floor(post.viewCount / 35) + 12);
+  const [bookmarked, setBookmarked] = useState(false);
+  
+  // Comments state
+  const [comments, setComments] = useState(INITIAL_BLOG_COMMENTS[post.id] || [
+    {
+      id: 'default-1',
+      author: '직장인A',
+      date: post.date,
+      content: '이해하기 쉽게 정리해주셔서 감사합니다. 2026년 기준 바뀐 내용 찾고 있었는데 큰 도움이 되었습니다!'
+    }
+  ]);
+  const [newCommentName, setNewCommentName] = useState('');
+  const [newCommentText, setNewCommentText] = useState('');
+  const [commentSubmitted, setCommentSubmitted] = useState(false);
+
+  // Find previous and next posts
+  const currentIndex = ALL_BLOG_POSTS.findIndex(p => p.id === post.id);
+  const prevPost = currentIndex > 0 ? ALL_BLOG_POSTS[currentIndex - 1] : null;
+  const nextPost = currentIndex < ALL_BLOG_POSTS.length - 1 ? ALL_BLOG_POSTS[currentIndex + 1] : null;
+
+  // Related posts in same category (excluding current)
+  const relatedPosts = ALL_BLOG_POSTS
+    .filter(p => p.category === post.category && p.id !== post.id)
+    .slice(0, 3);
+
+  const handleShare = () => {
+    try {
+      const url = `${window.location.origin}${window.location.pathname}?post=${post.id}`;
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Fallback
+    }
+  };
+
+  const handleToggleLike = () => {
+    if (!liked) {
+      setLikeCount(prev => prev + 1);
+      setLiked(true);
+    } else {
+      setLikeCount(prev => prev - 1);
+      setLiked(false);
+    }
+  };
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCommentName.trim() || !newCommentText.trim()) return;
+
+    const newComment = {
+      id: `user-${Date.now()}`,
+      author: newCommentName.trim(),
+      date: new Date().toISOString().split('T')[0],
+      content: newCommentText.trim()
+    };
+
+    setComments(prev => [newComment, ...prev]);
+    setNewCommentName('');
+    setNewCommentText('');
+    setCommentSubmitted(true);
+    setTimeout(() => setCommentSubmitted(false), 3000);
+  };
+
+  const meta = CATEGORY_META[post.category];
+
+  return (
+    <article className="space-y-8 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200 shadow-xs">
+      
+      {/* 1. Breadcrumbs Navigation */}
+      <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium no-print">
+        <button 
+          onClick={() => onSelectCategory('all')}
+          className="hover:text-indigo-600 transition"
+        >
+          블로그 홈
+        </button>
+        <span>&gt;</span>
+        <button 
+          onClick={() => onSelectCategory(post.category)}
+          className="hover:text-indigo-600 transition font-semibold"
+        >
+          {meta.name}
+        </button>
+        <span>&gt;</span>
+        <span className="text-slate-400 truncate max-w-[200px] sm:max-w-xs">{post.title}</span>
+      </nav>
+
+      {/* 2. Post Header */}
+      <header className="space-y-4 border-b border-slate-100 pb-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => onSelectCategory(post.category)}
+            className={`font-display text-xs font-extrabold px-3 py-1 rounded-full border ${meta.bg} ${meta.color} ${meta.border} flex items-center gap-1.5 cursor-pointer`}
+          >
+            <span>{meta.icon}</span>
+            <span>{meta.name}</span>
+          </button>
+
+          {/* Social Action Rail */}
+          <div className="flex items-center space-x-2 no-print">
+            <button
+              type="button"
+              onClick={handleToggleLike}
+              className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                liked 
+                  ? 'bg-rose-50 border-rose-200 text-rose-600' 
+                  : 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-600'
+              }`}
+            >
+              <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-rose-500 text-rose-500' : ''}`} />
+              <span className="font-num">{likeCount}</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+            >
+              <Share2 className="w-3.5 h-3.5 text-slate-500" />
+              <span>{copied ? '링크 복사됨!' : '공유'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="p-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs transition cursor-pointer"
+              title="인쇄하기"
+            >
+              <Printer className="w-4 h-4 text-slate-500" />
+            </button>
+          </div>
+        </div>
+
+        <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 leading-tight tracking-tight">
+          {post.title}
+        </h1>
+
+        <p className="font-body text-sm sm:text-base text-slate-600 leading-relaxed">
+          {post.summary}
+        </p>
+
+        {/* Author Meta Row */}
+        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 text-xs text-slate-500">
+          <div className="flex items-center space-x-2.5">
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-xs border border-indigo-200">
+              <BookOpen className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <span className="font-bold text-slate-900">{post.author}</span>
+              <span className="text-slate-400 ml-1.5 font-normal">({post.authorRole || '리서치팀'})</span>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4 text-slate-400 text-xs">
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              {post.date}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" />
+              {post.readTimeMinutes}분 소요
+            </span>
+            <span>조회 {post.viewCount.toLocaleString()}회</span>
+          </div>
+        </div>
+      </header>
+
+      {/* 3. Author's Personal Note Callout */}
+      {post.authorNote && (
+        <div className="bg-amber-50/80 border-l-4 border-amber-400 p-4 sm:p-5 rounded-r-2xl text-amber-950 space-y-1.5">
+          <p className="font-heading text-xs font-black text-amber-900 flex items-center gap-1.5 uppercase tracking-wider">
+            <span>💡</span>
+            <span>실무 핵심 팁 & 코멘트</span>
+          </p>
+          <p className="font-body text-xs sm:text-sm leading-relaxed text-amber-900 font-medium">
+            {post.authorNote}
+          </p>
+        </div>
+      )}
+
+      {/* 4. Highlights Metrics Box */}
+      {post.highlights && post.highlights.length > 0 && (
+        <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+          <p className="font-heading text-xs sm:text-sm font-black text-slate-900 flex items-center gap-1.5">
+            <Sparkles className="w-4 h-4 text-indigo-600" />
+            핵심 요약 & 2026 법정 기준 포인트
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            {post.highlights.map((h, i) => (
+              <div key={i} className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs">
+                <span className="text-[11px] text-slate-500 block mb-0.5">{h.label}</span>
+                <span className="font-heading font-extrabold text-xs sm:text-sm text-indigo-950 font-num">{h.value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 4.1 Mobile / Inline Table of Contents for easy navigation */}
+      <div className="lg:hidden">
+        <TableOfContents content={post.content} variant="inline" title="핵심 글 목차 (TOC)" />
+      </div>
+
+      {/* 5. Main Post Markdown-styled Rich Content */}
+      <div className="prose prose-slate max-w-none text-slate-800 text-sm sm:text-base leading-relaxed space-y-5 font-body">
+        {(() => {
+          let h2Count = 0;
+          let h3Count = 0;
+
+          return post.content.split('\n\n').map((paragraph, idx) => {
+            if (paragraph.startsWith('## ')) {
+              const headingId = `toc-heading-h2-${h2Count++}`;
+              const text = paragraph.replace('## ', '');
+              return (
+                <h2 
+                  key={idx} 
+                  id={headingId}
+                  className="scroll-mt-24 font-heading text-xl sm:text-2xl font-black text-slate-950 mt-8 mb-3 border-b border-slate-100 pb-2.5 flex items-center gap-2 group"
+                >
+                  <span className="text-indigo-600 text-base select-none opacity-60 group-hover:opacity-100 transition-opacity">#</span>
+                  <span>{text}</span>
+                </h2>
+              );
+            }
+            if (paragraph.startsWith('### ')) {
+              const headingId = `toc-heading-h3-${h3Count++}`;
+              const text = paragraph.replace('### ', '');
+              return (
+                <h3 
+                  key={idx} 
+                  id={headingId}
+                  className="scroll-mt-24 font-heading text-base sm:text-lg font-black text-slate-900 mt-6 mb-2 flex items-center gap-2 group"
+                >
+                  <span className="text-indigo-400 text-sm select-none opacity-50 group-hover:opacity-100 transition-opacity">##</span>
+                  <span>{text}</span>
+                </h3>
+              );
+            }
+            if (paragraph.startsWith('> ')) {
+              return (
+                <blockquote key={idx} className="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-sm my-4 italic">
+                  {paragraph.replace('> ', '')}
+                </blockquote>
+              );
+            }
+            if (paragraph.startsWith('- ')) {
+              return (
+                <ul key={idx} className="list-disc pl-5 space-y-1.5 text-slate-700">
+                  {paragraph.split('\n').map((item, itemIdx) => (
+                    <li key={itemIdx} className="leading-relaxed">
+                      {item.replace(/^- /, '')}
+                    </li>
+                  ))}
+                </ul>
+              );
+            }
+            if (paragraph.match(/^\d+\. /)) {
+              return (
+                <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-slate-700">
+                  {paragraph.split('\n').map((item, itemIdx) => (
+                    <li key={itemIdx} className="leading-relaxed">
+                      {item.replace(/^\d+\. /, '')}
+                    </li>
+                  ))}
+                </ol>
+              );
+            }
+            return (
+              <p key={idx} className="text-slate-700 leading-relaxed whitespace-pre-line">
+                {paragraph}
+              </p>
+            );
+          });
+        })()}
+      </div>
+
+      {/* 6. Statutory / Administrative Legal Basis */}
+      {post.legalBasis && (
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 flex items-start gap-2.5">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+          <div>
+            <span className="font-bold text-slate-800">관련 법령 및 행정 근거:</span>{' '}
+            <span>{post.legalBasis}</span>
+          </div>
+        </div>
+      )}
+
+      {/* 7. Calculator Link CTA */}
+      {post.relatedCalculatorId && (
+        <div className="bg-gradient-to-r from-indigo-50 via-blue-50 to-indigo-50 border border-indigo-200/80 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+          <div className="space-y-1">
+            <p className="font-heading text-sm sm:text-base font-black text-slate-900">
+              내 상황에 맞게 직접 계산해보시겠습니까?
+            </p>
+            <p className="font-body text-xs text-slate-600">
+              {post.relatedCalculatorName}를 통해 2026년 기준 예상 금액을 1초 만에 확인하실 수 있습니다.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (post.relatedCalculatorId) {
+                onNavigateToCalculator(post.relatedCalculatorId);
+              }
+            }}
+            className="font-display px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer shadow-xs shrink-0"
+          >
+            <span>계산기 바로가기</span>
+            <ExternalLink className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
+      {/* 8. Tags */}
+      <div className="flex flex-wrap gap-1.5 pt-2">
+        {post.tags.map((tag, idx) => (
+          <span key={idx} className="font-body text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1 rounded-lg transition font-medium">
+            #{tag}
+          </span>
+        ))}
+      </div>
+
+      {/* 9. Post Information Box */}
+      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-lg shadow-2xs shrink-0 border border-indigo-100">
+          <BookOpen className="w-6 h-6 text-indigo-600" />
+        </div>
+        <div className="space-y-1 text-center sm:text-left">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+            <h4 className="font-heading font-black text-slate-900 text-sm sm:text-base">{post.author}</h4>
+            <span className="text-xs text-indigo-700 bg-indigo-50 font-medium px-2 py-0.5 rounded-full border border-indigo-100">
+              {post.authorRole || '생활금융 에디터'}
+            </span>
+          </div>
+          <p className="font-body text-xs sm:text-sm text-slate-600 leading-relaxed">
+            본 글은 최신 세법 및 행정 고시 기준을 바탕으로 작성된 참고 자료입니다. 문의사항이나 의견은 이메일로 편하게 남겨주세요.
+          </p>
+          <p className="text-xs text-slate-400 pt-0.5">
+            이메일: <span className="font-mono text-slate-600">contact@life-calc.kr</span>
+          </p>
+        </div>
+      </div>
+
+      {/* 10. Previous / Next Post Navigation Rail */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-100 no-print">
+        {prevPost ? (
+          <div
+            onClick={() => onSelectPost(prevPost)}
+            className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition cursor-pointer group space-y-1"
+          >
+            <span className="text-[11px] text-slate-400 font-bold flex items-center gap-1 group-hover:text-indigo-600">
+              <ChevronLeft className="w-3.5 h-3.5" />
+              이전 글
+            </span>
+            <p className="font-heading text-xs sm:text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-indigo-600">
+              {prevPost.title}
+            </p>
+          </div>
+        ) : <div />}
+
+        {nextPost && (
+          <div
+            onClick={() => onSelectPost(nextPost)}
+            className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition cursor-pointer group space-y-1 text-right"
+          >
+            <span className="text-[11px] text-slate-400 font-bold flex items-center justify-end gap-1 group-hover:text-indigo-600">
+              다음 글
+              <ChevronRight className="w-3.5 h-3.5" />
+            </span>
+            <p className="font-heading text-xs sm:text-sm font-bold text-slate-800 line-clamp-1 group-hover:text-indigo-600">
+              {nextPost.title}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* 11. Related Articles Grid */}
+      {relatedPosts.length > 0 && (
+        <div className="space-y-4 pt-4 border-t border-slate-100 no-print">
+          <h3 className="font-heading text-base font-black text-slate-900 flex items-center gap-2">
+            <span>📚</span>
+            <span>같은 카테고리의 인기 글</span>
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {relatedPosts.map(rel => (
+              <div
+                key={rel.id}
+                onClick={() => onSelectPost(rel)}
+                className="p-4 rounded-2xl border border-slate-200 hover:shadow-md hover:border-indigo-300 transition cursor-pointer flex flex-col justify-between group space-y-2"
+              >
+                <div>
+                  <span className="text-[10px] text-slate-400">{rel.date}</span>
+                  <h4 className="font-heading text-xs sm:text-sm font-bold text-slate-800 group-hover:text-indigo-600 line-clamp-2 leading-snug mt-1">
+                    {rel.title}
+                  </h4>
+                </div>
+                <span className="text-[11px] text-indigo-600 font-bold flex items-center gap-0.5">
+                  <span>읽어보기</span>
+                  <ChevronRight className="w-3 h-3" />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 12. Interactive Comments Section */}
+      <div className="space-y-6 pt-6 border-t border-slate-100 no-print">
+        <div className="flex items-center justify-between">
+          <h3 className="font-heading text-base sm:text-lg font-black text-slate-900 flex items-center gap-2">
+            <MessageSquare className="w-5 h-5 text-indigo-600" />
+            <span>댓글과 의견 ({comments.length})</span>
+          </h3>
+          <span className="text-xs text-slate-400">자유롭게 질문과 의견을 남겨주세요</span>
+        </div>
+
+        {/* Comment Input Form */}
+        <form onSubmit={handleAddComment} className="bg-slate-50 rounded-2xl p-4 sm:p-5 border border-slate-200 space-y-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <input
+              type="text"
+              required
+              value={newCommentName}
+              onChange={(e) => setNewCommentName(e.target.value)}
+              placeholder="작성자 닉네임"
+              className="bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl p-2.5 border border-slate-200 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+            />
+          </div>
+          <textarea
+            required
+            rows={3}
+            value={newCommentText}
+            onChange={(e) => setNewCommentText(e.target.value)}
+            placeholder="칼럼에 대한 질문이나 본인의 경험을 나눠주세요..."
+            className="w-full bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl p-3 border border-slate-200 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
+          />
+          <div className="flex items-center justify-between">
+            {commentSubmitted && (
+              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                <Check className="w-4 h-4" />
+                댓글이 성공적으로 등록되었습니다!
+              </span>
+            )}
+            <div className="ml-auto">
+              <button
+                type="submit"
+                className="font-display px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+              >
+                <Send className="w-3.5 h-3.5" />
+                <span>댓글 등록</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        {/* Comments List */}
+        <div className="space-y-4">
+          {comments.map((comment) => (
+            <div key={comment.id} className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-900">{comment.author}</span>
+                <span className="text-slate-400">{comment.date}</span>
+              </div>
+              <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
+                {comment.content}
+              </p>
+
+              {/* Author Reply (if exists) */}
+              {comment.reply && (
+                <div className="mt-3 pl-4 border-l-2 border-indigo-400 bg-indigo-50/40 p-3 rounded-r-xl space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-indigo-900 flex items-center gap-1">
+                      <span className="bg-indigo-600 text-white text-[9px] px-1.5 py-0.2 rounded font-black">에디터</span>
+                      {comment.reply.author}
+                    </span>
+                    <span className="text-indigo-400 text-[11px]">{comment.reply.date}</span>
+                  </div>
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    {comment.reply.content}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </article>
+  );
+}
+
+export { BlogPostView as GuideReader };

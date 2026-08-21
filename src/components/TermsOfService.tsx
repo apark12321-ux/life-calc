@@ -1,56 +1,75 @@
 import React from 'react';
-import { AlignJustify, HelpCircle, AlertCircle, BookOpen, Clock } from 'lucide-react';
+import { FileText, Clock, AlertTriangle, ArrowLeft } from 'lucide-react';
 
-export default function TermsOfService() {
+interface TermsOfServiceProps {
+  onBack?: () => void;
+}
+
+export default function TermsOfService({ onBack }: TermsOfServiceProps) {
   return (
-    <div id="terms-of-service" className="bg-white rounded-2xl shadow-xs border border-slate-100 p-5 md:p-8 space-y-6 text-slate-700 leading-relaxed font-sans text-xs md:text-sm">
+    <div id="terms-of-service" className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 md:p-10 space-y-6 text-slate-700 leading-relaxed font-body text-xs sm:text-sm shadow-xs">
+      
       {/* Page Header */}
-      <div className="border-b border-slate-100 pb-5">
-        <div className="flex items-center space-x-3 mb-2">
-          <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
-            <AlignJustify className="w-6 h-6" />
+      <div className="border-b border-slate-100 pb-5 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-2xl">
+            <FileText className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight">서비스 이용약관 (Terms of Service)</h1>
-            <p className="text-xs text-slate-500 mt-0.5">사용자 안전과 가치 증진을 위한 이용 수칙 및 책임 한계 고지 약관입니다.</p>
+            <h1 className="font-heading text-xl sm:text-2xl font-black text-slate-950">이용약관 및 면책조항 (Terms of Service)</h1>
+            <p className="text-xs text-slate-500 mt-0.5">생활금융 실전 가이드 정보 열람 및 모의 계산기 도구 이용에 관한 기본 약관입니다.</p>
           </div>
         </div>
+
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>돌아가기</span>
+          </button>
+        )}
       </div>
 
-      <div className="bg-slate-50 rounded-xl p-4 border border-slate-150 space-y-2 text-slate-600 text-xs">
+      <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-2 text-slate-600 text-xs">
         <div className="flex items-center space-x-1 font-bold text-slate-800">
           <Clock className="w-4 h-4 text-slate-500" />
-          <span>시행일자: 2026년 6월 20일</span>
+          <span>시행일자: 2026년 08월 01일</span>
         </div>
-        <p>본 약관은 본 계산포털 사이트에서 제공하는 가상 모의 산출 시스템 및 해설 지식 정보 정보들을 사용하는 방문 고객과의 권리 관계를 명시하기 위해 설립되었습니다.</p>
-      </div>
-
-      {/* Terms list */}
-      <div className="space-y-4">
-        <h2 className="text-sm font-bold text-slate-900 border-l-4 border-emerald-600 pl-2">제 1 조 (목적 및 정보 제공의 의의)</h2>
         <p>
-          본 사이트의 산물들은 2026년 대한민국 보수 세목 가이드 및 정식 사법 지침들에 근거한 계산식을 제공하고 있습니다. 
-          그러나 개별 기업 특화 비과세 항목이나 소속 지자체의 추가 할인, 감세 약관에 따라 최종 산수에는 유의미한 변동이 발생하며, 이는 단순 **가상 참모 계산** 목적에 국한되며 세무적 또는 법적 행정 증빙자료로 간주될 수 없습니다.
-        </p>
-
-        <h2 className="text-sm font-bold text-slate-900 border-l-4 border-emerald-600 pl-2">제 2 조 (이용자의 의무 및 면책 규정)</h2>
-        <p>
-          모든 사용자는 본인의 자유의지로 계산 유틸리티를 구동합니다. 본 서비스 소유자는 당해 시뮬레이터가 도출한 예측 값을 맹신하여 체결된 과도한 임금 계약, 부동산 대출 실행 등으로 발생한 결과에 따르는 행위의 법적 재정적 피해에 대해 일체의 간접/직접적 책임을 보전하지 않습니다.
-        </p>
-
-        <h2 className="text-sm font-bold text-slate-900 border-l-4 border-emerald-600 pl-2">제 3 조 (저작권 및 무단 이용 금지)</h2>
-        <p>
-          본 웹 서비스의 디자인, 독자적 개발 계산 논리, 그리고 생활 밀착형 연산 가치를 극대화하기 위하여 직접 저술한 상세 설명 가이드는 고유 자산입니다. 
-          크롤러 봇을 악용한 무단 크롤링, 불법 전해 배포 및 타 사이트 도용 시 지식재산권 보호법에 의거한 법정 대응이 따를 수 있습니다.
+          본 이용약관은 『생활금융 실전 가이드』(이하 &apos;서비스&apos;)가 제공하는 모든 칼럼 콘텐츠 및 계산 시뮬레이션 기능의 이용 조건과 권리·의무를 규정합니다.
         </p>
       </div>
 
-      <div className="bg-rose-50 p-4 rounded-xl border border-rose-100 flex items-start space-x-3 text-rose-900">
-        <AlertCircle className="w-5 h-5 text-rose-500 mt-0.5 flex-shrink-0" />
-        <div className="text-xs">
-          <h3 className="font-bold text-rose-950">근무 보수 관련 최종 확인 권고</h3>
-          <p className="mt-1 leading-relaxed">
-            4대보험 및 각종 급여와 관련된 민감한 분쟁 요소는 반드시 국민연금공단(1355) 또는 고용노동부 삼각상담센터(1350) 등 유권 법적 해석을 담당하는 정부 유관 센터에 소장 문의하시어 검증하시기를 적극 당부드립니다.
+      <div className="space-y-6 text-slate-700">
+        <div>
+          <h2 className="font-heading text-sm sm:text-base font-black text-slate-900 border-l-4 border-indigo-600 pl-2.5 mb-2">
+            제 1 조 (목적 및 서비스의 성격)
+          </h2>
+          <p>
+            본 웹사이트는 대한민국 4대사회보험, 급여·퇴직금, 부동산 세무 및 재테크에 관한 정보를 알기 쉽게 제공하는 공익성 생활금융 정보 포털입니다.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-heading text-sm sm:text-base font-black text-slate-900 border-l-4 border-indigo-600 pl-2.5 mb-2 flex items-center gap-1.5">
+            <AlertTriangle className="w-4 h-4 text-amber-500" />
+            <span>제 2 조 (정보의 정확성 및 법적 면책)</span>
+          </h2>
+          <p>
+            본 웹사이트에 게재된 모든 칼럼과 계산기 결과는 2026년 최신 법령 및 고시를 바탕으로 성실히 작성되었으나, 개별 사업장의 취업규칙, 근로계약서, 개인별 과세표준 차이에 따라 실제 행정기관의 부과액과 오차가 발생할 수 있습니다.
+            따라서 본 웹사이트의 정보는 <strong>참고용 모의 데이터</strong>로 활용하시기 바라며, 법적 분쟁이나 구체적 세무 신고 시에는 반드시 공인노무사, 세무사, 또는 관할 행정기관의 공식 상담을 받으시기 바랍니다.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-heading text-sm sm:text-base font-black text-slate-900 border-l-4 border-indigo-600 pl-2.5 mb-2">
+            제 3 조 (저작권 및 콘텐츠 이용)
+          </h2>
+          <p>
+            본 웹사이트에 작성된 모든 칼럼 텍스트, 구조 및 분석 자료의 저작권은 서비스 운영진에게 있습니다. 비영리 목적의 단순 인용 및 출처 명시 공유는 자유롭게 허용되나, 상업적 무단 복제나 인공지능 학습용 대량 크롤링은 금지됩니다.
           </p>
         </div>
       </div>
