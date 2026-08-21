@@ -207,7 +207,7 @@ export default function BlogHome({
                     <span>{meta.icon}</span>
                     <span>{meta.name}</span>
                   </span>
-                  <span className="text-slate-400 font-num">{post.date}</span>
+                  <span className="text-slate-500 font-num font-medium">{post.date}</span>
                 </div>
 
                 {/* Title */}
@@ -216,14 +216,14 @@ export default function BlogHome({
                 </h3>
 
                 {/* Excerpt */}
-                <p className="font-body text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                <p className="font-body text-xs sm:text-sm text-slate-700 line-clamp-3 leading-relaxed">
                   {post.summary}
                 </p>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 pt-1">
                   {post.tags.slice(0, 3).map((tag, idx) => (
-                    <span key={idx} className="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                    <span key={idx} className="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-md font-medium">
                       #{tag}
                     </span>
                   ))}
@@ -231,14 +231,14 @@ export default function BlogHome({
               </div>
 
               {/* Author & Footer Meta */}
-              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center space-x-2">
                   <div className="w-5 h-5 rounded-md bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-[9px] border border-indigo-100">
                     <BookOpen className="w-2.5 h-2.5" />
                   </div>
-                  <span className="font-bold text-slate-700">{post.author}</span>
+                  <span className="font-bold text-slate-800">{post.author}</span>
                   <span>·</span>
-                  <span>{post.readTimeMinutes}분</span>
+                  <span className="text-slate-600 font-medium">{post.readTimeMinutes}분</span>
                 </div>
 
                 <span className="text-indigo-600 font-bold flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">

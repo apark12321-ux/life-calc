@@ -61,16 +61,65 @@ html, body {
   letter-spacing: -0.02em;
   word-break: keep-all;
   overflow-wrap: break-word;
-  line-height: 1.6;
+  line-height: 1.65;
   color: #1e293b;
+  background-color: #f8fafc;
 }
 
-/* Headings default contrast & tracking */
+/* Headings default high-contrast & tracking */
 h1, h2, h3, h4, h5, h6 {
   font-family: "NanumSquareNeo", "SUIT Variable", "Pretendard Variable", sans-serif;
   letter-spacing: -0.03em;
   font-weight: 800;
+  color: #090d16;
+}
+
+/* Paragraphs & Lists crisp contrast */
+p, li {
+  color: #334155;
+}
+
+strong, b {
+  color: #090d16;
+  font-weight: 700;
+}
+
+/* Enhanced Markdown & Guide Content Legibility */
+.prose {
+  color: #334155;
+}
+
+.prose p {
+  color: #334155;
+  line-height: 1.8;
+}
+
+.prose strong {
+  color: #090d16;
+  font-weight: 700;
+}
+
+.prose h2 {
+  color: #090d16;
+  font-weight: 800;
+}
+
+.prose h3 {
   color: #0f172a;
+  font-weight: 800;
+}
+
+.prose ul, .prose ol {
+  color: #334155;
+}
+
+.prose li {
+  color: #334155;
+  line-height: 1.75;
+}
+
+.prose blockquote {
+  color: #1e293b;
 }
 
 /* Text Selection Styling */

@@ -47,19 +47,19 @@ export default function BlogSidebar({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h3 className="font-heading font-black text-slate-900 text-base">생활금융 실전 가이드</h3>
+              <h3 className="font-heading font-black text-slate-950 text-base">생활금융 실전 가이드</h3>
             </div>
-            <p className="font-body text-xs text-slate-500 mt-0.5">2026 대한민국 생활금융 & 세무 포털</p>
+            <p className="font-body text-xs text-slate-600 mt-0.5 font-medium">2026 생활금융 & 세무 정보 블로그</p>
           </div>
         </div>
 
-        <p className="font-body text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+        <p className="font-body text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 font-medium">
           국민연금, 건강보험, 최저임금, 연봉 실수령액, 취득세 등 대한민국 공식 법령과 고시를 기반으로 검증된 실무 정보를 알기 쉽게 제공합니다.
         </p>
 
-        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-          <span className="flex items-center gap-1 font-mono text-[11px]">
-            <Mail className="w-3.5 h-3.5 text-slate-400" />
+        <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+          <span className="flex items-center gap-1 font-mono text-[11px] font-semibold text-slate-700">
+            <Mail className="w-3.5 h-3.5 text-slate-500" />
             contact@life-calc.kr
           </span>
           <button
@@ -67,7 +67,7 @@ export default function BlogSidebar({
             onClick={() => onSelectCategory('about')}
             className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-0.5 text-[11px] cursor-pointer"
           >
-            <span>서비스 소개</span>
+            <span>블로그 소개</span>
             <ChevronRight className="w-3 h-3" />
           </button>
         </div>
@@ -76,11 +76,11 @@ export default function BlogSidebar({
       {/* 2. Top 5 Popular Articles */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3.5">
         <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-          <h3 className="font-heading text-sm font-black text-slate-900 flex items-center gap-1.5">
+          <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5">
             <TrendingUp className="w-4 h-4 text-indigo-600" />
             인기 추천 칼럼 TOP 5
           </h3>
-          <span className="text-[10px] text-slate-400">조회수 기준</span>
+          <span className="text-[11px] text-slate-500 font-medium">조회수 기준</span>
         </div>
 
         <div className="space-y-2.5">
@@ -91,15 +91,15 @@ export default function BlogSidebar({
               className="flex items-start gap-2.5 group cursor-pointer p-1.5 rounded-xl hover:bg-slate-50 transition"
             >
               <span className={`font-num font-black text-xs px-2 py-0.5 rounded-md shrink-0 ${
-                idx === 0 ? 'bg-indigo-600 text-white' : idx === 1 ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-100 text-slate-600'
+                idx === 0 ? 'bg-indigo-600 text-white' : idx === 1 ? 'bg-indigo-100 text-indigo-900 font-bold' : 'bg-slate-100 text-slate-800 font-bold'
               }`}>
                 {idx + 1}
               </span>
               <div className="min-w-0">
-                <p className="font-heading text-xs font-bold text-slate-800 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug">
+                <p className="font-heading text-xs font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-2 leading-snug">
                   {post.title}
                 </p>
-                <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-1 font-body">
+                <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-1 font-body font-medium">
                   <span>{post.categoryName}</span>
                   <span>·</span>
                   <span>조회 {post.viewCount.toLocaleString()}</span>
@@ -112,7 +112,7 @@ export default function BlogSidebar({
 
       {/* 3. Category Archive Breakdown */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
-        <h3 className="font-heading text-sm font-black text-slate-900 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
+        <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
           <Folder className="w-4 h-4 text-emerald-600" />
           카테고리 분류
         </h3>
@@ -123,13 +123,13 @@ export default function BlogSidebar({
               key={cat.id}
               type="button"
               onClick={() => onSelectCategory(cat.id)}
-              className="w-full flex items-center justify-between p-2 rounded-xl text-xs hover:bg-slate-50 transition cursor-pointer text-slate-700 font-medium"
+              className="w-full flex items-center justify-between p-2 rounded-xl text-xs hover:bg-slate-50 transition cursor-pointer text-slate-800 font-semibold"
             >
               <span className="flex items-center gap-2">
                 <span>{cat.icon}</span>
                 <span>{cat.name}</span>
               </span>
-              <span className="font-num text-[11px] bg-slate-100 text-slate-500 font-bold px-2 py-0.5 rounded-full">
+              <span className="font-num text-[11px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded-full">
                 {cat.count}편
               </span>
             </button>
