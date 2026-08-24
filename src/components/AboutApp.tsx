@@ -41,7 +41,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
       <section className="space-y-4">
         <h2 className="font-heading text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
           <UserCheck className="w-5 h-5 text-indigo-600" />
-          <span>내가 이 블로그를 시작한 이유</span>
+          <span>이 블로그를 시작한 이유</span>
         </h2>
         <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200/80 space-y-3.5 text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
           <p>

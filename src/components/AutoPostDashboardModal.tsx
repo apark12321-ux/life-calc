@@ -457,7 +457,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                   type="text"
                   value={customTopic}
                   onChange={(e) => setCustomTopic(e.target.value)}
-                  placeholder="예: 내가 직접 퇴직연금 DB형에서 DC형으로 전환해 1,200만원 수익 더 낸 실전기"
+                  placeholder="예: 퇴직연금 DB형에서 DC형으로 전환해 1,200만원 수익 더 낸 실전기"
                   className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-hidden focus:border-indigo-500 bg-white"
                 />
               </div>
@@ -467,7 +467,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 <span className="text-[11px] font-bold text-slate-500">추천 실전 프롬프트 예시:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    '내가 이직할 때 미사용 연차수당 140만원 전부 받아낸 협상법',
+                    '첫 이직 때 미사용 연차수당 140만원 전부 받아낸 협상법',
                     '전세 계약 연장 시 보증보험 갱신 안 했다가 겪은 아찔한 실화',
                     '부모님 용돈 드리다 건강보험 피부양자 박탈당할 뻔했던 방어기'
                   ].map((preset, i) => (

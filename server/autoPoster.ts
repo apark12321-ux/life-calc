@@ -36,25 +36,25 @@ export interface ScheduleState {
 const TOPIC_SUGGESTIONS: Record<PostCategory, { title: string; hint: string; calculatorId: string; calculatorName: string }[]> = {
   work: [
     {
-      title: '내가 2026년 최저시급 10,030원 기준으로 월급 계산기 돌려보고 회사에 항의한 사연',
+      title: '2026년 최저시급 10,030원 기준으로 월급 계산기 돌려보고 회사에 항의한 사연',
       hint: '주 40시간 월 209시간 기본급 2,096,270원 미달 여부와 주휴수당 미지급분 전액 소급',
       calculatorId: 'wage',
       calculatorName: '주휴수당 & 시급 계산기'
     },
     {
-      title: '내가 육아휴직 1년 쓰고 월 최대 250만원 상한액 챙긴 실전 수령기 (사후지급금 폐지 팩트)',
+      title: '육아휴직 1년 쓰고 월 최대 250만원 상한액 챙긴 실전 수령기 (사후지급금 폐지 팩트)',
       hint: '2026년 육아휴직 급여 상한액 개편(첫 3개월 250만원)과 복직 후 사후지급금 전액 폐지 실무',
       calculatorId: 'wage',
       calculatorName: '육아휴직 & 시급 계산기'
     },
     {
-      title: '내가 프리랜서 투잡 3.3% 떼인 세금 5월 종합소득세 때 142만원 전액 환급받은 비법',
+      title: '프리랜서 투잡 3.3% 떼인 세금 5월 종합소득세 때 142만원 전액 환급받은 비법',
       hint: '단순경비율 vs 기준경비율 적용과 원천징수 3.3% 기납부세액 삼쩜삼 없이 홈택스로 환급받기',
       calculatorId: 'wage',
       calculatorName: '종합소득세 & 급여 계산기'
     },
     {
-      title: '내가 포괄임금제 계약서의 고정 야근 20시간 넘겼을 때 추가 수당 48만원 받아낸 썰',
+      title: '포괄임금제 계약서의 고정 야근 20시간 넘겼을 때 추가 수당 48만원 받아낸 썰',
       hint: '포괄임금 약정 시간을 초과한 실근로시간 기록 앱 증거와 근로기준법상 차액 청구 공식',
       calculatorId: 'wage',
       calculatorName: '연봉 실수령액 계산기'
@@ -62,25 +62,25 @@ const TOPIC_SUGGESTIONS: Record<PostCategory, { title: string; hint: string; cal
   ],
   property: [
     {
-      title: '내가 전세 만기 때 집주인이 보증금 안 빼주길래 임차권등기명령 걸고 HUG 보증금 타낸 썰',
+      title: '전세 만기 때 집주인이 보증금 안 빼주길래 임차권등기명령 걸고 HUG 보증금 타낸 썰',
       hint: '계약 만료 전 내용증명 발송부터 전자소송 임차권등기명령 신청, 이사 후 지연이자 연 12% 청구',
       calculatorId: 'property',
       calculatorName: '부동산 취득세 및 복비 계산기'
     },
     {
-      title: '내가 전월세 전환율(기준금리+2.0%) 계산기로 집주인의 무리한 월세 20만원 인상 막아낸 방법',
+      title: '전월세 전환율(기준금리+2.0%) 계산기로 집주인의 무리한 월세 20만원 인상 막아낸 방법',
       hint: '보증금 5,000만원 감액 시 법정 전환율(연 5.5% 한도) 역산으로 적정 월세 22.9만원 방어',
       calculatorId: 'property',
       calculatorName: '부동산 복비 및 전월세 계산기'
     },
     {
-      title: '내가 1주택자 12억원 비과세 특례 챙겨서 양도소득세 0원 만든 실전 매도 일기',
+      title: '1주택자 12억원 비과세 특례 챙겨서 양도소득세 0원 만든 실전 매도 일기',
       hint: '2년 보유(조정지역 2년 거주) 요건 충족과 장기보유특별공제 최대 80% 적용으로 5억 차익 비과세',
       calculatorId: 'property',
       calculatorName: '부동산 세금 및 취득세 계산기'
     },
     {
-      title: '내가 스트레스 DSR 3단계 적용 앞두고 대출 한도 5,000만원 깎일 뻔해서 서두른 경험담',
+      title: '스트레스 DSR 3단계 적용 앞두고 대출 한도 5,000만원 깎일 뻔해서 서두른 경험담',
       hint: '수도권 가산금리 스트레스 DSR 도입 전 주택담보대출 심사 통과 노하우와 DSR 40% 관리법',
       calculatorId: 'property',
       calculatorName: '대출 상환 & 부동산 계산기'
@@ -88,25 +88,25 @@ const TOPIC_SUGGESTIONS: Record<PostCategory, { title: string; hint: string; cal
   ],
   finance: [
     {
-      title: '내가 청년도약계좌 5년 만기 채우고 정부기여금+비과세 이자 합쳐 5,000만원 만든 실전 루틴',
+      title: '청년도약계좌 5년 만기 채우고 정부기여금+비과세 이자 합쳐 5,000만원 만든 실전 루틴',
       hint: '월 70만원 풀납입 시 정부 매칭지원금 월 최대 33,000원과 연 6.0% 비과세 복리 효과',
       calculatorId: 'finance',
       calculatorName: '예적금 이자 & 복리 계산기'
     },
     {
-      title: '내가 실손의료보험 4세대 전환하고 보험료 70% 낮추면서 할증 기준 피해간 실무 요령',
+      title: '실손의료보험 4세대 전환하고 보험료 70% 낮추면서 할증 기준 피해간 실무 요령',
       hint: '비급여 도수치료·주사료 연간 100만원 미만 사용 시 보험료 10% 추가 할인 혜택 챙기기',
       calculatorId: 'finance',
       calculatorName: '4대보험 및 연금 계산기'
     },
     {
-      title: '내가 정기예금 복리 vs 단리 1억원 굴렸을 때 세후 실수령 이자 120만원 차이 검증한 썰',
+      title: '정기예금 복리 vs 단리 1억원 굴렸을 때 세후 실수령 이자 120만원 차이 검증한 썰',
       hint: '월복리 적금과 만기일시지급 단리 예금의 3년 거치 시 세금 15.4% 공제 후 실제 통장 잔고 비교',
       calculatorId: 'finance',
       calculatorName: '예적금 & 금융상품 계산기'
     },
     {
-      title: '내가 퇴직연금(DC형) 방치하다 디폴트옵션 고위험 TDF로 변경하고 수익률 연 8.4% 달성한 후기',
+      title: '퇴직연금(DC형) 방치하다 디폴트옵션 고위험 TDF로 변경하고 수익률 연 8.4% 달성한 후기',
       hint: '원리금보장 예금 1.8%에 묶여있던 퇴직연금을 생애주기형 TDF 2050으로 분산 리밸런싱한 기록',
       calculatorId: 'finance',
       calculatorName: '연금 및 IRP 계산기'
@@ -359,8 +359,8 @@ export class AutoPosterEngine {
 
 다음 JSON 포맷으로만 응답하십시오 (JSON 외 텍스트 일체 금지):
 {
-  "title": "내가 직접 겪은 느낌을 살린 매력적인 1인칭 실전 제목 (예: 내가 ~해서 ~만원 지켜낸 실전 썰)",
-  "summary": "내가 겪은 핵심 상황과 구체적인 팩트 결과 요약 2문장",
+  "title": "매력적인 1인칭 실전 제목 ('내가'를 남발하지 않고 구체적 상황과 결과 명시, 예: 퇴직금 산정 공식 몰라 380만원 손해 볼 뻔했던 실전 경험담)",
+  "summary": "직접 겪은 핵심 상황과 구체적인 팩트 결과 요약 2문장",
   "authorNote": "박과장의 실전 한줄 팁 (💡 이모지와 함께)",
   "readTimeMinutes": 5,
   "tags": ["실제후기", "절약팁", "팩트체크", "${meta.name}", "2026기준"],
@@ -420,14 +420,14 @@ export class AutoPosterEngine {
     const postId = `auto-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     const fallbackPost: PostItem = {
       id: postId,
-      title: `${targetTopic} - 내가 직접 겪고 팩트로 해결한 생생 후기`,
+      title: `${targetTopic} - 박과장의 팩트 해결 생생 후기`,
       summary: `${targetTopic} 상황에서 제가 직접 겪었던 위기와 2026년 법령 및 엑셀 계산표를 무기로 내 피 같은 돈을 지켜낸 사이다 실화입니다.`,
       category,
       categoryName: meta.name,
       categoryIcon: meta.icon,
       author: '박과장 (11년차 직장인)',
       authorRole: '돈 지키는 박과장',
-      authorNote: `💡 ${chosenSuggestion?.hint || '가만히 있으면 아무도 안 챙겨줍니다. 내가 직접 계산해보고 당당하게 요구해야 합니다.'}`,
+      authorNote: `💡 ${chosenSuggestion?.hint || '가만히 있으면 아무도 안 챙겨줍니다. 본인이 직접 계산해보고 당당하게 요구해야 합니다.'}`,
       readTimeMinutes: 5,
       date: today,
       viewCount: Math.floor(Math.random() * 120) + 90,
@@ -443,11 +443,11 @@ export class AutoPosterEngine {
       content: `## "가만히 있었으면 그냥 생돈 날릴 뻔했습니다"
 
 제가 이번에 **${meta.name}** 관련 일을 겪으면서 뼈저리게 느낀 점이 하나 있습니다. 
-아무리 법으로 보장된 권리라도, **내가 직접 숫자를 두드려보고 당당하게 요구하지 않으면 세상은 내 돈을 지켜주지 않는다는 사실**입니다.
+아무리 법으로 보장된 권리라도, **직접 숫자를 두드려보고 당당하게 요구하지 않으면 세상은 내 돈을 지켜주지 않는다는 사실**입니다.
 
 ---
 
-### 내가 실제로 겪었던 전후 비교
+### 당시에 겪었던 전후 비교
 
 당시 상대방이 제시했던 금액과 제가 2026년 최신 법령을 기준으로 재계산한 차이는 어마어마했습니다.
 
@@ -459,7 +459,7 @@ export class AutoPosterEngine {
 
 ---
 
-### 내가 문제를 해결한 3단계 실천 로드맵
+### 문제를 해결한 3단계 실천 로드맵
 
 1. **1단계: 감정 빼고 팩트와 수치로만 대화하기**
    - 화를 내거나 읍소하지 않고, 공문서와 법령 조항을 캡처하여 객관적인 숫자로 전달했습니다.
