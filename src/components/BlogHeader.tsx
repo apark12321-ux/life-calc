@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Type, BookOpen, Calculator, User, Sparkles, HelpCircle, Shield, Bot } from 'lucide-react';
-import { CategoryType, PostCategory } from '../types';
-import { CATEGORY_META } from '../data/postsData';
+import { CategoryType } from '../types';
 
 interface BlogHeaderProps {
   currentCategory: CategoryType;
@@ -45,14 +44,12 @@ export default function BlogHeader({
   };
 
   const navItems: { id: CategoryType; label: string; icon?: string }[] = [
-    { id: 'all', label: '전체 칼럼' },
-    { id: 'insurance', label: '4대사회보험', icon: '🛡️' },
-    { id: 'wage', label: '급여·노무', icon: '⏱' },
-    { id: 'finance', label: '금융·재테크', icon: '💰' },
-    { id: 'property', label: '부동산·세금', icon: '🏠' },
-    { id: 'life', label: '생활·행정', icon: '🎂' },
+    { id: 'all', label: '전체 실전기록' },
+    { id: 'work', label: '직장·월급·퇴직', icon: '💼' },
+    { id: 'property', label: '내집·부동산·세금', icon: '🏠' },
+    { id: 'finance', label: '연금·보험·재테크', icon: '🛡️' },
     { id: 'calculators', label: '실생활 계산기', icon: '🧮' },
-    { id: 'about', label: '서비스 소개', icon: 'ℹ️' }
+    { id: 'about', label: '박과장 소개', icon: '👤' }
   ];
 
   return (
@@ -67,19 +64,19 @@ export default function BlogHeader({
             className="flex items-center space-x-3 cursor-pointer select-none shrink-0 group"
           >
             <div className="w-11 h-11 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-sm group-hover:bg-indigo-600 transition-colors">
-              <BookOpen className="w-5 h-5 text-indigo-400 group-hover:text-white transition-colors" />
+              <span className="text-xl">💼</span>
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-slate-950">
-                  생활금융 <span className="text-indigo-600">실전 가이드</span>
+                  박과장의 <span className="text-indigo-600">돈 지키는 실전 노트</span>
                 </span>
-                <span className="hidden sm:inline-block bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-slate-200">
-                  2026 최신 법령 기준
+                <span className="hidden sm:inline-block bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">
+                  1인칭 실화 스토리텔링
                 </span>
               </div>
               <p className="font-body text-xs text-slate-500 hidden md:block">
-                4대사회보험·급여·퇴직금·부동산 세무 및 실생활 모의 계산기
+                11년차 직장인이 직접 겪고 팩트로 검증한 월급·부동산·연금 생존기록
               </p>
             </div>
           </div>
@@ -92,7 +89,7 @@ export default function BlogHeader({
                 type="button"
                 onClick={onOpenAutoPoster}
                 className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 text-indigo-700 rounded-xl border border-indigo-200/80 text-xs font-bold transition shadow-2xs cursor-pointer group"
-                title="매일 카테고리별 1회 4시간 텀 자동 포스팅 시스템 현황"
+                title="매일 3대 핵심 분야 1인칭 자동 포스팅 시스템 현황"
               >
                 <Bot className="w-4 h-4 text-indigo-600 group-hover:rotate-12 transition-transform" />
                 <span className="hidden lg:inline">자동 포스팅 엔진</span>
@@ -135,32 +132,38 @@ export default function BlogHeader({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearch(e.target.value)}
-                placeholder="칼럼 검색 (예: 4대보험, 퇴직금)"
+                placeholder="경험담 검색 (예: 퇴직금, 복비, 건보료)"
                 className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl py-2 pl-9 pr-3 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white border border-slate-200 font-medium transition-all"
               />
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => onSearch('')}
+                  className="absolute right-2.5 top-2.5 text-xs text-slate-400 hover:text-slate-700 bg-slate-200 hover:bg-slate-300 rounded-full w-4 h-4 flex items-center justify-center font-bold"
+                >
+                  ✕
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Navigation Menu Bar */}
-      <div className="bg-slate-50/80 border-t border-slate-200/80 overflow-x-auto whitespace-nowrap scrollbar-none">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <nav className="flex space-x-1 sm:space-x-2 py-1.5">
+      {/* Main Navigation Bar */}
+      <div className="bg-slate-50/90 border-t border-slate-200 backdrop-blur-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex items-center space-x-1.5 overflow-x-auto py-2.5 scrollbar-none text-xs sm:text-sm font-semibold">
             {navItems.map((item) => {
               const isActive = currentCategory === item.id;
               return (
                 <button
                   key={item.id}
-                  type="button"
                   onClick={() => onSelectCategory(item.id)}
-                  className={`font-display py-2 px-3.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-1.5 rounded-xl whitespace-nowrap transition-all duration-150 flex items-center space-x-1.5 cursor-pointer font-heading ${
                     isActive
-                      ? 'bg-slate-900 text-white shadow-xs'
-                      : item.id === 'calculators'
-                      ? 'text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-slate-950 text-white shadow-xs font-bold'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-200/70 font-medium'
                   }`}
                 >
                   {item.icon && <span>{item.icon}</span>}

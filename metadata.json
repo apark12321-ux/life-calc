@@ -1,6 +1,6 @@
 {
-  "name": "생활금융 실전 가이드",
-  "description": "2026년 4대사회보험, 급여·퇴직금, 연봉 실수령액, 부동산 세무 및 재테크 실전 정보 가이드",
+  "name": "박과장의 돈 지키는 실전 노트",
+  "description": "11년차 직장인 박과장이 직접 겪고 팩트로 검증한 생생 스토리텔링 생활금융·월급·부동산·연금 실전 가이드",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

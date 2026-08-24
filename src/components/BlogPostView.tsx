@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PostItem, CategoryType } from '../types';
-import { ALL_BLOG_POSTS, CATEGORY_META, INITIAL_BLOG_COMMENTS } from '../data/postsData';
+import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
   Calendar, Clock, User, Share2, Printer, ChevronRight, ChevronLeft, 
   Sparkles, ShieldCheck, ArrowRight, ExternalLink, MessageSquare, Send, Check, Heart, Bookmark, BookOpen,
@@ -24,15 +24,14 @@ export default function BlogPostView({
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(Math.floor(post.viewCount / 35) + 12);
-  const [bookmarked, setBookmarked] = useState(false);
   
   // Comments state
-  const [comments, setComments] = useState(INITIAL_BLOG_COMMENTS[post.id] || [
+  const [comments, setComments] = useState([
     {
       id: 'default-1',
-      author: '직장인A',
+      author: '이직준비생김대리',
       date: post.date,
-      content: '이해하기 쉽게 정리해주셔서 감사합니다. 2026년 기준 바뀐 내용 찾고 있었는데 큰 도움이 되었습니다!'
+      content: '직접 겪으신 썰과 함께 엑셀 비교표로 계산법까지 딱 짚어주시니까 머리에 쏙쏙 들어옵니다. 저도 회사에 바로 요청해봐야겠네요!'
     }
   ]);
   const [newCommentName, setNewCommentName] = useState('');
@@ -51,7 +50,7 @@ export default function BlogPostView({
 
   const handleShare = () => {
     try {
-      const url = `${window.location.origin}${window.location.pathname}?post=${post.id}`;
+      const url = window.location.href;
       navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -88,7 +87,7 @@ export default function BlogPostView({
     setTimeout(() => setCommentSubmitted(false), 3000);
   };
 
-  const meta = CATEGORY_META[post.category];
+  const meta = CATEGORY_META[post.category] || { name: '실전기록', icon: '📝', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
 
   return (
     <article className="space-y-8 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200 shadow-xs">
@@ -99,7 +98,7 @@ export default function BlogPostView({
           onClick={() => onSelectCategory('all')}
           className="hover:text-indigo-600 transition"
         >
-          블로그 홈
+          실전기록 홈
         </button>
         <span>&gt;</span>
         <button 
@@ -168,12 +167,12 @@ export default function BlogPostView({
         {/* Author Meta Row */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-3 text-xs text-slate-600">
           <div className="flex items-center space-x-2.5">
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-xs border border-indigo-200">
-              <BookOpen className="w-3.5 h-3.5" />
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-sm border border-indigo-200">
+              👨‍💼
             </div>
             <div>
               <span className="font-bold text-slate-950">{post.author}</span>
-              <span className="text-slate-500 ml-1.5 font-normal">({post.authorRole || '리서치팀'})</span>
+              <span className="text-slate-500 ml-1.5 font-normal">({post.authorRole || '돈 지키는 박과장'})</span>
             </div>
           </div>
 
@@ -196,7 +195,7 @@ export default function BlogPostView({
         <div className="bg-amber-50/90 border-l-4 border-amber-500 p-4 sm:p-5 rounded-r-2xl text-amber-950 space-y-1.5 shadow-2xs">
           <p className="font-heading text-xs font-black text-amber-950 flex items-center gap-1.5 uppercase tracking-wider">
             <span>💡</span>
-            <span>실무 핵심 팁 & 코멘트</span>
+            <span>박과장의 실전 당부의 말</span>
           </p>
           <p className="font-body text-xs sm:text-sm leading-relaxed text-amber-950 font-medium">
             {post.authorNote}
@@ -209,7 +208,7 @@ export default function BlogPostView({
         <div className="bg-slate-50/90 rounded-2xl p-5 border border-slate-200 space-y-3">
           <p className="font-heading text-xs sm:text-sm font-black text-slate-950 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600" />
-            핵심 요약 & 2026 기준 포인트
+            핵심 팩트 & 직접 검증한 결과
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {post.highlights.map((h, i) => (
@@ -222,7 +221,7 @@ export default function BlogPostView({
         </div>
       )}
 
-      {/* 4.1 Mobile / Inline Table of Contents for easy navigation */}
+      {/* 4.1 Mobile Table of Contents */}
       <div className="lg:hidden">
         <TableOfContents content={post.content} variant="inline" title="핵심 글 목차 (TOC)" />
       </div>
@@ -262,16 +261,58 @@ export default function BlogPostView({
                 </h3>
               );
             }
+            if (paragraph.startsWith('#### ')) {
+              const text = paragraph.replace('#### ', '');
+              return (
+                <h4 key={idx} className="font-heading text-sm sm:text-base font-bold text-indigo-950 mt-4 mb-1">
+                  {text}
+                </h4>
+              );
+            }
             if (paragraph.startsWith('> ')) {
               return (
-                <blockquote key={idx} className="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-sm my-4 italic">
+                <blockquote key={idx} className="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-xs sm:text-sm my-4 font-medium italic">
                   {paragraph.replace('> ', '')}
                 </blockquote>
               );
             }
+            if (paragraph.startsWith('|')) {
+              // Parse Markdown table
+              const rows = paragraph.trim().split('\n').filter(r => r.trim().startsWith('|'));
+              if (rows.length >= 2) {
+                const headerRow = rows[0].split('|').map(c => c.trim()).filter(Boolean);
+                const dataRows = rows.slice(2).map(r => r.split('|').map(c => c.trim()).filter(Boolean));
+                return (
+                  <div key={idx} className="overflow-x-auto my-4 rounded-2xl border border-slate-200 shadow-2xs">
+                    <table className="w-full text-xs sm:text-sm text-left">
+                      <thead className="bg-slate-900 text-white font-heading font-black text-xs">
+                        <tr>
+                          {headerRow.map((h, hi) => (
+                            <th key={hi} className="px-4 py-3 border-r border-slate-700 last:border-r-0">
+                              {h.replace(/\*\*/g, '')}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 font-medium">
+                        {dataRows.map((row, ri) => (
+                          <tr key={ri} className={ri % 2 === 0 ? 'bg-white hover:bg-slate-50' : 'bg-slate-50/70 hover:bg-slate-100/70'}>
+                            {row.map((cell, ci) => (
+                              <td key={ci} className="px-4 py-3 border-r border-slate-100 last:border-r-0 text-slate-800">
+                                {cell.includes('**') ? <strong>{cell.replace(/\*\*/g, '')}</strong> : cell}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              }
+            }
             if (paragraph.startsWith('- ')) {
               return (
-                <ul key={idx} className="list-disc pl-5 space-y-1.5 text-slate-700">
+                <ul key={idx} className="list-disc pl-5 space-y-1.5 text-slate-700 text-xs sm:text-sm">
                   {paragraph.split('\n').map((item, itemIdx) => (
                     <li key={itemIdx} className="leading-relaxed">
                       {item.replace(/^- /, '')}
@@ -282,7 +323,7 @@ export default function BlogPostView({
             }
             if (paragraph.match(/^\d+\. /)) {
               return (
-                <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-slate-700">
+                <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-slate-700 text-xs sm:text-sm">
                   {paragraph.split('\n').map((item, itemIdx) => (
                     <li key={itemIdx} className="leading-relaxed">
                       {item.replace(/^\d+\. /, '')}
@@ -292,7 +333,7 @@ export default function BlogPostView({
               );
             }
             return (
-              <p key={idx} className="text-slate-700 leading-relaxed whitespace-pre-line">
+              <p key={idx} className="text-slate-700 text-xs sm:text-sm sm:leading-relaxed leading-normal whitespace-pre-line">
                 {paragraph}
               </p>
             );
@@ -305,7 +346,7 @@ export default function BlogPostView({
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-700 flex items-start gap-2.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold text-slate-900">관련 법령 및 행정 근거:</span>{' '}
+            <span className="font-bold text-slate-900">관련 법령 및 공식 행정 근거:</span>{' '}
             <span className="text-slate-700">{post.legalBasis}</span>
           </div>
         </div>
@@ -316,7 +357,7 @@ export default function BlogPostView({
         <div className="bg-gradient-to-r from-indigo-50/80 via-blue-50/80 to-indigo-50/80 border border-indigo-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1">
             <p className="font-heading text-sm sm:text-base font-black text-slate-950">
-              내 상황에 맞게 직접 계산해보시겠습니까?
+              내 상황에 맞게 1원 단위까지 직접 계산해보시겠습니까?
             </p>
             <p className="font-body text-xs text-slate-700">
               {post.relatedCalculatorName}를 통해 2026년 기준 예상 금액을 1초 만에 확인하실 수 있습니다.
@@ -346,23 +387,23 @@ export default function BlogPostView({
         ))}
       </div>
 
-      {/* 9. Post Information Box */}
+      {/* 9. Author Persona Box */}
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-lg shadow-2xs shrink-0 border border-indigo-100">
-          <BookOpen className="w-6 h-6 text-indigo-600" />
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-2xl shadow-2xs shrink-0 border border-indigo-100">
+          👨‍💼
         </div>
         <div className="space-y-1 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <h4 className="font-heading font-black text-slate-950 text-sm sm:text-base">{post.author}</h4>
             <span className="text-xs text-indigo-700 bg-indigo-50 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-100">
-              {post.authorRole || '생활금융 에디터'}
+              {post.authorRole || '돈 지키는 박과장'}
             </span>
           </div>
           <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
-            본 글은 최신 세법 및 행정 고시 기준을 바탕으로 작성된 참고 자료입니다. 문의사항이나 의견은 이메일로 편하게 남겨주세요.
+            11년 동안 회사와 부동산 시장에서 부딪히며 배운 팩트만 1인칭으로 기록합니다. 비슷한 고민이나 계산 문의는 언제든 이메일로 보내주세요.
           </p>
           <p className="text-xs text-slate-500 pt-0.5 font-medium">
-            이메일: <span className="font-mono text-slate-700 font-semibold">contact@life-calc.kr</span>
+            이메일: <span className="font-mono text-slate-700 font-semibold">contact@park-money.kr</span>
           </p>
         </div>
       </div>
@@ -376,7 +417,7 @@ export default function BlogPostView({
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center gap-1 group-hover:text-indigo-600">
               <ChevronLeft className="w-3.5 h-3.5" />
-              이전 글
+              이전 실화
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
               {prevPost.title}
@@ -390,7 +431,7 @@ export default function BlogPostView({
             className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition cursor-pointer group space-y-1 text-right"
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center justify-end gap-1 group-hover:text-indigo-600">
-              다음 글
+              다음 실화
               <ChevronRight className="w-3.5 h-3.5" />
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
@@ -405,7 +446,7 @@ export default function BlogPostView({
         <div className="space-y-4 pt-4 border-t border-slate-100 no-print">
           <h3 className="font-heading text-base font-black text-slate-950 flex items-center gap-2">
             <span>📚</span>
-            <span>같은 카테고리의 인기 글</span>
+            <span>같은 카테고리의 박과장 실전기록</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedPosts.map(rel => (
@@ -435,9 +476,9 @@ export default function BlogPostView({
         <div className="flex items-center justify-between">
           <h3 className="font-heading text-base sm:text-lg font-black text-slate-950 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-indigo-600" />
-            <span>댓글과 의견 ({comments.length})</span>
+            <span>댓글과 실전 후기 공유 ({comments.length})</span>
           </h3>
-          <span className="text-xs text-slate-500 font-medium">자유롭게 질문과 의견을 남겨주세요</span>
+          <span className="text-xs text-slate-500 font-medium">비슷한 경험담이나 질문을 편하게 남겨주세요</span>
         </div>
 
         {/* Comment Input Form */}
@@ -448,7 +489,7 @@ export default function BlogPostView({
               required
               value={newCommentName}
               onChange={(e) => setNewCommentName(e.target.value)}
-              placeholder="작성자 닉네임"
+              placeholder="작성자 닉네임 (예: 신입사원박군)"
               className="bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl p-2.5 border border-slate-200 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
             />
           </div>
@@ -457,7 +498,7 @@ export default function BlogPostView({
             rows={3}
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="칼럼에 대한 질문이나 본인의 경험을 나눠주세요..."
+            placeholder="박과장의 실전 경험담에 대한 질문이나 본인이 겪은 사연을 나눠주세요..."
             className="w-full bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl p-3 border border-slate-200 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
           />
           <div className="flex items-center justify-between">
@@ -490,22 +531,6 @@ export default function BlogPostView({
               <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
                 {comment.content}
               </p>
-
-              {/* Author Reply (if exists) */}
-              {comment.reply && (
-                <div className="mt-3 pl-4 border-l-2 border-indigo-400 bg-indigo-50/40 p-3 rounded-r-xl space-y-1">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-indigo-900 flex items-center gap-1">
-                      <span className="bg-indigo-600 text-white text-[9px] px-1.5 py-0.2 rounded font-black">에디터</span>
-                      {comment.reply.author}
-                    </span>
-                    <span className="text-indigo-400 text-[11px]">{comment.reply.date}</span>
-                  </div>
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    {comment.reply.content}
-                  </p>
-                </div>
-              )}
             </div>
           ))}
         </div>

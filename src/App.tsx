@@ -17,7 +17,7 @@ export default function App() {
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('all');
   const [selectedPost, setSelectedPost] = useState<PostItem | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('insurance');
+  const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('wage_salary');
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
   const [isAutoPostModalOpen, setIsAutoPostModalOpen] = useState<boolean>(false);
@@ -37,8 +37,8 @@ export default function App() {
 
   useEffect(() => {
     fetchPosts();
-    // Poll posts every 30 seconds to catch newly scheduled auto-posts
-    const interval = setInterval(fetchPosts, 30000);
+    // Poll posts every 20 seconds to catch newly scheduled auto-posts
+    const interval = setInterval(fetchPosts, 20000);
     return () => clearInterval(interval);
   }, [fetchPosts]);
 
@@ -64,7 +64,7 @@ export default function App() {
       } else if (calcId) {
         setCurrentCategory('calculators');
         setActiveCalculatorSubId(calcId);
-      } else if (cat && ['insurance', 'wage', 'finance', 'property', 'life', 'calculators', 'about', 'privacy', 'terms'].includes(cat)) {
+      } else if (cat && ['work', 'property', 'finance', 'calculators', 'about', 'privacy', 'terms'].includes(cat)) {
         setCurrentCategory(cat as CategoryType);
       }
     } catch (e) {
@@ -88,7 +88,7 @@ export default function App() {
   // Cookie consent banner logic
   useEffect(() => {
     try {
-      const consent = localStorage.getItem('life_calc_cookie_consent');
+      const consent = localStorage.getItem('park_money_cookie_consent');
       if (!consent) {
         const timer = setTimeout(() => {
           setShowCookieBanner(true);
@@ -102,7 +102,7 @@ export default function App() {
 
   const handleAcceptCookies = () => {
     try {
-      localStorage.setItem('life_calc_cookie_consent', 'all_granted');
+      localStorage.setItem('park_money_cookie_consent', 'all_granted');
       setShowCookieBanner(false);
     } catch (e) {
       console.error(e);
@@ -111,7 +111,7 @@ export default function App() {
 
   const handleDeclineCookies = () => {
     try {
-      localStorage.setItem('life_calc_cookie_consent', 'all_denied');
+      localStorage.setItem('park_money_cookie_consent', 'all_denied');
       setShowCookieBanner(false);
     } catch (e) {
       console.error(e);
@@ -236,7 +236,7 @@ export default function App() {
       />
 
       {/* 3. Footer */}
-      <footer className="bg-slate-900 text-slate-400 mt-16 border-t border-slate-800 text-xs leading-relaxed font-body">
+      <footer className="bg-slate-950 text-slate-400 mt-16 border-t border-slate-800 text-xs leading-relaxed font-body">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-slate-800">
@@ -244,50 +244,40 @@ export default function App() {
             {/* Col 1: Brand & Bio */}
             <div className="md:col-span-2 space-y-3">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-sm">
-                  <BookOpen className="w-4 h-4 text-white" />
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-slate-800 text-white font-bold flex items-center justify-center text-base">
+                  👨‍💼
                 </div>
                 <span className="font-heading text-lg font-black text-white">
-                  생활금융 실전 가이드
+                  박과장의 돈 지키는 실전 노트
                 </span>
               </div>
               <p className="text-slate-400 text-xs max-w-md leading-relaxed">
-                2026년 대한민국 4대사회보험, 급여·퇴직금, 연봉 실수령액, 부동산 세무 및 금융 재테크 실전 정보와 무료 모의 계산기를 제공합니다.
+                11년차 직장인 박과장이 직접 겪은 퇴직금 누락, 첫 집 매수 취득세 감면, 건보료 피부양자 방어 등 100% 팩트 기반 실전 기록 및 모의 계산기입니다.
               </p>
               <p className="text-slate-500 text-[11px]">
-                공식 이메일: <span className="font-mono text-slate-300">contact@life-calc.kr</span>
+                공식 이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span>
               </p>
             </div>
 
-            {/* Col 2: Category Quick Links */}
+            {/* Col 2: 3 Category Quick Links */}
             <div className="space-y-2">
               <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
-                칼럼 카테고리
+                3대 실전 카테고리
               </h4>
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
-                  <button onClick={() => handleSelectCategory('insurance')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🛡️ 4대사회보험 칼럼
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => handleSelectCategory('wage')} className="hover:text-indigo-400 transition cursor-pointer">
-                    ⏱ 급여·수당·노무
-                  </button>
-                </li>
-                <li>
-                  <button onClick={() => handleSelectCategory('finance')} className="hover:text-indigo-400 transition cursor-pointer">
-                    💰 금융·예적금·대출
+                  <button onClick={() => handleSelectCategory('work')} className="hover:text-indigo-400 transition cursor-pointer">
+                    💼 직장·월급·퇴직
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('property')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🏠 부동산·세금·청약
+                    🏠 내집·부동산·세금
                   </button>
                 </li>
                 <li>
-                  <button onClick={() => handleSelectCategory('life')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🎂 생활·법률·행정
+                  <button onClick={() => handleSelectCategory('finance')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🛡️ 연금·보험·재테크
                   </button>
                 </li>
               </ul>
@@ -296,12 +286,12 @@ export default function App() {
             {/* Col 3: Policy & Calculators */}
             <div className="space-y-2">
               <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
-                서비스 안내 및 도구
+                실전 도구 및 안내
               </h4>
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
                   <button onClick={() => handleSelectCategory('about')} className="hover:text-indigo-400 transition cursor-pointer">
-                    ℹ️ 블로그 소개
+                    👨‍💼 박과장 소개
                   </button>
                 </li>
                 <li>
@@ -327,7 +317,7 @@ export default function App() {
           {/* Bottom Copyright & Disclaimer */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
             <p>
-              &copy; 2026 생활금융 실전 가이드. All rights reserved. 본 웹사이트의 모든 글과 데이터는 참고용이며, 개별 세무·법률 분쟁에 대한 법적 효력을 갖지 않습니다.
+              &copy; 2026 박과장의 돈 지키는 실전 노트. All rights reserved. 본 웹사이트의 모든 글은 개인 경험과 공식 법령을 바탕으로 작성되었으며, 개별 소송이나 세무 신고 시 법적 대리를 대신하지 않습니다.
             </p>
             <div className="flex items-center space-x-3 text-slate-400">
               <button onClick={() => handleSelectCategory('privacy')} className="hover:underline cursor-pointer">개인정보처리방침</button>
@@ -360,10 +350,10 @@ export default function App() {
             </div>
             <div className="space-y-1">
               <h4 className="font-heading text-xs sm:text-sm font-black text-slate-900">
-                쿠키 사용 및 개인정보 안내
+                쿠키 및 브라우저 저장 안내
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed">
-                본 블로그는 원활한 서비스 제공 및 구글 맞춤형 광고 게재를 위해 최소한의 쿠키를 사용합니다.
+                본 블로그는 원활한 서비스 제공 및 최적화된 칼럼 조회를 위해 최소한의 브라우저 로컬 저장소를 사용합니다.
               </p>
             </div>
           </div>

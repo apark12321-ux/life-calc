@@ -57,9 +57,9 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
   const [data, setData] = useState<ScheduleStateData | null>(null);
   const [loading, setLoading] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<PostCategory>('insurance');
+  const [selectedCategory, setSelectedCategory] = useState<PostCategory>('work');
   const [customTopic, setCustomTopic] = useState('');
-  const [activeTab, setActiveTab] = useState<'schedule' | 'instant' | 'logs' | 'list'>('schedule');
+  const [activeTab, setActiveTab] = useState<'schedule' | 'instant' | 'logs'>('schedule');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const fetchStatus = async () => {
@@ -100,7 +100,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
       if (json.success) {
         setFeedback({
           type: 'success',
-          message: json.enabled ? '자동 포스팅 스케줄러가 활성화되었습니다.' : '스케줄러가 일시 중지되었습니다.'
+          message: json.enabled ? '1인칭 자동 포스팅 스케줄러가 활성화되었습니다.' : '스케줄러가 일시 중지되었습니다.'
         });
         await fetchStatus();
       }
@@ -121,7 +121,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
       if (json.success) {
         setFeedback({
           type: 'success',
-          message: '오늘의 5개 카테고리별 4시간 텀 랜덤 시분초가 새로 배정되었습니다.'
+          message: '오늘의 3대 핵심 카테고리별 4시간 텀 랜덤 시분초가 새로 배정되었습니다.'
         });
         await fetchStatus();
       }
@@ -148,7 +148,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
       if (json.success && json.post) {
         setFeedback({
           type: 'success',
-          message: `"${json.post.title}" 포스팅이 성공적으로 생성 및 발행되었습니다!`
+          message: `"${json.post.title}" 1인칭 실전 포스팅이 성공적으로 생성 및 발행되었습니다!`
         });
         setCustomTopic('');
         await fetchStatus();
@@ -160,21 +160,6 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
       setFeedback({ type: 'error', message: err.message || '요청 처리 중 오류가 발생했습니다.' });
     } finally {
       setActionLoading(false);
-    }
-  };
-
-  const handleDeletePost = async (id: string) => {
-    if (!confirm('이 자동 생성 포스트를 삭제하시겠습니까?')) return;
-    try {
-      const res = await fetch(`/api/auto-post/posts/${id}`, { method: 'DELETE' });
-      const json = await res.json();
-      if (json.success) {
-        setFeedback({ type: 'success', message: '포스트가 삭제되었습니다.' });
-        await fetchStatus();
-        onPostsUpdated();
-      }
-    } catch (err) {
-      setFeedback({ type: 'error', message: '삭제 실패' });
     }
   };
 
@@ -207,15 +192,15 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
       <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden">
         
         {/* Modal Header */}
-        <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
+        <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
-              <Bot className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 text-xl">
+              👨‍💼
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="font-heading font-black text-base sm:text-lg">
-                  24시간 자동 포스팅 스케줄러
+                  박과장의 1인칭 자동 포스팅 엔진
                 </h3>
                 {data?.enabled ? (
                   <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -229,7 +214,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 )}
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                매일 랜덤 시분초에 5개 카테고리별 1회씩 4시간 텀으로 자동 발행됩니다.
+                매일 랜덤 시분초에 3대 핵심 카테고리별 1회씩 4시간 텀으로 자동 발행됩니다.
               </p>
             </div>
           </div>
@@ -242,7 +227,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
           </button>
         </div>
 
-        {/* Modal Navigation Tabs & Top Stats */}
+        {/* Modal Navigation Tabs & Top Controls */}
         <div className="bg-slate-50 px-5 sm:px-6 py-3 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center space-x-1.5 bg-slate-200/70 p-1 rounded-xl text-xs font-semibold">
             <button
@@ -260,7 +245,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
               }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
-              즉시 생성 테스트
+              1인칭 즉시 생성 테스트
             </button>
             <button
               onClick={() => setActiveTab('logs')}
@@ -268,7 +253,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 activeTab === 'logs' ? 'bg-white text-indigo-700 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              시스템 실행 로그
+              실행 로그
             </button>
           </div>
 
@@ -322,10 +307,10 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 <div>
                   <h4 className="font-heading font-black text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
                     <Calendar className="w-4 h-4 text-indigo-600" />
-                    오늘({data?.date}) 카테고리별 4시간 간격 스케줄
+                    오늘({data?.date}) 3대 카테고리 4시간 간격 타임라인
                   </h4>
                   <p className="text-xs text-slate-500 mt-0.5">
-                    매일 오전/오후 균등하게 4시간 텀으로 나뉘며, 매일 초 단위까지 무작위 분산됩니다.
+                    각 카테고리별로 4시간 간격을 두고 무작위 시분초에 자동 발행됩니다.
                   </p>
                 </div>
 
@@ -339,13 +324,13 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 </button>
               </div>
 
-              {/* 5 Category Schedule Timeline Cards */}
+              {/* 3 Category Schedule Timeline Cards */}
               <div className="grid grid-cols-1 gap-3">
                 {data?.slots.map((slot, idx) => {
                   const { displayTime, diffText, isPast } = formatTimeSlot(slot);
                   const isDone = slot.status === 'published';
                   const isFailed = slot.status === 'failed';
-                  const catMeta = CATEGORY_META[slot.category];
+                  const catMeta = CATEGORY_META[slot.category] || { bg: 'bg-slate-100', border: 'border-slate-200', icon: '💼', name: slot.categoryName };
 
                   return (
                     <div
@@ -362,13 +347,13 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                         <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-base border shrink-0 ${
                           catMeta?.bg || 'bg-slate-100'
                         } ${catMeta?.border || 'border-slate-200'}`}>
-                          {slot.categoryIcon}
+                          {catMeta.icon || slot.categoryIcon}
                         </div>
 
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-heading font-black text-slate-900 text-sm">
-                              {slot.categoryName}
+                              {catMeta.name || slot.categoryName}
                             </span>
                             <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
                               🕒 {displayTime}
@@ -412,12 +397,12 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
               <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-600 space-y-1.5">
                 <p className="font-bold text-slate-800 flex items-center gap-1">
                   <span>💡</span>
-                  <span>자동 포스팅 동작 원리</span>
+                  <span>1인칭 실전 포스팅 원리</span>
                 </p>
                 <p className="leading-relaxed">
-                  1. 백그라운드 타이머가 매 20초마다 예약 시각 도달 여부를 감지합니다.<br />
-                  2. 예약된 시각이 되면 Gemini 3.7 Flash 모델이 2026년 기준 실무 포스팅을 즉시 작성하여 블로그, sitemap.xml, RSS 피드에 자동 등록합니다.<br />
-                  3. 생성된 글은 두괄식 결론, 비교 표, 불렛포인트, 실무 팁, 모의계산기 링크가 완벽히 탑재되어 네이버 AI 브리핑 및 검색 엔진에 최적화됩니다.
+                  1. 11년차 박과장 페르소나가 직접 겪은 사연("퇴직금 누락", "복비 협상", "건보료 방어")을 1인칭으로 서술합니다.<br />
+                  2. 모든 글은 2026년 법정 기준 표, 3단계 행동 로드맵, 공식 법령 근거를 반드시 포함합니다.<br />
+                  3. 백그라운드 타이머가 매 20초마다 스케줄을 감지하여 자동 발행합니다.
                 </p>
               </div>
             </div>
@@ -429,18 +414,18 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
               <div>
                 <h4 className="font-heading font-black text-slate-900 text-sm sm:text-base flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-indigo-600" />
-                  AI 즉시 포스팅 생성 & 테스트
+                  박과장의 1인칭 실전 글 즉시 생성
                 </h4>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  스케줄 시간을 기다리지 않고 지금 즉시 원하는 카테고리의 고품질 글을 생성하여 블로그에 게시합니다.
+                  스케줄 시간을 기다리지 않고 3대 핵심 카테고리 중 하나를 선택해 1인칭 실화 글을 즉시 생성합니다.
                 </p>
               </div>
 
               {/* Category Selector */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-slate-700">카테고리 선택</label>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                  {(['insurance', 'wage', 'finance', 'property', 'life'] as PostCategory[]).map(cat => {
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {(['work', 'property', 'finance'] as PostCategory[]).map(cat => {
                     const meta = CATEGORY_META[cat];
                     const isSelected = selectedCategory === cat;
                     return (
@@ -448,14 +433,14 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                         key={cat}
                         type="button"
                         onClick={() => setSelectedCategory(cat)}
-                        className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition cursor-pointer ${
+                        className={`p-3.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1.5 transition cursor-pointer ${
                           isSelected
-                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                            ? 'bg-slate-950 text-white border-slate-950 shadow-sm'
                             : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                         }`}
                       >
-                        <span className="text-base">{meta?.icon}</span>
-                        <span>{meta?.name}</span>
+                        <span className="text-xl">{meta?.icon}</span>
+                        <span className="font-heading">{meta?.name}</span>
                       </button>
                     );
                   })}
@@ -466,25 +451,25 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold text-slate-700">작성 주제 (선택 입력)</label>
-                  <span className="text-[11px] text-slate-400">비워두면 2026년 추천 주제로 자동 작성</span>
+                  <span className="text-[11px] text-slate-400">비워두면 박과장의 추천 주제로 자동 작성</span>
                 </div>
                 <input
                   type="text"
                   value={customTopic}
                   onChange={(e) => setCustomTopic(e.target.value)}
-                  placeholder="예: 2026년 청년 도약계좌 가입 조건 및 기여금 계산 방법"
+                  placeholder="예: 내가 직접 퇴직연금 DB형에서 DC형으로 전환해 1,200만원 수익 더 낸 실전기"
                   className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-hidden focus:border-indigo-500 bg-white"
                 />
               </div>
 
               {/* Quick Topic Prompts */}
               <div className="space-y-1.5">
-                <span className="text-[11px] font-bold text-slate-500">추천 퀵 프롬프트 예시:</span>
+                <span className="text-[11px] font-bold text-slate-500">추천 실전 프롬프트 예시:</span>
                 <div className="flex flex-wrap gap-1.5">
                   {[
-                    '2026년 프리랜서 3.3% 원천징수 환급 및 5월 종합소득세 절세',
-                    '2026년 육아휴직 급여 상한액 월 250만원 및 사후지급금 폐지',
-                    '2026년 주택담보대출 스트레스 DSR 3단계 적용과 한도 변화'
+                    '내가 이직할 때 미사용 연차수당 140만원 전부 받아낸 협상법',
+                    '전세 계약 연장 시 보증보험 갱신 안 했다가 겪은 아찔한 실화',
+                    '부모님 용돈 드리다 건강보험 피부양자 박탈당할 뻔했던 방어기'
                   ].map((preset, i) => (
                     <button
                       key={i}
@@ -503,17 +488,17 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                 <button
                   onClick={handleInstantPost}
                   disabled={actionLoading}
-                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition cursor-pointer disabled:opacity-50"
+                  className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-slate-950 to-indigo-950 hover:from-slate-900 hover:to-indigo-900 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition cursor-pointer disabled:opacity-50"
                 >
                   {actionLoading ? (
                     <>
                       <RefreshCw className="w-4 h-4 animate-spin" />
-                      <span>Gemini AI가 포스팅을 작성 중입니다...</span>
+                      <span>박과장의 실전 경험담 포스팅을 생성 중입니다...</span>
                     </>
                   ) : (
                     <>
-                      <Sparkles className="w-4 h-4" />
-                      <span>{CATEGORY_META[selectedCategory]?.name} 카테고리 즉시 포스팅 생성 & 발행</span>
+                      <Sparkles className="w-4 h-4 text-indigo-300" />
+                      <span>{CATEGORY_META[selectedCategory]?.name} 1인칭 포스팅 즉시 생성 & 발행</span>
                     </>
                   )}
                 </button>
@@ -562,7 +547,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
         <div className="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
           <div className="flex items-center space-x-4">
             <span>
-              총 포스트: <strong className="font-num text-slate-900">{data?.totalPostsCount || 32}</strong>편
+              총 실전 포스트: <strong className="font-num text-slate-900">{data?.totalPostsCount || 10}</strong>편
             </span>
             <span>
               자동 생성 포스트: <strong className="font-num text-indigo-600">{data?.autoGeneratedCount || 0}</strong>편

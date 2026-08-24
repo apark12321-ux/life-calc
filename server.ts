@@ -91,8 +91,8 @@ async function startServer() {
   app.post("/api/auto-post/trigger", async (req, res) => {
     try {
       const { category, topic } = req.body;
-      const validCategories: PostCategory[] = ["insurance", "wage", "finance", "property", "life"];
-      const targetCategory: PostCategory = validCategories.includes(category) ? category : "insurance";
+      const validCategories: PostCategory[] = ["work", "property", "finance"];
+      const targetCategory: PostCategory = validCategories.includes(category) ? category : "work";
 
       const created = await autoPosterEngine.triggerInstantPost(targetCategory, topic);
       res.json({ success: true, post: created });

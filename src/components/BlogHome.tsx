@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { PostItem, CategoryType, PostCategory } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
-import { Calendar, Clock, ChevronRight, Sparkles, Filter, TrendingUp, Search, BookOpen, ArrowRight, User } from 'lucide-react';
+import { Calendar, Clock, ChevronRight, Sparkles, Filter, TrendingUp, Search, BookOpen, ArrowRight, User, ShieldCheck } from 'lucide-react';
 
 interface BlogHomeProps {
   currentCategory: CategoryType;
@@ -29,7 +29,7 @@ export default function BlogHome({
     let list = posts;
 
     // Filter by category
-    if (currentCategory !== 'all' && ['insurance', 'wage', 'finance', 'property', 'life'].includes(currentCategory)) {
+    if (currentCategory !== 'all' && ['work', 'property', 'finance'].includes(currentCategory)) {
       list = list.filter(p => p.category === currentCategory);
     }
 
@@ -52,65 +52,65 @@ export default function BlogHome({
       if (sortBy === 'readTime') {
         return b.readTimeMinutes - a.readTimeMinutes;
       }
-      // Latest default (by date descending, then id)
       return b.date.localeCompare(a.date);
     });
-  }, [currentCategory, searchQuery, sortBy]);
+  }, [currentCategory, searchQuery, sortBy, posts]);
 
-  // Featured Post (first post of all, or highest viewed)
+  // Featured Post (first post of all, or top viewed)
   const featuredPost = useMemo(() => {
     if (searchQuery.trim() || currentCategory !== 'all') return null;
-    return posts[0] || ALL_BLOG_POSTS[0]; // Top latest post
+    return posts[0] || ALL_BLOG_POSTS[0];
   }, [searchQuery, currentCategory, posts]);
 
   return (
     <div className="space-y-8">
       
-      {/* 1. Featured Editor's Pick Banner (Shown on 'All' view without search) */}
+      {/* 1. Featured Real Experience Story Banner */}
       {featuredPost && (
-        <div 
+        <section
           onClick={() => onSelectPost(featuredPost)}
-          className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 md:p-10 cursor-pointer shadow-lg hover:shadow-xl transition-all group border border-slate-700/50"
+          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 lg:p-10 shadow-xl border border-indigo-500/20 cursor-pointer group transition-all duration-300 hover:shadow-2xl hover:border-indigo-400/40"
         >
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="relative z-10 max-w-3xl space-y-4">
-            <div className="flex flex-wrap items-center gap-2.5">
-              <span className="bg-indigo-500/30 text-indigo-200 text-xs font-black px-3 py-1 rounded-full border border-indigo-400/30 flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 px-3 py-1 rounded-full font-bold flex items-center gap-1.5 backdrop-blur-xs">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
-                에디터 추천 칼럼
+                박과장 대표 실전 기록
               </span>
-              <span className="text-xs text-slate-300 bg-slate-800/80 px-2.5 py-1 rounded-full border border-slate-700">
-                {featuredPost.categoryName}
+              <span className="bg-white/10 text-white px-3 py-1 rounded-full font-medium">
+                {CATEGORY_META[featuredPost.category]?.name}
               </span>
-              <span className="text-xs text-slate-400 font-num">{featuredPost.date}</span>
+              <span className="text-slate-300 font-num font-medium">{featuredPost.date}</span>
             </div>
 
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug group-hover:text-indigo-200 transition-colors">
+            <h2 className="font-heading font-black text-xl sm:text-2xl lg:text-3xl text-white group-hover:text-indigo-200 transition-colors leading-tight tracking-tight">
               {featuredPost.title}
             </h2>
 
-            <p className="font-body text-xs sm:text-sm text-slate-300 line-clamp-2 leading-relaxed">
+            <p className="font-body text-xs sm:text-sm text-slate-200 line-clamp-2 leading-relaxed max-w-2xl font-normal">
               {featuredPost.summary}
             </p>
 
-            <div className="flex items-center justify-between pt-3 border-t border-slate-700/60">
-              <div className="flex items-center space-x-2 text-xs text-slate-300">
-                <div className="w-5 h-5 rounded-md bg-indigo-600/60 text-white font-bold flex items-center justify-center text-[10px]">
-                  <BookOpen className="w-3 h-3" />
+            <div className="pt-2 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-300 border-t border-white/10">
+              <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-1.5">
+                  <span className="text-base">👨‍💼</span>
+                  <span className="text-white font-bold">{featuredPost.author}</span>
                 </div>
-                <span>{featuredPost.author}</span>
                 <span>·</span>
-                <span>{featuredPost.readTimeMinutes}분 읽기</span>
+                <span className="text-slate-200">{featuredPost.readTimeMinutes}분 읽기</span>
                 <span>·</span>
-                <span>조회 {featuredPost.viewCount.toLocaleString()}</span>
+                <span className="font-num text-slate-200">조회 {featuredPost.viewCount.toLocaleString()}</span>
               </div>
 
-              <span className="font-display text-xs sm:text-sm font-bold text-indigo-300 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                <span>전문 읽기</span>
+              <span className="font-bold text-indigo-300 group-hover:text-white group-hover:translate-x-1 transition-all flex items-center gap-1">
+                <span>실제 이야기 읽기</span>
                 <ArrowRight className="w-4 h-4" />
               </span>
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* 2. Control Bar: Filter Pills & Sorting */}
@@ -122,9 +122,9 @@ export default function BlogHome({
             {searchQuery.trim() ? (
               <span>&ldquo;{searchQuery}&rdquo; 검색 결과 ({filteredPosts.length}건)</span>
             ) : currentCategory === 'all' ? (
-              <span>전체 칼럼 모아보기 ({filteredPosts.length}편)</span>
+              <span>전체 실전기록 모아보기 ({filteredPosts.length}편)</span>
             ) : (
-              <span>{CATEGORY_META[currentCategory as PostCategory]?.name} 칼럼 ({filteredPosts.length}편)</span>
+              <span>{CATEGORY_META[currentCategory as PostCategory]?.name} ({filteredPosts.length}편)</span>
             )}
           </span>
           {searchQuery.trim() && (
@@ -159,7 +159,7 @@ export default function BlogHome({
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            조회순
+            인기순
           </button>
           <button
             type="button"
@@ -183,21 +183,21 @@ export default function BlogHome({
             검색 결과가 없습니다.
           </h3>
           <p className="font-body text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
-            다른 키워드로 검색하시거나 상단의 카테고리 탭을 통해 칼럼을 확인해보세요.
+            다른 키워드로 검색하시거나 상단의 카테고리 탭을 통해 박과장의 실전 경험담을 확인해보세요.
           </p>
           <button
             onClick={onClearSearch}
             className="mt-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-indigo-600 transition cursor-pointer"
           >
-            전체 칼럼 목록 보기
+            전체 실전기록 보기
           </button>
         </div>
       )}
 
-      {/* 4. Blog Posts Feed (Clean Cards Layout) */}
+      {/* 4. Blog Posts Feed (Clean 1st-person Story Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredPosts.map((post) => {
-          const meta = CATEGORY_META[post.category];
+          const meta = CATEGORY_META[post.category] || { name: '실전기록', icon: '📝', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
           return (
             <article
               key={post.id}
@@ -237,8 +237,8 @@ export default function BlogHome({
               {/* Author & Footer Meta */}
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center space-x-2">
-                  <div className="w-5 h-5 rounded-md bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-[9px] border border-indigo-100">
-                    <BookOpen className="w-2.5 h-2.5" />
+                  <div className="w-5 h-5 rounded-md bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-[11px] border border-indigo-100">
+                    👨‍💼
                   </div>
                   <span className="font-bold text-slate-800">{post.author}</span>
                   <span>·</span>
@@ -246,7 +246,7 @@ export default function BlogHome({
                 </div>
 
                 <span className="text-indigo-600 font-bold flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
-                  <span>자세히 보기</span>
+                  <span>후기 보기</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
