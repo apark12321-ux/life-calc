@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Type, BookOpen, Calculator, User, Sparkles, HelpCircle, Shield, Bot } from 'lucide-react';
+import { Search, Type, BookOpen, Calculator, User, Sparkles, HelpCircle, Shield } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface BlogHeaderProps {
@@ -17,7 +17,6 @@ export default function BlogHeader({
   onSelectPost,
   onSearch,
   searchQuery,
-  onOpenAutoPoster
 }: BlogHeaderProps) {
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
 
@@ -44,12 +43,12 @@ export default function BlogHeader({
   };
 
   const navItems: { id: CategoryType; label: string; icon?: string }[] = [
-    { id: 'all', label: '전체 실전기록' },
-    { id: 'work', label: '직장·월급·퇴직', icon: '💼' },
-    { id: 'property', label: '내집·부동산·세금', icon: '🏠' },
-    { id: 'finance', label: '연금·보험·재테크', icon: '🛡️' },
-    { id: 'calculators', label: '실생활 계산기', icon: '🧮' },
-    { id: 'about', label: '박과장 소개', icon: '👤' }
+    { id: 'all', label: '전체 글' },
+    { id: 'work', label: '직장·급여·퇴직', icon: '💼' },
+    { id: 'property', label: '부동산·세금', icon: '🏠' },
+    { id: 'finance', label: '연금·금융·절세', icon: '🛡️' },
+    { id: 'calculators', label: '금융 계산기', icon: '🧮' },
+    { id: 'about', label: '블로그 소개', icon: '👤' }
   ];
 
   return (
@@ -69,34 +68,20 @@ export default function BlogHeader({
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="font-heading text-xl sm:text-2xl font-black tracking-tight text-slate-950">
-                  박과장의 <span className="text-indigo-600">돈 지키는 실전 노트</span>
+                  박과장의 <span className="text-indigo-600">생활경제 노트</span>
                 </span>
-                <span className="hidden sm:inline-block bg-indigo-50 text-indigo-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-indigo-200">
-                  1인칭 실화 스토리텔링
+                <span className="hidden sm:inline-block bg-slate-100 text-slate-700 text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-slate-200">
+                  직장인 생활경제 가이드
                 </span>
               </div>
               <p className="font-body text-xs text-slate-500 hidden md:block">
-                11년차 직장인이 직접 겪고 팩트로 검증한 월급·부동산·연금 생존기록
+                11년차 직장인이 정리하는 급여·부동산·연금 실전 정보
               </p>
             </div>
           </div>
 
-          {/* Right Controls: Auto-Poster, Font Size & Search */}
+          {/* Right Controls: Font Size & Search */}
           <div className="flex items-center space-x-2.5">
-            {/* Auto Poster Button */}
-            {onOpenAutoPoster && (
-              <button
-                type="button"
-                onClick={onOpenAutoPoster}
-                className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 text-indigo-700 rounded-xl border border-indigo-200/80 text-xs font-bold transition shadow-2xs cursor-pointer group"
-                title="매일 3대 핵심 분야 1인칭 자동 포스팅 시스템 현황"
-              >
-                <Bot className="w-4 h-4 text-indigo-600 group-hover:rotate-12 transition-transform" />
-                <span className="hidden lg:inline">자동 포스팅 엔진</span>
-                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              </button>
-            )}
-
             {/* Font Size Accessibility */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
               <span className="hidden xl:inline-block px-2 text-slate-500 font-bold text-[11px]">
@@ -132,7 +117,7 @@ export default function BlogHeader({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearch(e.target.value)}
-                placeholder="경험담 검색 (예: 퇴직금, 복비, 건보료)"
+                placeholder="검색 (예: 퇴직금, 복비, 건보료)"
                 className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl py-2 pl-9 pr-3 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white border border-slate-200 font-medium transition-all"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5 pointer-events-none" />

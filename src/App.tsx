@@ -248,36 +248,36 @@ export default function App() {
                   👨‍💼
                 </div>
                 <span className="font-heading text-lg font-black text-white">
-                  박과장의 돈 지키는 실전 노트
+                  박과장의 생활경제 노트
                 </span>
               </div>
               <p className="text-slate-400 text-xs max-w-md leading-relaxed">
-                11년차 직장인 박과장이 직접 겪은 퇴직금 누락, 첫 집 매수 취득세 감면, 건보료 피부양자 방어 등 100% 팩트 기반 실전 기록 및 모의 계산기입니다.
+                11년차 직장인이 정리하는 급여, 세금, 부동산, 연금 실전 정보 및 생활 금융 계산기입니다.
               </p>
               <p className="text-slate-500 text-[11px]">
-                공식 이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span>
+                이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span>
               </p>
             </div>
 
-            {/* Col 2: 3 Category Quick Links */}
+            {/* Col 2: Category Quick Links */}
             <div className="space-y-2">
               <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
-                3대 실전 카테고리
+                카테고리
               </h4>
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
                   <button onClick={() => handleSelectCategory('work')} className="hover:text-indigo-400 transition cursor-pointer">
-                    💼 직장·월급·퇴직
+                    💼 직장·급여·퇴직
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('property')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🏠 내집·부동산·세금
+                    🏠 부동산·세금
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('finance')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🛡️ 연금·보험·재테크
+                    🛡️ 연금·금융·절세
                   </button>
                 </li>
               </ul>
@@ -286,17 +286,17 @@ export default function App() {
             {/* Col 3: Policy & Calculators */}
             <div className="space-y-2">
               <h4 className="font-heading text-xs font-black text-slate-200 uppercase tracking-wider">
-                실전 도구 및 안내
+                안내 및 도구
               </h4>
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
                   <button onClick={() => handleSelectCategory('about')} className="hover:text-indigo-400 transition cursor-pointer">
-                    👨‍💼 박과장 소개
+                    👨‍💼 블로그 소개
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('calculators')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🧮 실생활 모의 계산기
+                    🧮 금융 계산기
                   </button>
                 </li>
                 <li>
@@ -317,7 +317,7 @@ export default function App() {
           {/* Bottom Copyright & Disclaimer */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500">
             <p>
-              &copy; 2026 박과장의 돈 지키는 실전 노트. All rights reserved. 본 웹사이트의 모든 글은 개인 경험과 공식 법령을 바탕으로 작성되었으며, 개별 소송이나 세무 신고 시 법적 대리를 대신하지 않습니다.
+              &copy; 2026 박과장의 생활경제 노트. All rights reserved. 본 블로그의 정보는 관련 법령과 실무 기준을 참고하여 작성되었으며, 개별 법률 및 세무 대리를 대신하지 않습니다.
             </p>
             <div className="flex items-center space-x-3 text-slate-400">
               <button onClick={() => handleSelectCategory('privacy')} className="hover:underline cursor-pointer">개인정보처리방침</button>

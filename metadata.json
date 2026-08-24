@@ -1,6 +1,6 @@
 {
-  "name": "박과장의 돈 지키는 실전 노트",
-  "description": "11년차 직장인 박과장이 직접 겪고 팩트로 검증한 생생 스토리텔링 생활금융·월급·부동산·연금 실전 가이드",
+  "name": "박과장의 생활경제 노트",
+  "description": "11년차 직장인이 전하는 실전 급여, 세금, 부동산, 금융 정보 및 생활 금융 계산기",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -98,7 +98,7 @@ export default function BlogPostView({
           onClick={() => onSelectCategory('all')}
           className="hover:text-indigo-600 transition"
         >
-          실전기록 홈
+          전체 글
         </button>
         <span>&gt;</span>
         <button 
@@ -172,7 +172,7 @@ export default function BlogPostView({
             </div>
             <div>
               <span className="font-bold text-slate-950">{post.author}</span>
-              <span className="text-slate-500 ml-1.5 font-normal">({post.authorRole || '돈 지키는 박과장'})</span>
+              <span className="text-slate-500 ml-1.5 font-normal">({post.authorRole || '블로그 운영자'})</span>
             </div>
           </div>
 
@@ -195,7 +195,7 @@ export default function BlogPostView({
         <div className="bg-amber-50/90 border-l-4 border-amber-500 p-4 sm:p-5 rounded-r-2xl text-amber-950 space-y-1.5 shadow-2xs">
           <p className="font-heading text-xs font-black text-amber-950 flex items-center gap-1.5 uppercase tracking-wider">
             <span>💡</span>
-            <span>박과장의 실전 당부의 말</span>
+            <span>참고 사항</span>
           </p>
           <p className="font-body text-xs sm:text-sm leading-relaxed text-amber-950 font-medium">
             {post.authorNote}
@@ -208,7 +208,7 @@ export default function BlogPostView({
         <div className="bg-slate-50/90 rounded-2xl p-5 border border-slate-200 space-y-3">
           <p className="font-heading text-xs sm:text-sm font-black text-slate-950 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600" />
-            핵심 팩트 & 직접 검증한 결과
+            핵심 요약
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {post.highlights.map((h, i) => (
@@ -223,7 +223,7 @@ export default function BlogPostView({
 
       {/* 4.1 Mobile Table of Contents */}
       <div className="lg:hidden">
-        <TableOfContents content={post.content} variant="inline" title="핵심 글 목차 (TOC)" />
+        <TableOfContents content={post.content} variant="inline" title="글 목차" />
       </div>
 
       {/* 5. Main Post Markdown-styled Rich Content */}
@@ -346,7 +346,7 @@ export default function BlogPostView({
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-700 flex items-start gap-2.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold text-slate-900">관련 법령 및 공식 행정 근거:</span>{' '}
+            <span className="font-bold text-slate-900">관련 법령 및 근거:</span>{' '}
             <span className="text-slate-700">{post.legalBasis}</span>
           </div>
         </div>
@@ -357,10 +357,10 @@ export default function BlogPostView({
         <div className="bg-gradient-to-r from-indigo-50/80 via-blue-50/80 to-indigo-50/80 border border-indigo-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1">
             <p className="font-heading text-sm sm:text-base font-black text-slate-950">
-              내 상황에 맞게 1원 단위까지 직접 계산해보시겠습니까?
+              내 조건에 맞게 직접 계산해보기
             </p>
             <p className="font-body text-xs text-slate-700">
-              {post.relatedCalculatorName}를 통해 2026년 기준 예상 금액을 1초 만에 확인하실 수 있습니다.
+              {post.relatedCalculatorName}를 통해 관련 세법 및 기준에 맞춘 예상 금액을 확인하실 수 있습니다.
             </p>
           </div>
           <button
@@ -396,11 +396,11 @@ export default function BlogPostView({
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <h4 className="font-heading font-black text-slate-950 text-sm sm:text-base">{post.author}</h4>
             <span className="text-xs text-indigo-700 bg-indigo-50 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-100">
-              {post.authorRole || '돈 지키는 박과장'}
+              {post.authorRole || '블로그 운영자'}
             </span>
           </div>
           <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
-            11년 동안 회사와 부동산 시장에서 부딪히며 배운 팩트만 1인칭으로 기록합니다. 비슷한 고민이나 계산 문의는 언제든 이메일로 보내주세요.
+            11년 동안 회사 생활과 부동산, 금융을 거치며 직접 겪고 확인한 정보를 알기 쉽게 정리합니다.
           </p>
           <p className="text-xs text-slate-500 pt-0.5 font-medium">
             이메일: <span className="font-mono text-slate-700 font-semibold">contact@park-money.kr</span>
@@ -417,7 +417,7 @@ export default function BlogPostView({
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center gap-1 group-hover:text-indigo-600">
               <ChevronLeft className="w-3.5 h-3.5" />
-              이전 실화
+              이전 글
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
               {prevPost.title}
@@ -431,7 +431,7 @@ export default function BlogPostView({
             className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition cursor-pointer group space-y-1 text-right"
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center justify-end gap-1 group-hover:text-indigo-600">
-              다음 실화
+              다음 글
               <ChevronRight className="w-3.5 h-3.5" />
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
@@ -446,7 +446,7 @@ export default function BlogPostView({
         <div className="space-y-4 pt-4 border-t border-slate-100 no-print">
           <h3 className="font-heading text-base font-black text-slate-950 flex items-center gap-2">
             <span>📚</span>
-            <span>같은 카테고리의 박과장 실전기록</span>
+            <span>관련 글</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedPosts.map(rel => (
@@ -476,9 +476,9 @@ export default function BlogPostView({
         <div className="flex items-center justify-between">
           <h3 className="font-heading text-base sm:text-lg font-black text-slate-950 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-indigo-600" />
-            <span>댓글과 실전 후기 공유 ({comments.length})</span>
+            <span>댓글 ({comments.length})</span>
           </h3>
-          <span className="text-xs text-slate-500 font-medium">비슷한 경험담이나 질문을 편하게 남겨주세요</span>
+          <span className="text-xs text-slate-500 font-medium">궁금한 점이나 의견을 편하게 남겨주세요</span>
         </div>
 
         {/* Comment Input Form */}
@@ -498,7 +498,7 @@ export default function BlogPostView({
             rows={3}
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="박과장의 실전 경험담에 대한 질문이나 본인이 겪은 사연을 나눠주세요..."
+            placeholder="궁금한 점이나 의견을 편하게 남겨주세요..."
             className="w-full bg-white text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl p-3 border border-slate-200 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-hidden"
           />
           <div className="flex items-center justify-between">
