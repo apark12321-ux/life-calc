@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CategoryType, PostItem } from './types';
 import { ALL_BLOG_POSTS } from './data/postsData';
 import BlogHeader from './components/BlogHeader';
@@ -9,15 +9,38 @@ import CalculatorsHub from './components/CalculatorsHub';
 import AboutApp from './components/AboutApp';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
-import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles } from 'lucide-react';
+import AutoPostDashboardModal from './components/AutoPostDashboardModal';
+import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles, Bot } from 'lucide-react';
 
 export default function App() {
+  const [posts, setPosts] = useState<PostItem[]>(ALL_BLOG_POSTS);
   const [currentCategory, setCurrentCategory] = useState<CategoryType>('all');
   const [selectedPost, setSelectedPost] = useState<PostItem | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('insurance');
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+  const [isAutoPostModalOpen, setIsAutoPostModalOpen] = useState<boolean>(false);
+
+  // Fetch posts from backend (incorporating scheduled & auto-generated posts)
+  const fetchPosts = useCallback(async () => {
+    try {
+      const res = await fetch('/api/posts');
+      const json = await res.json();
+      if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        setPosts(json.data);
+      }
+    } catch (e) {
+      console.warn('Using local posts fallback:', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchPosts();
+    // Poll posts every 30 seconds to catch newly scheduled auto-posts
+    const interval = setInterval(fetchPosts, 30000);
+    return () => clearInterval(interval);
+  }, [fetchPosts]);
 
   // Parse deep link parameters on mount
   useEffect(() => {
@@ -26,9 +49,14 @@ export default function App() {
       const postId = params.get('post');
       const cat = params.get('cat') || params.get('c') || params.get('category');
       const calcId = params.get('calc') || params.get('s');
+      const openScheduler = params.get('autopost') || params.get('admin');
+
+      if (openScheduler) {
+        setIsAutoPostModalOpen(true);
+      }
 
       if (postId) {
-        const found = ALL_BLOG_POSTS.find(p => p.id === postId);
+        const found = posts.find(p => p.id === postId) || ALL_BLOG_POSTS.find(p => p.id === postId);
         if (found) {
           setSelectedPost(found);
           setCurrentCategory(found.category);
@@ -42,7 +70,7 @@ export default function App() {
     } catch (e) {
       console.warn('URL parsing failed:', e);
     }
-  }, []);
+  }, [posts]);
 
   // Track scroll position for "Back to top" button
   useEffect(() => {
@@ -131,6 +159,7 @@ export default function App() {
           }
         }}
         searchQuery={searchQuery}
+        onOpenAutoPoster={() => setIsAutoPostModalOpen(true)}
       />
 
       {/* 2. Main Content Container (2-Column Blog Layout) */}
@@ -176,6 +205,8 @@ export default function App() {
                   onSelectPost={handleSelectPost}
                   searchQuery={searchQuery}
                   onClearSearch={() => setSearchQuery('')}
+                  posts={posts}
+                  onOpenAutoPoster={() => setIsAutoPostModalOpen(true)}
                 />
               )}
             </main>
@@ -187,12 +218,22 @@ export default function App() {
                 onSelectCategory={handleSelectCategory}
                 onNavigateToCalculator={handleNavigateToCalculator}
                 activePost={selectedPost}
+                posts={posts}
+                onOpenAutoPoster={() => setIsAutoPostModalOpen(true)}
               />
             </div>
 
           </div>
         )}
       </div>
+
+      {/* Auto-Posting System Modal */}
+      <AutoPostDashboardModal
+        isOpen={isAutoPostModalOpen}
+        onClose={() => setIsAutoPostModalOpen(false)}
+        onSelectPost={handleSelectPost}
+        onPostsUpdated={fetchPosts}
+      />
 
       {/* 3. Footer */}
       <footer className="bg-slate-900 text-slate-400 mt-16 border-t border-slate-800 text-xs leading-relaxed font-body">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Type, BookOpen, Calculator, User, Sparkles, HelpCircle, Shield } from 'lucide-react';
+import { Search, Type, BookOpen, Calculator, User, Sparkles, HelpCircle, Shield, Bot } from 'lucide-react';
 import { CategoryType, PostCategory } from '../types';
 import { CATEGORY_META } from '../data/postsData';
 
@@ -9,6 +9,7 @@ interface BlogHeaderProps {
   onSelectPost?: (postId: string) => void;
   onSearch: (query: string) => void;
   searchQuery: string;
+  onOpenAutoPoster?: () => void;
 }
 
 export default function BlogHeader({
@@ -16,7 +17,8 @@ export default function BlogHeader({
   onSelectCategory,
   onSelectPost,
   onSearch,
-  searchQuery
+  searchQuery,
+  onOpenAutoPoster
 }: BlogHeaderProps) {
   const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
 
@@ -82,8 +84,22 @@ export default function BlogHeader({
             </div>
           </div>
 
-          {/* Right Controls: Font Size & Search */}
-          <div className="flex items-center space-x-3">
+          {/* Right Controls: Auto-Poster, Font Size & Search */}
+          <div className="flex items-center space-x-2.5">
+            {/* Auto Poster Button */}
+            {onOpenAutoPoster && (
+              <button
+                type="button"
+                onClick={onOpenAutoPoster}
+                className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 text-indigo-700 rounded-xl border border-indigo-200/80 text-xs font-bold transition shadow-2xs cursor-pointer group"
+                title="매일 카테고리별 1회 4시간 텀 자동 포스팅 시스템 현황"
+              >
+                <Bot className="w-4 h-4 text-indigo-600 group-hover:rotate-12 transition-transform" />
+                <span className="hidden lg:inline">자동 포스팅 엔진</span>
+                <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </button>
+            )}
+
             {/* Font Size Accessibility */}
             <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
               <span className="hidden xl:inline-block px-2 text-slate-500 font-bold text-[11px]">
@@ -114,12 +130,12 @@ export default function BlogHeader({
             </div>
 
             {/* Quick Search */}
-            <div className="relative w-44 sm:w-56 md:w-64">
+            <div className="relative w-40 sm:w-52 md:w-60">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onSearch(e.target.value)}
-                placeholder="칼럼 검색 (예: 4대보험, 취득세)"
+                placeholder="칼럼 검색 (예: 4대보험, 퇴직금)"
                 className="w-full bg-slate-50 text-slate-900 placeholder-slate-400 text-xs sm:text-sm rounded-xl py-2 pl-9 pr-3 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 focus:bg-white border border-slate-200 font-medium transition-all"
               />
               <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400 pointer-events-none" />

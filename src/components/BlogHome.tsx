@@ -9,6 +9,8 @@ interface BlogHomeProps {
   onSelectPost: (post: PostItem) => void;
   searchQuery: string;
   onClearSearch: () => void;
+  posts?: PostItem[];
+  onOpenAutoPoster?: () => void;
 }
 
 export default function BlogHome({
@@ -16,13 +18,15 @@ export default function BlogHome({
   onSelectCategory,
   onSelectPost,
   searchQuery,
-  onClearSearch
+  onClearSearch,
+  posts = ALL_BLOG_POSTS,
+  onOpenAutoPoster
 }: BlogHomeProps) {
   const [sortBy, setSortBy] = useState<'latest' | 'popular' | 'readTime'>('latest');
 
   // Filter posts based on category and search query
   const filteredPosts = useMemo(() => {
-    let list = ALL_BLOG_POSTS;
+    let list = posts;
 
     // Filter by category
     if (currentCategory !== 'all' && ['insurance', 'wage', 'finance', 'property', 'life'].includes(currentCategory)) {
@@ -56,8 +60,8 @@ export default function BlogHome({
   // Featured Post (first post of all, or highest viewed)
   const featuredPost = useMemo(() => {
     if (searchQuery.trim() || currentCategory !== 'all') return null;
-    return ALL_BLOG_POSTS[0]; // Top latest post
-  }, [searchQuery, currentCategory]);
+    return posts[0] || ALL_BLOG_POSTS[0]; // Top latest post
+  }, [searchQuery, currentCategory, posts]);
 
   return (
     <div className="space-y-8">
