@@ -1,0 +1,134 @@
+{
+  "date": "2026-08-24",
+  "enabled": true,
+  "intervalHours": 4,
+  "slots": [
+    {
+      "id": "slot-2026-08-24-property-0",
+      "category": "property",
+      "categoryName": "부동산·세금",
+      "categoryIcon": "🏠",
+      "scheduledTime": "2026-08-24T01:46:28",
+      "scheduledHour": 1,
+      "scheduledMinute": 46,
+      "scheduledSecond": 28,
+      "status": "published",
+      "publishedPostId": "auto-1787569341697-d5e6m",
+      "publishedPostTitle": "2026년 전월세 전환율 법정 상한선(기준금리+2.0%)과 월세 인상 계산법 (2026년 실전 요약)",
+      "publishedAt": "2026-08-24T11:02:21.698Z"
+    },
+    {
+      "id": "slot-2026-08-24-finance-1",
+      "category": "finance",
+      "categoryName": "금융·재테크",
+      "categoryIcon": "💰",
+      "scheduledTime": "2026-08-24T05:04:05",
+      "scheduledHour": 5,
+      "scheduledMinute": 4,
+      "scheduledSecond": 5,
+      "status": "published",
+      "publishedPostId": "auto-1787569368269-5yy8e",
+      "publishedPostTitle": "원리금균등 vs 원금균등 vs 만기일시상환 대출 이자 총액 비교와 선택 기준 (2026년 실전 요약)",
+      "publishedAt": "2026-08-24T11:02:48.270Z"
+    },
+    {
+      "id": "slot-2026-08-24-wage-2",
+      "category": "wage",
+      "categoryName": "급여·노무",
+      "categoryIcon": "⏱",
+      "scheduledTime": "2026-08-24T09:37:40",
+      "scheduledHour": 9,
+      "scheduledMinute": 37,
+      "scheduledSecond": 40,
+      "status": "published",
+      "publishedPostId": "auto-1787569505911-h7j0t",
+      "publishedPostTitle": "야간근로수당 및 연장·휴일근로 가산수당 중복 할증 계산 완전정복 (2026년 실전 요약)",
+      "publishedAt": "2026-08-24T11:05:05.912Z"
+    },
+    {
+      "id": "slot-2026-08-24-life-3",
+      "category": "life",
+      "categoryName": "생활·행정",
+      "categoryIcon": "🎂",
+      "scheduledTime": "2026-08-24T13:32:22",
+      "scheduledHour": 13,
+      "scheduledMinute": 32,
+      "scheduledSecond": 22,
+      "status": "published",
+      "publishedPostId": "auto-1787571619137-mrarg",
+      "publishedPostTitle": "2026년 만 나이 통일법 완벽 적용: 연령별 혜택과 법적 기준 정리 (2026년 실전 요약)",
+      "publishedAt": "2026-08-24T11:40:19.137Z"
+    },
+    {
+      "id": "slot-2026-08-24-insurance-4",
+      "category": "insurance",
+      "categoryName": "4대사회보험",
+      "categoryIcon": "🛡️",
+      "scheduledTime": "2026-08-24T17:15:10",
+      "scheduledHour": 17,
+      "scheduledMinute": 15,
+      "scheduledSecond": 10,
+      "status": "published",
+      "publishedPostId": "auto-1787571640754-9wahn",
+      "publishedPostTitle": "2026년 국민연금 조기노령연금 수령 조건과 감액률 손익분기점 분석 (2026년 실전 요약)",
+      "publishedAt": "2026-08-24T11:40:40.754Z"
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2026-08-24T11:40:40.754Z",
+      "message": "[즉시 수동 발행] \"2026년 국민연금 조기노령연금 수령 조건과 감액률 손익분기점 분석 (2026년 실전 요약)\" (4대사회보험) 생성 및 등록 완료",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-08-24T11:40:19.137Z",
+      "message": "[즉시 수동 발행] \"2026년 만 나이 통일법 완벽 적용: 연령별 혜택과 법적 기준 정리 (2026년 실전 요약)\" (생활·행정) 생성 및 등록 완료",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-08-24T11:05:05.912Z",
+      "message": "[발행 완료] \"야간근로수당 및 연장·휴일근로 가산수당 중복 할증 계산 완전정복 (2026년 실전 요약)\" (급여·노무) 자동 발행 및 사이트 반영 성공",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-08-24T11:02:48.270Z",
+      "message": "[자동 발행 실행] 카테고리: 급여·노무(wage) 예약 시각 도달 (9:37:40)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-08-24T11:02:48.270Z",
+      "message": "[발행 완료] \"원리금균등 vs 원금균등 vs 만기일시상환 대출 이자 총액 비교와 선택 기준 (2026년 실전 요약)\" (금융·재테크) 자동 발행 및 사이트 반영 성공",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-08-24T11:02:21.698Z",
+      "message": "[자동 발행 실행] 카테고리: 금융·재테크(finance) 예약 시각 도달 (5:4:5)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-08-24T11:02:21.698Z",
+      "message": "[발행 완료] \"2026년 전월세 전환율 법정 상한선(기준금리+2.0%)과 월세 인상 계산법 (2026년 실전 요약)\" (부동산·세금) 자동 발행 및 사이트 반영 성공",
+      "type": "success"
+    },
+    {
+      "timestamp": "2026-08-24T11:02:00.160Z",
+      "message": "[자동 발행 실행] 카테고리: 부동산·세금(property) 예약 시각 도달 (1:46:28)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-08-24T11:01:19.175Z",
+      "message": "[자동 발행 실행] 카테고리: 부동산·세금(property) 예약 시각 도달 (1:46:28)",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-08-24T11:01:17.173Z",
+      "message": "오늘(2026-08-24) 5개 카테고리별 4시간 텀 자동 포스팅 스케줄 배정 완료",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-08-24T11:01:17.173Z",
+      "message": "자동 포스팅 엔진 초기화 완료 (매일 5개 카테고리 4시간 텀 랜덤 시분초 발행)",
+      "type": "info"
+    }
+  ]
+}
