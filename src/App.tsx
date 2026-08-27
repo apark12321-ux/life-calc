@@ -9,6 +9,7 @@ import CalculatorsHub from './components/CalculatorsHub';
 import AboutApp from './components/AboutApp';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import SitemapView from './components/SitemapView';
 import AutoPostDashboardModal from './components/AutoPostDashboardModal';
 import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles, Bot } from 'lucide-react';
 
@@ -64,7 +65,7 @@ export default function App() {
       } else if (calcId) {
         setCurrentCategory('calculators');
         setActiveCalculatorSubId(calcId);
-      } else if (cat && ['work', 'property', 'finance', 'calculators', 'about', 'privacy', 'terms'].includes(cat)) {
+      } else if (cat && ['work', 'property', 'finance', 'calculators', 'about', 'privacy', 'terms', 'sitemap'].includes(cat)) {
         setCurrentCategory(cat as CategoryType);
       }
     } catch (e) {
@@ -178,6 +179,16 @@ export default function App() {
         ) : currentCategory === 'terms' ? (
           <div className="max-w-4xl mx-auto">
             <TermsOfService onBack={() => handleSelectCategory('all')} />
+          </div>
+        ) : currentCategory === 'sitemap' ? (
+          <div className="max-w-5xl mx-auto">
+            <SitemapView
+              posts={posts}
+              onSelectPost={handleSelectPost}
+              onSelectCategory={handleSelectCategory}
+              onNavigateToCalculator={handleNavigateToCalculator}
+              onBack={() => handleSelectCategory('all')}
+            />
           </div>
         ) : currentCategory === 'about' ? (
           <div className="max-w-4xl mx-auto">
@@ -297,6 +308,11 @@ export default function App() {
                 <li>
                   <button onClick={() => handleSelectCategory('calculators')} className="hover:text-indigo-400 transition cursor-pointer">
                     🧮 금융 계산기
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-indigo-400 transition cursor-pointer">
+                    🗺️ 전체 사이트맵
                   </button>
                 </li>
                 <li>

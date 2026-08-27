@@ -136,13 +136,14 @@ async function startServer() {
       // Main category and portal hubs
       const baseUrls = [
         { loc: "https://www.life-calc.kr/", priority: "1.0", changefreq: "daily" },
-        { loc: "https://www.life-calc.kr/?cat=insurance", priority: "0.9", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=wage", priority: "0.9", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=finance", priority: "0.9", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=property", priority: "0.9", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=life", priority: "0.9", changefreq: "weekly" },
+        { loc: "https://www.life-calc.kr/?cat=work", priority: "0.9", changefreq: "daily" },
+        { loc: "https://www.life-calc.kr/?cat=property", priority: "0.9", changefreq: "daily" },
+        { loc: "https://www.life-calc.kr/?cat=finance", priority: "0.9", changefreq: "daily" },
         { loc: "https://www.life-calc.kr/?cat=calculators", priority: "0.85", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=about", priority: "0.8", changefreq: "monthly" }
+        { loc: "https://www.life-calc.kr/?cat=sitemap", priority: "0.8", changefreq: "weekly" },
+        { loc: "https://www.life-calc.kr/?cat=about", priority: "0.8", changefreq: "monthly" },
+        { loc: "https://www.life-calc.kr/?cat=privacy", priority: "0.5", changefreq: "monthly" },
+        { loc: "https://www.life-calc.kr/?cat=terms", priority: "0.5", changefreq: "monthly" }
       ];
 
       for (const u of baseUrls) {
@@ -171,9 +172,9 @@ async function startServer() {
       const allPosts = autoPosterEngine.getAllPosts();
 
       let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0">\n<channel>\n`;
-      xml += `  <title>생활금융 실전 가이드</title>\n`;
+      xml += `  <title>박과장의 생활경제 노트</title>\n`;
       xml += `  <link>https://www.life-calc.kr</link>\n`;
-      xml += `  <description>2026년 4대보험, 급여·퇴직금, 연봉 실수령액, 부동산 세무 및 재테크 실전 정보 가이드</description>\n`;
+      xml += `  <description>11년차 직장인이 정리하는 급여, 세금, 부동산, 연금 실전 정보 및 생활 금융 계산기</description>\n`;
       xml += `  <language>ko-KR</language>\n`;
       xml += `  <lastBuildDate>${now.toUTCString()}</lastBuildDate>\n`;
 
