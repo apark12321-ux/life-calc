@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Mail, BookOpen, Calculator, Lock, RefreshCw, ArrowRight, UserCheck } from 'lucide-react';
+import { ShieldCheck, Mail, ArrowRight, UserCheck, CalendarDays, Sparkles, BookOpenCheck, ChevronRight } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface AboutAppProps {
@@ -11,6 +11,70 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
   return (
     <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 md:p-10 space-y-10 text-slate-700 leading-relaxed font-body shadow-xs">
       
+      {/* 0. Regular Series Planning Notice Banner */}
+      <section className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 sm:p-7 border border-indigo-500/20 shadow-md relative overflow-hidden space-y-4">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-400/20 pb-3">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-1 rounded-full bg-indigo-600/60 border border-indigo-400/30 text-[11px] font-black text-indigo-200 uppercase tracking-wider flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-indigo-300" />
+              정기 기획 연재 안내
+            </span>
+            <span className="text-xs text-slate-300 font-medium hidden sm:inline">
+              매주 수요일 업데이트
+            </span>
+          </div>
+          <span className="text-[11px] text-indigo-300 font-bold flex items-center gap-1">
+            <CalendarDays className="w-3.5 h-3.5" />
+            2026 특별 기획 시리즈
+          </span>
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="font-heading text-lg sm:text-xl font-black text-white flex items-center gap-2">
+            <BookOpenCheck className="w-5 h-5 text-indigo-400 shrink-0" />
+            <span>[연재 기획] 11년차 박과장의 직장인 연차별 생존·자산 전략</span>
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+            사회초년생부터 팀장급까지, 각 연차별로 반드시 챙겨야 할 <strong>급여명세서 비밀·청약/주거 사다리·이직 협상·퇴직금 관리 노하우</strong>를 매주 실무 데이터와 함께 집중 연재합니다.
+          </p>
+        </div>
+
+        {/* Series Roadmap Schedule Preview */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10 space-y-1">
+            <span className="text-[10px] font-black text-indigo-300">1단계 (1~3년차)</span>
+            <h3 className="font-heading font-black text-xs text-white">첫 통장과 청약의 기초</h3>
+            <p className="text-[11px] text-slate-300 line-clamp-2">실수령액 파악, 청년도약계좌 및 소득공제 세팅</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10 space-y-1">
+            <span className="text-[10px] font-black text-amber-300">2단계 (4~7년차)</span>
+            <h3 className="font-heading font-black text-xs text-white">이직 연봉협상과 주거 사다리</h3>
+            <p className="text-[11px] text-slate-300 line-clamp-2">원천징수 기반 협상, 디딤돌·버팀목 대출 활용</p>
+          </div>
+          <div className="bg-white/10 backdrop-blur-xs rounded-xl p-3 border border-white/10 space-y-1">
+            <span className="text-[10px] font-black text-emerald-300">3단계 (8년차 이상)</span>
+            <h3 className="font-heading font-black text-xs text-white">퇴직연금(IRP)과 절세 파이프라인</h3>
+            <p className="text-[11px] text-slate-300 line-clamp-2">DB/DC 전환 타이밍, ISA 계좌 만기 연금 전환</p>
+          </div>
+        </div>
+
+        <div className="pt-1 flex flex-wrap items-center justify-between gap-3 text-xs">
+          <span className="text-slate-400 text-[11px]">
+            * 연재되는 모든 콘텐츠는 '직장·급여·퇴직' 및 '연금·금융·절세' 카테고리에 순차 수록됩니다.
+          </span>
+          <button
+            type="button"
+            onClick={() => onSelectCategory('work')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-500/30 hover:bg-indigo-500/50 text-indigo-200 border border-indigo-400/30 font-bold transition cursor-pointer"
+          >
+            <span>직장·급여 최신 칼럼 보러가기</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </section>
+
       {/* 1. Page Header & Author Persona */}
       <div className="border-b border-slate-100 pb-8 flex flex-col md:flex-row items-center md:items-start gap-6">
         <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-950 to-slate-900 text-white flex items-center justify-center font-black text-4xl shadow-md shrink-0">

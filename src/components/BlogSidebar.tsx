@@ -1,7 +1,7 @@
 import React from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
-import { User, Mail, ChevronRight, TrendingUp, Folder, Calculator, ShieldCheck, Heart, Sparkles, BookOpen } from 'lucide-react';
+import { Mail, ChevronRight, Folder, Calculator, Sparkles } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 
 interface BlogSidebarProps {
@@ -20,10 +20,8 @@ export default function BlogSidebar({
   activePost = null,
   posts = ALL_BLOG_POSTS,
 }: BlogSidebarProps) {
-  // Top 5 popular posts sorted by view count
-  const popularPosts = [...posts]
-    .sort((a, b) => b.viewCount - a.viewCount)
-    .slice(0, 5);
+  // Top 5 recommended posts
+  const recommendedPosts = posts.slice(0, 5);
 
   const categories: { id: CategoryType; name: string; icon: string; count: number; desc: string }[] = [
     { id: 'work', name: '직장·급여·퇴직', icon: '💼', count: posts.filter(p => p.category === 'work').length, desc: '월급명세서, 퇴직금, 주휴수당, 실업급여' },
@@ -77,18 +75,17 @@ export default function BlogSidebar({
         </div>
       </div>
 
-      {/* 2. Top 5 Popular Real Stories */}
+      {/* 2. Top 5 Recommended Articles */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3.5">
         <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
           <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5">
-            <TrendingUp className="w-4 h-4 text-indigo-600" />
-            인기 글 TOP 5
+            <Sparkles className="w-4 h-4 text-indigo-600" />
+            주요 추천 글 TOP 5
           </h3>
-          <span className="text-[11px] text-slate-500 font-medium">조회수 기준</span>
         </div>
 
         <div className="space-y-2.5">
-          {popularPosts.map((post, idx) => (
+          {recommendedPosts.map((post, idx) => (
             <div
               key={post.id}
               onClick={() => onSelectPost(post)}
@@ -106,7 +103,7 @@ export default function BlogSidebar({
                 <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-1 font-body font-medium">
                   <span>{post.categoryName}</span>
                   <span>·</span>
-                  <span>조회 {post.viewCount.toLocaleString()}</span>
+                  <span>{post.date}</span>
                 </div>
               </div>
             </div>

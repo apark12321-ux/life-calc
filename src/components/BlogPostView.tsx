@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
-  Calendar, Clock, User, Share2, Printer, ChevronRight, ChevronLeft, 
+  Calendar, User, Share2, Printer, ChevronRight, ChevronLeft, 
   Sparkles, ShieldCheck, ArrowRight, ExternalLink, MessageSquare, Send, Check, Heart, Bookmark, BookOpen,
   List
 } from 'lucide-react';
@@ -23,7 +23,6 @@ export default function BlogPostView({
 }: BlogPostViewProps) {
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(Math.floor(post.viewCount / 35) + 12);
   
   // Comments state
   const [comments, setComments] = useState([
@@ -60,13 +59,7 @@ export default function BlogPostView({
   };
 
   const handleToggleLike = () => {
-    if (!liked) {
-      setLikeCount(prev => prev + 1);
-      setLiked(true);
-    } else {
-      setLikeCount(prev => prev - 1);
-      setLiked(false);
-    }
+    setLiked(prev => !prev);
   };
 
   const handleAddComment = (e: React.FormEvent) => {
@@ -135,7 +128,7 @@ export default function BlogPostView({
               }`}
             >
               <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-rose-500 text-rose-500' : ''}`} />
-              <span className="font-num">{likeCount}</span>
+              <span>{liked ? '추천됨' : '추천'}</span>
             </button>
             <button
               type="button"
@@ -176,16 +169,11 @@ export default function BlogPostView({
             </div>
           </div>
 
-          <div className="flex items-center space-x-4 text-slate-500 text-xs font-medium">
+          <div className="flex items-center text-slate-500 text-xs font-medium">
             <span className="flex items-center gap-1 text-slate-600">
               <Calendar className="w-3.5 h-3.5 text-slate-500" />
               {post.date}
             </span>
-            <span className="flex items-center gap-1 text-slate-600">
-              <Clock className="w-3.5 h-3.5 text-slate-500" />
-              {post.readTimeMinutes}분 소요
-            </span>
-            <span className="text-slate-600 font-num">조회 {post.viewCount.toLocaleString()}회</span>
           </div>
         </div>
       </header>

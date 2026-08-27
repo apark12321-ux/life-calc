@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { PostItem, CategoryType, PostCategory } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
-import { Calendar, Clock, ChevronRight, Sparkles, Filter, TrendingUp, Search, BookOpen, ArrowRight, User, ShieldCheck } from 'lucide-react';
+import { ChevronRight, Sparkles, Search, BookOpen, ArrowRight, User, ShieldCheck } from 'lucide-react';
 
 interface BlogHomeProps {
   currentCategory: CategoryType;
@@ -21,8 +21,6 @@ export default function BlogHome({
   onClearSearch,
   posts = ALL_BLOG_POSTS,
 }: BlogHomeProps) {
-  const [sortBy, setSortBy] = useState<'latest' | 'popular' | 'readTime'>('latest');
-
   // Filter posts based on category and search query
   const filteredPosts = useMemo(() => {
     let list = posts;
@@ -43,17 +41,9 @@ export default function BlogHome({
       );
     }
 
-    // Sort
-    return [...list].sort((a, b) => {
-      if (sortBy === 'popular') {
-        return b.viewCount - a.viewCount;
-      }
-      if (sortBy === 'readTime') {
-        return b.readTimeMinutes - a.readTimeMinutes;
-      }
-      return b.date.localeCompare(a.date);
-    });
-  }, [currentCategory, searchQuery, sortBy, posts]);
+    // Sort by latest date descending
+    return [...list].sort((a, b) => b.date.localeCompare(a.date));
+  }, [currentCategory, searchQuery, posts]);
 
   // Featured Post (first post of all, or top viewed)
   const featuredPost = useMemo(() => {
@@ -98,9 +88,7 @@ export default function BlogHome({
                   <span className="text-white font-bold">{featuredPost.author}</span>
                 </div>
                 <span>·</span>
-                <span className="text-slate-200">{featuredPost.readTimeMinutes}분 읽기</span>
-                <span>·</span>
-                <span className="font-num text-slate-200">조회 {featuredPost.viewCount.toLocaleString()}</span>
+                <span className="text-slate-200">{featuredPost.date}</span>
               </div>
 
               <span className="font-bold text-indigo-300 group-hover:text-white group-hover:translate-x-1 transition-all flex items-center gap-1">
@@ -112,7 +100,7 @@ export default function BlogHome({
         </section>
       )}
 
-      {/* 2. Control Bar: Filter Pills & Sorting */}
+      {/* 2. Control Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
         
         {/* Category Description or Search Indicator */}
@@ -136,41 +124,8 @@ export default function BlogHome({
           )}
         </div>
 
-        {/* Sorting Buttons */}
-        <div className="flex items-center space-x-1.5 text-xs">
-          <button
-            type="button"
-            onClick={() => setSortBy('latest')}
-            className={`px-3 py-1.5 rounded-xl font-bold transition cursor-pointer ${
-              sortBy === 'latest'
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            최신순
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy('popular')}
-            className={`px-3 py-1.5 rounded-xl font-bold transition cursor-pointer ${
-              sortBy === 'popular'
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            인기순
-          </button>
-          <button
-            type="button"
-            onClick={() => setSortBy('readTime')}
-            className={`px-3 py-1.5 rounded-xl font-bold transition cursor-pointer ${
-              sortBy === 'readTime'
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            소요시간순
-          </button>
+        <div className="text-xs text-slate-500 font-medium">
+          최신순 정렬
         </div>
       </div>
 
@@ -240,8 +195,6 @@ export default function BlogHome({
                     👨‍💼
                   </div>
                   <span className="font-bold text-slate-800">{post.author}</span>
-                  <span>·</span>
-                  <span className="text-slate-600 font-medium">{post.readTimeMinutes}분</span>
                 </div>
 
                 <span className="text-indigo-600 font-bold flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
