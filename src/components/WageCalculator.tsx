@@ -222,7 +222,7 @@ export default function WageCalculator() {
               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          ⏱ 시급 & 주휴수당
+          ■ 시급 & 주휴수당
         </button>
         <button
           onClick={() => setActiveSubTab('salary')}
@@ -232,7 +232,7 @@ export default function WageCalculator() {
               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          💰 연봉 실수령액
+          ◆ 연봉 실수령액
         </button>
         <button
           onClick={() => setActiveSubTab('retirement')}
@@ -242,7 +242,7 @@ export default function WageCalculator() {
               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          🏢 퇴직금 예산
+          ● 퇴직금 예산
         </button>
         <button
           onClick={() => setActiveSubTab('unemployment')}
@@ -252,7 +252,7 @@ export default function WageCalculator() {
               : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
           }`}
         >
-          ☂ 실업급여 모의
+          ▲ 실업급여 모의
         </button>
       </div>
 
@@ -260,7 +260,7 @@ export default function WageCalculator() {
       {activeSubTab === 'hourly' && (
         <div className="space-y-6">
           <div className="bg-emerald-50/70 rounded-2xl p-4 sm:p-5 border border-emerald-200 flex items-start space-x-3.5 shadow-2xs">
-            <span className="text-emerald-700 text-xl">💡</span>
+            <span className="text-emerald-700 font-bold text-base">※</span>
             <p className="font-body text-xs sm:text-sm text-emerald-950 leading-relaxed font-semibold">
               2026년 대한민국 공식 최저시급은 <span className="font-num text-rose-600 font-extrabold underline text-sm sm:text-base">10,320원</span>입니다. 
               주 소정근로시간이 15시간 이상이고 약정 근무일을 만근하면, 고용주는 무조건 주 1회의 유급 주휴수당을 추가 지급해야 합니다.

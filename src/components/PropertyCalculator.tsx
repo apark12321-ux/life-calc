@@ -273,19 +273,19 @@ export default function PropertyCalculator() {
           onClick={() => setActiveTab('size')}
           className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'size' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
-          📏 평수 상호 변환 (㎡ ↔ 평)
+          ■ 평수 상호 변환 (㎡ ↔ 평)
         </button>
         <button
           onClick={() => setActiveTab('agent')}
           className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'agent' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
-          📂 법정 중개 수수료 (복비)
+          ◆ 법정 중개 수수료 (복비)
         </button>
         <button
           onClick={() => setActiveTab('tax')}
           className={`py-3 px-2 text-center rounded-xl border text-xs font-bold transition-all ${activeTab === 'tax' ? 'bg-blue-600 text-white border-blue-600 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
-          🏛 취득세 모의 산정
+          ● 취득세 모의 산정
         </button>
       </div>
 

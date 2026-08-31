@@ -211,13 +211,13 @@ export default function FinanceCalculator() {
           onClick={() => setActiveTab('savings')}
           className={`font-display py-3 px-3 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'savings' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
-          💰 예금 & 적금 이자수익
+          ■ 예금 & 적금 이자수익
         </button>
         <button
           onClick={() => setActiveTab('loan')}
           className={`font-display py-3 px-3 text-center rounded-2xl border text-xs sm:text-sm font-extrabold transition-all cursor-pointer ${activeTab === 'loan' ? 'bg-amber-500 text-white border-amber-500 shadow-xs' : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'}`}
         >
-          💳 대출 이자 & 상환 스케줄
+          ◆ 대출 이자 & 상환 스케줄
         </button>
       </div>
 

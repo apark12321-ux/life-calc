@@ -268,8 +268,8 @@ export default function App() {
             {/* Col 1: Brand & Bio */}
             <div className="md:col-span-2 space-y-3">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-slate-800 text-white font-bold flex items-center justify-center text-base">
-                  👨‍💼
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-slate-800 text-white font-bold flex items-center justify-center text-xs">
+                  <span className="font-heading font-black text-white">박</span>
                 </div>
                 <span className="font-heading text-lg font-black text-white">
                   박과장의 생활경제 노트
@@ -300,17 +300,17 @@ export default function App() {
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
                   <button onClick={() => handleSelectCategory('work')} className="hover:text-indigo-400 transition cursor-pointer">
-                    💼 직장·급여·퇴직
+                    ■ 직장·급여·퇴직
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('property')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🏠 부동산·세금
+                    ◆ 부동산·세금
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('finance')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🛡️ 연금·금융·절세
+                    ● 연금·금융·절세
                   </button>
                 </li>
               </ul>
@@ -324,32 +324,32 @@ export default function App() {
               <ul className="space-y-1.5 text-xs text-slate-400">
                 <li>
                   <button onClick={() => handleSelectCategory('about')} className="hover:text-indigo-400 transition cursor-pointer">
-                    👨‍💼 블로그 소개
+                    ※ 블로그 소개
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('calculators')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🧮 금융 계산기
+                    ▶ 금융 계산기
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🗺️ 전체 사이트맵
+                    ■ 전체 사이트맵
                   </button>
                 </li>
                 <li>
                   <button onClick={() => setIsAdSenseAuditModalOpen(true)} className="hover:text-emerald-400 transition cursor-pointer text-emerald-400/90 font-medium flex items-center gap-1">
-                    <span>🏆 애드센스 심사 점검표</span>
+                    <span>★ 애드센스 심사 점검표</span>
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('privacy')} className="hover:text-indigo-400 transition cursor-pointer">
-                    🔒 개인정보처리방침
+                    ■ 개인정보처리방침
                   </button>
                 </li>
                 <li>
                   <button onClick={() => handleSelectCategory('terms')} className="hover:text-indigo-400 transition cursor-pointer">
-                    📄 이용약관 및 면책조항
+                    ■ 이용약관 및 면책조항
                   </button>
                 </li>
               </ul>

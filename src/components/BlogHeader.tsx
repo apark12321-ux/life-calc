@@ -44,11 +44,11 @@ export default function BlogHeader({
 
   const navItems: { id: CategoryType; label: string; icon?: string }[] = [
     { id: 'all', label: '전체 글' },
-    { id: 'work', label: '직장·급여·퇴직', icon: '💼' },
-    { id: 'property', label: '부동산·세금', icon: '🏠' },
-    { id: 'finance', label: '연금·금융·절세', icon: '🛡️' },
-    { id: 'calculators', label: '금융 계산기', icon: '🧮' },
-    { id: 'about', label: '블로그 소개', icon: '👤' }
+    { id: 'work', label: '직장·급여·퇴직', icon: '■' },
+    { id: 'property', label: '부동산·세금', icon: '◆' },
+    { id: 'finance', label: '연금·금융·절세', icon: '●' },
+    { id: 'calculators', label: '금융 계산기', icon: '▶' },
+    { id: 'about', label: '블로그 소개', icon: '※' }
   ];
 
   return (
@@ -63,7 +63,7 @@ export default function BlogHeader({
             className="flex items-center space-x-3 cursor-pointer select-none shrink-0 group"
           >
             <div className="w-11 h-11 bg-slate-900 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-sm group-hover:bg-indigo-600 transition-colors">
-              <span className="text-xl">💼</span>
+              <BookOpen className="w-5 h-5 text-indigo-400" />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">

@@ -84,7 +84,7 @@ export default function BlogHome({
             <div className="pt-2 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-300 border-t border-white/10">
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-1.5">
-                  <span className="text-base">👨‍💼</span>
+                  <User className="w-3.5 h-3.5 text-indigo-300" />
                   <span className="text-white font-bold">{featuredPost.author}</span>
                 </div>
                 <span>·</span>
@@ -132,7 +132,7 @@ export default function BlogHome({
       {/* 3. Empty Search Feedback */}
       {filteredPosts.length === 0 && (
         <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-xs space-y-3">
-          <p className="text-3xl">🔍</p>
+          <Search className="w-8 h-8 text-slate-300 mx-auto" />
           <h3 className="font-heading text-lg font-black text-slate-800">
             검색 결과가 없습니다.
           </h3>
@@ -151,7 +151,7 @@ export default function BlogHome({
       {/* 4. Blog Posts Feed */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredPosts.map((post) => {
-          const meta = CATEGORY_META[post.category] || { name: '일반', icon: '📝', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
+          const meta = CATEGORY_META[post.category] || { name: '일반', icon: '■', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
           return (
             <article
               key={post.id}
@@ -192,7 +192,7 @@ export default function BlogHome({
               <div className="pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                 <div className="flex items-center space-x-2">
                   <div className="w-5 h-5 rounded-md bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-[11px] border border-indigo-100">
-                    👨‍💼
+                    <User className="w-3.5 h-3.5 text-indigo-600" />
                   </div>
                   <span className="font-bold text-slate-800">{post.author}</span>
                 </div>

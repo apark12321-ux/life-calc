@@ -78,7 +78,7 @@ export default function SitemapView({
                 onClick={() => onSelectCategory('work')}
                 className="font-heading font-black text-sm text-indigo-900 flex items-center gap-1.5 hover:underline cursor-pointer"
               >
-                <span>💼</span>
+                <span>■</span>
                 <span>직장·급여·퇴직 ({workPosts.length})</span>
               </button>
             </div>
@@ -106,7 +106,7 @@ export default function SitemapView({
                 onClick={() => onSelectCategory('property')}
                 className="font-heading font-black text-sm text-amber-900 flex items-center gap-1.5 hover:underline cursor-pointer"
               >
-                <span>🏠</span>
+                <span>◆</span>
                 <span>부동산·세금 ({propPosts.length})</span>
               </button>
             </div>
@@ -134,7 +134,7 @@ export default function SitemapView({
                 onClick={() => onSelectCategory('finance')}
                 className="font-heading font-black text-sm text-emerald-900 flex items-center gap-1.5 hover:underline cursor-pointer"
               >
-                <span>🛡️</span>
+                <span>●</span>
                 <span>연금·금융·절세 ({finPosts.length})</span>
               </button>
             </div>

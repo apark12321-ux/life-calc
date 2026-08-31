@@ -77,8 +77,8 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
 
       {/* 1. Page Header & Author Persona */}
       <div className="border-b border-slate-100 pb-8 flex flex-col md:flex-row items-center md:items-start gap-6">
-        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-950 to-slate-900 text-white flex items-center justify-center font-black text-4xl shadow-md shrink-0">
-          👨‍💼
+        <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-950 to-slate-900 text-white flex items-center justify-center font-black shadow-md shrink-0">
+          <UserCheck className="w-10 h-10 text-indigo-300" />
         </div>
         <div className="space-y-2 text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
@@ -115,7 +115,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
           
           <div className="space-y-2 bg-white p-4 sm:p-5 rounded-xl border border-slate-200">
             <h3 className="font-heading font-black text-slate-950 text-sm flex items-center gap-1.5">
-              <span>💡</span>
+              <span className="text-indigo-600 font-bold">※</span>
               <span>제가 이 사이트와 계산기를 직접 만든 진짜 이유</span>
             </h3>
             <p className="text-slate-600">
@@ -144,7 +144,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-sm">
-              📊
+              ■
             </div>
             <h3 className="font-heading font-black text-slate-900 text-sm">1. 100% 팩트 기반 데이터 검증</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -154,7 +154,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center font-black text-sm">
-              ✍️
+              ◆
             </div>
             <h3 className="font-heading font-black text-slate-900 text-sm">2. 기계적 서식 탈피와 경험담</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -164,7 +164,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
             <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black text-sm">
-              🎯
+              ●
             </div>
             <h3 className="font-heading font-black text-slate-900 text-sm">3. 즉시 실천하는 Action Item</h3>
             <p className="text-xs text-slate-600 leading-relaxed">

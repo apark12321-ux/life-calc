@@ -24,9 +24,9 @@ export default function BlogSidebar({
   const recommendedPosts = posts.slice(0, 5);
 
   const categories: { id: CategoryType; name: string; icon: string; count: number; desc: string }[] = [
-    { id: 'work', name: '직장·급여·퇴직', icon: '💼', count: posts.filter(p => p.category === 'work').length, desc: '월급명세서, 퇴직금, 주휴수당, 실업급여' },
-    { id: 'property', name: '부동산·세금', icon: '🏠', count: posts.filter(p => p.category === 'property').length, desc: '취득세 감면, 전월세 복비, 주담대 상환' },
-    { id: 'finance', name: '연금·금융·절세', icon: '🛡️', count: posts.filter(p => p.category === 'finance').length, desc: '건보료 방어, 조기연금 계산, ISA 절세' }
+    { id: 'work', name: '직장·급여·퇴직', icon: '■', count: posts.filter(p => p.category === 'work').length, desc: '월급명세서, 퇴직금, 주휴수당, 실업급여' },
+    { id: 'property', name: '부동산·세금', icon: '◆', count: posts.filter(p => p.category === 'property').length, desc: '취득세 감면, 전월세 복비, 주담대 상환' },
+    { id: 'finance', name: '연금·금융·절세', icon: '●', count: posts.filter(p => p.category === 'finance').length, desc: '건보료 방어, 조기연금 계산, ISA 절세' }
   ];
 
   return (
@@ -42,7 +42,7 @@ export default function BlogSidebar({
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4">
         <div className="flex items-center space-x-3.5">
           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-900 to-slate-900 text-white flex items-center justify-center font-bold shadow-xs shrink-0 text-xl">
-            👨‍💼
+            <span className="font-heading font-black text-indigo-200 text-sm">박과장</span>
           </div>
           <div>
             <div className="flex items-center gap-1.5">
@@ -80,7 +80,7 @@ export default function BlogSidebar({
         <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
           <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600" />
-            🔥 직장인들이 가장 많이 읽은 글
+            <span>■ 직장인들이 가장 많이 읽은 글</span>
           </h3>
         </div>
 
@@ -115,7 +115,7 @@ export default function BlogSidebar({
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
         <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
           <Folder className="w-4 h-4 text-emerald-600" />
-          📂 주제별 실전 칼럼
+          <span>■ 주제별 실전 칼럼</span>
         </h3>
 
         <div className="space-y-1.5">
@@ -128,7 +128,7 @@ export default function BlogSidebar({
             >
               <div className="flex items-center justify-between font-bold">
                 <span className="flex items-center gap-2 group-hover:text-indigo-600 transition-colors">
-                  <span>{cat.icon}</span>
+                  <span className="text-indigo-600 font-bold">{cat.icon}</span>
                   <span>{cat.name}</span>
                 </span>
                 <span className="font-num text-[11px] bg-slate-100 text-slate-700 font-bold px-2 py-0.5 rounded-full">
@@ -147,7 +147,7 @@ export default function BlogSidebar({
       <div className="bg-gradient-to-br from-indigo-50/70 to-blue-50/70 rounded-2xl p-5 border border-indigo-100 shadow-xs space-y-3">
         <h3 className="font-heading text-sm font-black text-indigo-950 flex items-center gap-1.5">
           <Calculator className="w-4 h-4 text-indigo-600" />
-          🧮 박과장의 실무 계산기
+          <span>▶ 박과장의 실무 계산기</span>
         </h3>
         <p className="text-xs text-slate-600 leading-relaxed">
           제가 직접 엑셀로 검증해 만든 공식으로 내 급여·수당·세금을 1초 만에 확인해보세요.
@@ -159,7 +159,7 @@ export default function BlogSidebar({
             onClick={() => onNavigateToCalculator('wage_salary')}
             className="p-2.5 bg-white hover:bg-indigo-600 hover:text-white text-slate-800 rounded-xl border border-indigo-100 text-xs font-bold transition flex items-center justify-between cursor-pointer shadow-2xs group"
           >
-            <span>💵 실수령액</span>
+            <span>▶ 실수령액</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
           </button>
           <button
@@ -167,7 +167,7 @@ export default function BlogSidebar({
             onClick={() => onNavigateToCalculator('wage_hourly')}
             className="p-2.5 bg-white hover:bg-indigo-600 hover:text-white text-slate-800 rounded-xl border border-indigo-100 text-xs font-bold transition flex items-center justify-between cursor-pointer shadow-2xs group"
           >
-            <span>⏱ 퇴직금·수당</span>
+            <span>▶ 퇴직금·수당</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
           </button>
           <button
@@ -175,7 +175,7 @@ export default function BlogSidebar({
             onClick={() => onNavigateToCalculator('property_tax')}
             className="p-2.5 bg-white hover:bg-indigo-600 hover:text-white text-slate-800 rounded-xl border border-indigo-100 text-xs font-bold transition flex items-center justify-between cursor-pointer shadow-2xs group"
           >
-            <span>🏠 취득세·복비</span>
+            <span>▶ 취득세·복비</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
           </button>
           <button
@@ -183,7 +183,7 @@ export default function BlogSidebar({
             onClick={() => onNavigateToCalculator('finance_loan')}
             className="p-2.5 bg-white hover:bg-indigo-600 hover:text-white text-slate-800 rounded-xl border border-indigo-100 text-xs font-bold transition flex items-center justify-between cursor-pointer shadow-2xs group"
           >
-            <span>🏦 대출 이자</span>
+            <span>▶ 대출 이자</span>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white" />
           </button>
         </div>

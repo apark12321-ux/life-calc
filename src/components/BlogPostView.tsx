@@ -309,8 +309,8 @@ export default function BlogPostView({
         {/* Author Meta Row */}
         <div className="flex flex-wrap items-center justify-between gap-4 pt-3 text-xs text-slate-600">
           <div className="flex items-center space-x-2.5">
-            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-sm border border-indigo-200">
-              👨‍💼
+            <div className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 font-bold flex items-center justify-center text-xs border border-indigo-200">
+              <User className="w-4 h-4 text-indigo-600" />
             </div>
             <div>
               <span className="font-bold text-slate-950">{post.author}</span>
@@ -331,8 +331,8 @@ export default function BlogPostView({
       {post.authorNote && (
         <div className="bg-amber-50/90 border-l-4 border-amber-500 p-4 sm:p-5 rounded-r-2xl text-amber-950 space-y-1.5 shadow-2xs">
           <p className="font-heading text-xs font-black text-amber-950 flex items-center gap-1.5 uppercase tracking-wider">
-            <span>💡</span>
-            <span>참고 사항</span>
+            <span>※</span>
+            <span>실무자 핵심 메모</span>
           </p>
           <p className="font-body text-xs sm:text-sm leading-relaxed text-amber-950 font-medium">
             {post.authorNote}
@@ -486,7 +486,7 @@ export default function BlogPostView({
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-700 flex items-start gap-2.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold text-slate-900">⚖️ 실무 법령 및 근거 조항:</span>{' '}
+            <span className="font-bold text-slate-900">※ 실무 법령 및 근거 조항:</span>{' '}
             <span className="text-slate-700">{post.legalBasis}</span>
           </div>
         </div>
@@ -496,8 +496,9 @@ export default function BlogPostView({
       {post.relatedCalculatorId && (
         <div className="bg-gradient-to-r from-indigo-50/80 via-blue-50/80 to-indigo-50/80 border border-indigo-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1">
-            <p className="font-heading text-sm sm:text-base font-black text-slate-950">
-              🧮 내 조건에 맞게 직접 계산해보기
+            <p className="font-heading text-sm sm:text-base font-black text-slate-950 flex items-center gap-1.5">
+              <span>▶</span>
+              <span>내 조건에 맞게 직접 계산해보기</span>
             </p>
             <p className="font-body text-xs text-slate-700">
               박과장이 직접 제작한 [{post.relatedCalculatorName}]로 내 급여·세금·이자 예상치를 1초 만에 확인해보세요.
@@ -532,8 +533,8 @@ export default function BlogPostView({
 
       {/* 9. Author Persona Box */}
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-2xl shadow-2xs shrink-0 border border-indigo-100">
-          👨‍💼
+        <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xl shadow-2xs shrink-0 border border-indigo-100">
+          <User className="w-6 h-6 text-indigo-600" />
         </div>
         <div className="space-y-1 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
@@ -588,7 +589,7 @@ export default function BlogPostView({
       {relatedPosts.length > 0 && (
         <div className="space-y-4 pt-4 border-t border-slate-100 no-print">
           <h3 className="font-heading text-base font-black text-slate-950 flex items-center gap-2">
-            <span>📚</span>
+            <span className="text-indigo-600">■</span>
             <span>박과장의 추천 관련 칼럼</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
