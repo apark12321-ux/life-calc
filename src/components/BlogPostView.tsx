@@ -16,6 +16,32 @@ interface BlogPostViewProps {
   onNavigateToCalculator: (calcId: string) => void;
 }
 
+// Helper to render markdown inline elements (bold, links, code) without raw asterisks
+function renderFormattedText(text: string): React.ReactNode {
+  if (!text) return null;
+
+  // Split text by bold markers **...**
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+      return (
+        <strong key={index} className="font-bold text-slate-900">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+    // Handle inline code `...`
+    if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
+      return (
+        <code key={index} className="bg-slate-100 text-indigo-700 px-1.5 py-0.5 rounded text-xs font-mono">
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+    return part;
+  });
+}
+
 export default function BlogPostView({
   post,
   onSelectPost,
@@ -386,7 +412,7 @@ export default function BlogPostView({
             if (paragraph.startsWith('> ')) {
               return (
                 <blockquote key={idx} className="bg-slate-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-slate-700 text-xs sm:text-sm my-4 font-medium italic">
-                  {paragraph.replace('> ', '')}
+                  {renderFormattedText(paragraph.replace('> ', ''))}
                 </blockquote>
               );
             }
@@ -403,7 +429,7 @@ export default function BlogPostView({
                         <tr>
                           {headerRow.map((h, hi) => (
                             <th key={hi} className="px-4 py-3 border-r border-slate-700 last:border-r-0">
-                              {h.replace(/\*\*/g, '')}
+                              {renderFormattedText(h)}
                             </th>
                           ))}
                         </tr>
@@ -413,7 +439,7 @@ export default function BlogPostView({
                           <tr key={ri} className={ri % 2 === 0 ? 'bg-white hover:bg-slate-50' : 'bg-slate-50/70 hover:bg-slate-100/70'}>
                             {row.map((cell, ci) => (
                               <td key={ci} className="px-4 py-3 border-r border-slate-100 last:border-r-0 text-slate-800">
-                                {cell.includes('**') ? <strong>{cell.replace(/\*\*/g, '')}</strong> : cell}
+                                {renderFormattedText(cell)}
                               </td>
                             ))}
                           </tr>
@@ -429,7 +455,7 @@ export default function BlogPostView({
                 <ul key={idx} className="list-disc pl-5 space-y-1.5 text-slate-700 text-xs sm:text-sm">
                   {paragraph.split('\n').map((item, itemIdx) => (
                     <li key={itemIdx} className="leading-relaxed">
-                      {item.replace(/^- /, '')}
+                      {renderFormattedText(item.replace(/^- /, ''))}
                     </li>
                   ))}
                 </ul>
@@ -440,7 +466,7 @@ export default function BlogPostView({
                 <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-slate-700 text-xs sm:text-sm">
                   {paragraph.split('\n').map((item, itemIdx) => (
                     <li key={itemIdx} className="leading-relaxed">
-                      {item.replace(/^\d+\. /, '')}
+                      {renderFormattedText(item.replace(/^\d+\. /, ''))}
                     </li>
                   ))}
                 </ol>
@@ -448,7 +474,7 @@ export default function BlogPostView({
             }
             return (
               <p key={idx} className="text-slate-700 text-xs sm:text-sm sm:leading-relaxed leading-normal whitespace-pre-line">
-                {paragraph}
+                {renderFormattedText(paragraph)}
               </p>
             );
           });
