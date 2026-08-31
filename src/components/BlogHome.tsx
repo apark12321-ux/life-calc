@@ -65,7 +65,7 @@ export default function BlogHome({
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <span className="bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 px-3 py-1 rounded-full font-bold flex items-center gap-1.5 backdrop-blur-xs">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
-                추천 글
+                이달의 추천 칼럼
               </span>
               <span className="bg-white/10 text-white px-3 py-1 rounded-full font-medium">
                 {CATEGORY_META[featuredPost.category]?.name}
@@ -92,7 +92,7 @@ export default function BlogHome({
               </div>
 
               <span className="font-bold text-indigo-300 group-hover:text-white group-hover:translate-x-1 transition-all flex items-center gap-1">
-                <span>글 읽기</span>
+                <span>실전 칼럼 읽기</span>
                 <ArrowRight className="w-4 h-4" />
               </span>
             </div>
@@ -107,11 +107,11 @@ export default function BlogHome({
         <div className="flex items-center space-x-2">
           <span className="font-heading text-sm font-black text-slate-900">
             {searchQuery.trim() ? (
-              <span>&ldquo;{searchQuery}&rdquo; 검색 결과 ({filteredPosts.length}건)</span>
+              <span>&ldquo;{searchQuery}&rdquo; 검색 결과 ({filteredPosts.length}편)</span>
             ) : currentCategory === 'all' ? (
-              <span>전체 글 목록 ({filteredPosts.length}편)</span>
+              <span>박과장의 전체 실전 칼럼 ({filteredPosts.length}편)</span>
             ) : (
-              <span>{CATEGORY_META[currentCategory as PostCategory]?.name} ({filteredPosts.length}편)</span>
+              <span>{CATEGORY_META[currentCategory as PostCategory]?.name} 칼럼 ({filteredPosts.length}편)</span>
             )}
           </span>
           {searchQuery.trim() && (
@@ -125,7 +125,7 @@ export default function BlogHome({
         </div>
 
         <div className="text-xs text-slate-500 font-medium">
-          최신순 정렬
+          최신 발행순
         </div>
       </div>
 
@@ -198,7 +198,7 @@ export default function BlogHome({
                 </div>
 
                 <span className="text-indigo-600 font-bold flex items-center gap-0.5 group-hover:translate-x-1 transition-transform">
-                  <span>자세히 보기</span>
+                  <span>칼럼 읽기</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>

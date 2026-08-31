@@ -39,15 +39,15 @@ export default function CalculatorsHub({
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-black bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full border border-indigo-100">
-              실무 검증 도구
+              박과장의 실무 검증 도구
             </span>
-            <span className="text-xs text-slate-400 font-medium">2026 개정 세법 및 법정 고시 완벽 반영</span>
+            <span className="text-xs text-slate-400 font-medium">2026년 개정 세법 및 노동부 고시 기준</span>
           </div>
           <h1 className="font-heading text-2xl sm:text-3xl font-black text-slate-950">
-            실생활 금융 & 생활 모의 계산기
+            실생활 금융 & 급여 모의계산기
           </h1>
           <p className="font-body text-xs sm:text-sm text-slate-600 mt-1">
-            블로그 칼럼에서 설명해 드린 법적 산정 공식에 맞춰 누구나 간편하게 모의 계산해 보실 수 있습니다.
+            제가 회사 생활하며 엑셀로 직접 두드려 검증했던 공식들을 모아, 이웃 직장인분들이 1원 단위까지 편하게 확인하실 수 있도록 만들었습니다.
           </p>
         </div>
 
@@ -57,7 +57,7 @@ export default function CalculatorsHub({
           className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shrink-0"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>칼럼 목록으로 돌아가기</span>
+          <span>실전 칼럼으로 돌아가기</span>
         </button>
       </div>
 

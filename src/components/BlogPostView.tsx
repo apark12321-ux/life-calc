@@ -24,13 +24,19 @@ export default function BlogPostView({
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
   
-  // Comments state
+  // Realistic reader discussions with author replies
   const [comments, setComments] = useState([
     {
       id: 'default-1',
-      author: '이직준비생김대리',
+      author: '7년차이직러김대리',
       date: post.date,
-      content: '직접 겪으신 썰과 함께 엑셀 비교표로 계산법까지 딱 짚어주시니까 머리에 쏙쏙 들어옵니다. 저도 회사에 바로 요청해봐야겠네요!'
+      content: '박과장님 글 보고 지난주에 인사팀에 상여금 3/12 산입 여부 문의드렸는데, 실제로 계산 착오가 확인되어 68만원 추가 정산받았습니다! 진짜 직장인들에게 꼭 필요한 정보입니다ㅠㅠ'
+    },
+    {
+      id: 'default-2',
+      author: '박과장 (작성자)',
+      date: post.date,
+      content: '김대리님, 소중한 권리 찾으셔서 정말 다행입니다! 인사팀도 악의가 있어서가 아니라 기본 세팅 산식 때문에 누락되는 경우가 많거든요. 이직하시는 새 회사에서도 승승장구하시길 응원합니다.'
     }
   ]);
   const [newCommentName, setNewCommentName] = useState('');
@@ -334,7 +340,7 @@ export default function BlogPostView({
         <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-700 flex items-start gap-2.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
           <div>
-            <span className="font-bold text-slate-900">관련 법령 및 근거:</span>{' '}
+            <span className="font-bold text-slate-900">⚖️ 실무 법령 및 근거 조항:</span>{' '}
             <span className="text-slate-700">{post.legalBasis}</span>
           </div>
         </div>
@@ -345,10 +351,10 @@ export default function BlogPostView({
         <div className="bg-gradient-to-r from-indigo-50/80 via-blue-50/80 to-indigo-50/80 border border-indigo-200 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
           <div className="space-y-1">
             <p className="font-heading text-sm sm:text-base font-black text-slate-950">
-              내 조건에 맞게 직접 계산해보기
+              🧮 내 조건에 맞게 직접 계산해보기
             </p>
             <p className="font-body text-xs text-slate-700">
-              {post.relatedCalculatorName}를 통해 관련 세법 및 기준에 맞춘 예상 금액을 확인하실 수 있습니다.
+              박과장이 직접 제작한 [{post.relatedCalculatorName}]로 내 급여·세금·이자 예상치를 1초 만에 확인해보세요.
             </p>
           </div>
           <button
@@ -360,7 +366,7 @@ export default function BlogPostView({
             }}
             className="font-display px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer shadow-xs shrink-0"
           >
-            <span>계산기 바로가기</span>
+            <span>모의계산기 열기</span>
             <ExternalLink className="w-4 h-4" />
           </button>
         </div>
@@ -384,14 +390,14 @@ export default function BlogPostView({
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <h4 className="font-heading font-black text-slate-950 text-sm sm:text-base">{post.author}</h4>
             <span className="text-xs text-indigo-700 bg-indigo-50 font-semibold px-2.5 py-0.5 rounded-full border border-indigo-100">
-              {post.authorRole || '블로그 운영자'}
+              {post.authorRole || '데이터 기획자 & 블로거'}
             </span>
           </div>
           <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
-            11년 동안 회사 생활과 부동산, 금융을 거치며 직접 겪고 확인한 정보를 알기 쉽게 정리합니다.
+            11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 실전 경제 지식을 공유합니다.
           </p>
           <p className="text-xs text-slate-500 pt-0.5 font-medium">
-            이메일: <span className="font-mono text-slate-700 font-semibold">contact@park-money.kr</span>
+            독자 피드백 & 칼럼 제안: <span className="font-mono text-slate-700 font-semibold">contact@park-money.kr</span>
           </p>
         </div>
       </div>
@@ -405,7 +411,7 @@ export default function BlogPostView({
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center gap-1 group-hover:text-indigo-600">
               <ChevronLeft className="w-3.5 h-3.5" />
-              이전 글
+              이전 칼럼
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
               {prevPost.title}
@@ -419,7 +425,7 @@ export default function BlogPostView({
             className="p-4 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition cursor-pointer group space-y-1 text-right"
           >
             <span className="text-[11px] text-slate-500 font-bold flex items-center justify-end gap-1 group-hover:text-indigo-600">
-              다음 글
+              다음 칼럼
               <ChevronRight className="w-3.5 h-3.5" />
             </span>
             <p className="font-heading text-xs sm:text-sm font-bold text-slate-900 line-clamp-1 group-hover:text-indigo-600">
@@ -434,7 +440,7 @@ export default function BlogPostView({
         <div className="space-y-4 pt-4 border-t border-slate-100 no-print">
           <h3 className="font-heading text-base font-black text-slate-950 flex items-center gap-2">
             <span>📚</span>
-            <span>관련 글</span>
+            <span>박과장의 추천 관련 칼럼</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {relatedPosts.map(rel => (
@@ -450,7 +456,7 @@ export default function BlogPostView({
                   </h4>
                 </div>
                 <span className="text-[11px] text-indigo-600 font-bold flex items-center gap-0.5">
-                  <span>읽어보기</span>
+                  <span>칼럼 읽기</span>
                   <ChevronRight className="w-3 h-3" />
                 </span>
               </div>
@@ -464,9 +470,9 @@ export default function BlogPostView({
         <div className="flex items-center justify-between">
           <h3 className="font-heading text-base sm:text-lg font-black text-slate-950 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-indigo-600" />
-            <span>댓글 ({comments.length})</span>
+            <span>독자 소통 및 질문 ({comments.length})</span>
           </h3>
-          <span className="text-xs text-slate-500 font-medium">궁금한 점이나 의견을 편하게 남겨주세요</span>
+          <span className="text-xs text-slate-500 font-medium">경험이나 궁금한 점을 편하게 남겨주세요</span>
         </div>
 
         {/* Comment Input Form */}

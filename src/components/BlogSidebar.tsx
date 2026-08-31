@@ -51,12 +51,12 @@ export default function BlogSidebar({
                 11년차 직장인
               </span>
             </div>
-            <p className="font-body text-xs text-slate-600 mt-0.5 font-medium">생활경제 블로거</p>
+            <p className="font-body text-xs text-slate-600 mt-0.5 font-medium">데이터 기획자 & 블로거</p>
           </div>
         </div>
 
         <p className="font-body text-xs text-slate-700 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100 font-medium">
-          "11년 동안 회사 생활과 내 집 마련을 거치며 직접 경험하고 확인한 월급, 퇴직금, 세금, 연금 정보를 알기 쉽게 정리합니다."
+          "11년 동안 회사 생활과 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 세금, 연금 정보를 알기 쉽게 풀어드립니다."
         </p>
 
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
@@ -69,7 +69,7 @@ export default function BlogSidebar({
             onClick={() => onSelectCategory('about')}
             className="text-indigo-600 hover:text-indigo-800 font-bold flex items-center gap-0.5 text-[11px] cursor-pointer"
           >
-            <span>소개글 보기</span>
+            <span>운영자 소개</span>
             <ChevronRight className="w-3 h-3" />
           </button>
         </div>
@@ -80,7 +80,7 @@ export default function BlogSidebar({
         <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
           <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-indigo-600" />
-            주요 추천 글 TOP 5
+            🔥 직장인들이 가장 많이 읽은 글
           </h3>
         </div>
 
@@ -115,7 +115,7 @@ export default function BlogSidebar({
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-3">
         <h3 className="font-heading text-sm font-black text-slate-950 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
           <Folder className="w-4 h-4 text-emerald-600" />
-          카테고리
+          📂 주제별 실전 칼럼
         </h3>
 
         <div className="space-y-1.5">
@@ -147,10 +147,10 @@ export default function BlogSidebar({
       <div className="bg-gradient-to-br from-indigo-50/70 to-blue-50/70 rounded-2xl p-5 border border-indigo-100 shadow-xs space-y-3">
         <h3 className="font-heading text-sm font-black text-indigo-950 flex items-center gap-1.5">
           <Calculator className="w-4 h-4 text-indigo-600" />
-          생활 금융 계산기
+          🧮 박과장의 실무 계산기
         </h3>
         <p className="text-xs text-slate-600 leading-relaxed">
-          관련 법령과 산정 기준에 맞춰 내 조건으로 직접 계산해보세요.
+          제가 직접 엑셀로 검증해 만든 공식으로 내 급여·수당·세금을 1초 만에 확인해보세요.
         </p>
 
         <div className="grid grid-cols-2 gap-2 pt-1">
