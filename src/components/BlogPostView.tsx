@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
   Calendar, User, Share2, Printer, ChevronRight, ChevronLeft, 
   Sparkles, ShieldCheck, ArrowRight, ExternalLink, MessageSquare, Send, Check, Heart, Bookmark, BookOpen,
-  List
+  List, Award, CheckCircle2
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 import AdSenseMock from './AdSenseMock';
@@ -89,8 +89,124 @@ export default function BlogPostView({
 
   const meta = CATEGORY_META[post.category] || { name: '실전기록', icon: '📝', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
 
+  // Generate comprehensive E-E-A-T Schema.org JSON-LD structured data
+  const jsonLdSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    '@id': `https://www.life-calc.kr/post/${post.id}#blogposting`,
+    'mainEntityOfPage': {
+      '@type': 'WebPage',
+      '@id': `https://www.life-calc.kr/?p=${post.id}`
+    },
+    'headline': post.title,
+    'description': post.summary,
+    'datePublished': `${post.date}T09:00:00+09:00`,
+    'dateModified': `${post.date}T18:00:00+09:00`,
+    'inLanguage': 'ko-KR',
+    'isAccessibleForFree': true,
+    'articleSection': meta.name,
+    'keywords': post.tags ? post.tags.join(', ') : '직장인 재테크, 생활금융, 연봉 계산, 세금 상식',
+    'wordCount': post.content ? post.content.replace(/\s+/g, ' ').length : 2200,
+    // Google E-E-A-T Author Schema (Experience, Expertise, Authoritativeness, Trustworthiness)
+    'author': {
+      '@type': 'Person',
+      '@id': 'https://www.life-calc.kr/about#author',
+      'name': post.author || '박과장',
+      'jobTitle': post.authorRole || '11년차 데이터 기획자 & 생활경제 블로거',
+      'description': '11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 세금, 연금 정보를 알기 쉽게 공유하는 실무자입니다.',
+      'email': 'contact@park-money.kr',
+      'url': 'https://www.life-calc.kr/about',
+      'sameAs': [
+        'https://www.life-calc.kr/about'
+      ],
+      'worksFor': {
+        '@type': 'Organization',
+        'name': '박과장의 생활경제 노트',
+        'url': 'https://www.life-calc.kr'
+      },
+      'knowsAbout': [
+        '근로기준법 및 퇴직금 산정 공식',
+        '4대 사회보험 요율 및 실수령액 공제',
+        '부동산 취득세 감면 및 양도소득세 비과세',
+        '주택담보대출 원리금균등 및 체증식 상환 비교',
+        '연금저축 및 IRP 절세 세액공제 한도'
+      ]
+    },
+    // Publisher Organization Schema
+    'publisher': {
+      '@type': 'Organization',
+      '@id': 'https://www.life-calc.kr/#organization',
+      'name': '박과장의 생활경제 노트',
+      'url': 'https://www.life-calc.kr',
+      'logo': {
+        '@type': 'ImageObject',
+        'url': 'https://www.life-calc.kr/favicon.ico',
+        'width': 60,
+        'height': 60
+      }
+    },
+    // Legal reference grounding
+    'about': {
+      '@type': 'Thing',
+      'name': post.legalBasis || post.title
+    },
+    // BreadcrumbList for Rich Google Search results
+    'breadcrumb': {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': '홈',
+          'item': 'https://www.life-calc.kr/'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': meta.name,
+          'item': `https://www.life-calc.kr/?category=${post.category}`
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': post.title,
+          'item': `https://www.life-calc.kr/?p=${post.id}`
+        }
+      ]
+    }
+  };
+
+  // Inject and sync JSON-LD script in document.head
+  useEffect(() => {
+    const scriptId = 'post-structured-data-jsonld';
+    let scriptTag = document.getElementById(scriptId) as HTMLScriptElement | null;
+    
+    if (!scriptTag) {
+      scriptTag = document.createElement('script');
+      scriptTag.id = scriptId;
+      scriptTag.type = 'application/ld+json';
+      document.head.appendChild(scriptTag);
+    }
+    
+    scriptTag.textContent = JSON.stringify(jsonLdSchema);
+
+    // Update document title for SEO
+    const prevTitle = document.title;
+    document.title = `${post.title} | 박과장의 생활경제 노트`;
+
+    return () => {
+      document.title = prevTitle;
+    };
+  }, [post, meta]);
+
   return (
     <article className="space-y-8 bg-white rounded-3xl p-6 sm:p-8 md:p-10 border border-slate-200 shadow-xs">
+      
+      {/* 0. Embedded JSON-LD Schema (Crawler Native) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
+      />
       
       {/* 1. Breadcrumbs Navigation */}
       <nav className="flex items-center space-x-2 text-xs text-slate-500 font-medium no-print">
