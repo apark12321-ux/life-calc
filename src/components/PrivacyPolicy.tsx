@@ -168,7 +168,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-xs space-y-1">
             <p><strong className="text-slate-900">운영 주체:</strong> 박과장의 생활경제 노트 운영팀</p>
             <p><strong className="text-slate-900">대표 운영자:</strong> 박과장 (데이터 기획자)</p>
-            <p><strong className="text-slate-900">전자우편(이메일):</strong> <span className="font-mono text-indigo-700 font-bold">contact@park-money.kr</span></p>
+            <p><strong className="text-slate-900">소통 창구:</strong> 본 사이트 하단 피드백 및 칼럼별 댓글 피드</p>
             <p><strong className="text-slate-900">블로그 공식 URL:</strong> <span className="font-mono text-slate-600">https://www.life-calc.kr/</span></p>
           </div>
         </div>

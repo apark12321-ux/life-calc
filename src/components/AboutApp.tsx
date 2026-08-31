@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, Mail, ArrowRight, UserCheck, CalendarDays, Sparkles, BookOpenCheck, ChevronRight } from 'lucide-react';
+import { ShieldCheck, UserCheck, CalendarDays, Sparkles, BookOpenCheck, ChevronRight } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface AboutAppProps {
@@ -94,8 +94,8 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
           </p>
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-slate-500 pt-1">
             <span className="flex items-center gap-1.5">
-              <Mail className="w-4 h-4 text-indigo-600" />
-              직접 소통: <span className="font-mono font-bold text-slate-700">contact@park-money.kr</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span className="text-slate-700 font-semibold">2026년 공공 고시 산식 기준 실시간 모의계산기 제공</span>
             </span>
           </div>
         </div>
@@ -146,9 +146,9 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
             <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-black text-sm">
               ■
             </div>
-            <h3 className="font-heading font-black text-slate-900 text-sm">1. 100% 팩트 기반 데이터 검증</h3>
+            <h3 className="font-heading font-black text-slate-900 text-sm">1. 공공 고시 기준 산식 산출</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              모호한 추측성 정보는 배제합니다. 고용노동부, 국세청, 국민건강보험공단의 2026년 최신 고시 데이터를 기준으로 직접 검증한 산식만 전달합니다.
+              모호한 추측성 정보 대신, 고용노동부·국세청·국민건강보험공단의 2026년 최신 고시 데이터를 토대로 직접 역산한 공식을 전달합니다.
             </p>
           </div>
 
@@ -174,24 +174,14 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
         </div>
       </section>
 
-      {/* 4. Contact Box */}
+      {/* 4. Feedback Guide Box */}
       <section className="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 space-y-3">
         <h3 className="font-heading text-lg font-black text-white flex items-center gap-2">
-          <Mail className="w-5 h-5 text-indigo-400" />
-          <span>문의 및 의견 보내기</span>
+          <span>의견 및 피드백</span>
         </h3>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-          글에 대한 질문이나 계산 검증 관련 의견이 있으시면 언제든 편하게 이메일로 남겨주세요.
+          칼럼 내용에 대한 질문이나 계산 검증 관련 의견은 각 칼럼 하단의 댓글란을 통해 자유롭게 남겨주실 수 있습니다.
         </p>
-        <div className="pt-2">
-          <a
-            href="mailto:contact@park-money.kr"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition shadow-sm"
-          >
-            <span>이메일 문의 (contact@park-money.kr)</span>
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
       </section>
 
     </div>

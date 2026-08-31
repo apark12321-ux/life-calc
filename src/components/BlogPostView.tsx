@@ -113,7 +113,7 @@ export default function BlogPostView({
     setTimeout(() => setCommentSubmitted(false), 3000);
   };
 
-  const meta = CATEGORY_META[post.category] || { name: '실전기록', icon: '📝', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
+  const meta = CATEGORY_META[post.category] || { name: '실전 칼럼', icon: '■', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };
 
   // Generate comprehensive E-E-A-T Schema.org JSON-LD structured data
   const jsonLdSchema = {
@@ -126,8 +126,8 @@ export default function BlogPostView({
     },
     'headline': post.title,
     'description': post.summary,
-    'datePublished': `${post.date}T09:00:00+09:00`,
-    'dateModified': `${post.date}T18:00:00+09:00`,
+    'datePublished': post.date.includes(' ') ? `${post.date.replace(' ', 'T')}+09:00` : `${post.date}T09:00:00+09:00`,
+    'dateModified': post.date.includes(' ') ? `${post.date.replace(' ', 'T')}+09:00` : `${post.date}T18:00:00+09:00`,
     'inLanguage': 'ko-KR',
     'isAccessibleForFree': true,
     'articleSection': meta.name,
@@ -140,7 +140,6 @@ export default function BlogPostView({
       'name': post.author || '박과장',
       'jobTitle': post.authorRole || '11년차 데이터 기획자 & 생활경제 블로거',
       'description': '11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 세금, 연금 정보를 알기 쉽게 공유하는 실무자입니다.',
-      'email': 'contact@park-money.kr',
       'url': 'https://www.life-calc.kr/about',
       'sameAs': [
         'https://www.life-calc.kr/about'
@@ -545,9 +544,6 @@ export default function BlogPostView({
           </div>
           <p className="font-body text-xs sm:text-sm text-slate-700 leading-relaxed">
             11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 실전 경제 지식을 공유합니다.
-          </p>
-          <p className="text-xs text-slate-500 pt-0.5 font-medium">
-            독자 피드백 & 칼럼 제안: <span className="font-mono text-slate-700 font-semibold">contact@park-money.kr</span>
           </p>
         </div>
       </div>

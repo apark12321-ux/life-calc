@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { PostItem, CategoryType, PostCategory } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
-import { ChevronRight, Sparkles, Search, BookOpen, ArrowRight, User, ShieldCheck } from 'lucide-react';
+import { ChevronRight, Search, User } from 'lucide-react';
 
 interface BlogHomeProps {
   currentCategory: CategoryType;
@@ -45,62 +45,10 @@ export default function BlogHome({
     return [...list].sort((a, b) => b.date.localeCompare(a.date));
   }, [currentCategory, searchQuery, posts]);
 
-  // Featured Post (first post of all, or top viewed)
-  const featuredPost = useMemo(() => {
-    if (searchQuery.trim() || currentCategory !== 'all') return null;
-    return posts[0] || ALL_BLOG_POSTS[0];
-  }, [searchQuery, currentCategory, posts]);
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       
-      {/* 1. Featured Article Banner */}
-      {featuredPost && (
-        <section
-          onClick={() => onSelectPost(featuredPost)}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 lg:p-10 shadow-xl border border-indigo-500/20 cursor-pointer group transition-all duration-300 hover:shadow-2xl hover:border-indigo-400/40"
-        >
-          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="relative z-10 max-w-3xl space-y-4">
-            <div className="flex flex-wrap items-center gap-2 text-xs">
-              <span className="bg-indigo-500/30 text-indigo-200 border border-indigo-400/40 px-3 py-1 rounded-full font-bold flex items-center gap-1.5 backdrop-blur-xs">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-300" />
-                이달의 추천 칼럼
-              </span>
-              <span className="bg-white/10 text-white px-3 py-1 rounded-full font-medium">
-                {CATEGORY_META[featuredPost.category]?.name}
-              </span>
-              <span className="text-slate-300 font-num font-medium">{featuredPost.date}</span>
-            </div>
-
-            <h2 className="font-heading font-black text-xl sm:text-2xl lg:text-3xl text-white group-hover:text-indigo-200 transition-colors leading-tight tracking-tight">
-              {featuredPost.title}
-            </h2>
-
-            <p className="font-body text-xs sm:text-sm text-slate-200 line-clamp-2 leading-relaxed max-w-2xl font-normal">
-              {featuredPost.summary}
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-300 border-t border-white/10">
-              <div className="flex items-center space-x-3">
-                <div className="flex items-center space-x-1.5">
-                  <User className="w-3.5 h-3.5 text-indigo-300" />
-                  <span className="text-white font-bold">{featuredPost.author}</span>
-                </div>
-                <span>·</span>
-                <span className="text-slate-200">{featuredPost.date}</span>
-              </div>
-
-              <span className="font-bold text-indigo-300 group-hover:text-white group-hover:translate-x-1 transition-all flex items-center gap-1">
-                <span>실전 칼럼 읽기</span>
-                <ArrowRight className="w-4 h-4" />
-              </span>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 2. Control Bar */}
+      {/* 1. Control Bar & Category Counter */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
         
         {/* Category Description or Search Indicator */}
@@ -129,7 +77,7 @@ export default function BlogHome({
         </div>
       </div>
 
-      {/* 3. Empty Search Feedback */}
+      {/* 2. Empty Search Feedback */}
       {filteredPosts.length === 0 && (
         <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 shadow-xs space-y-3">
           <Search className="w-8 h-8 text-slate-300 mx-auto" />
@@ -148,7 +96,7 @@ export default function BlogHome({
         </div>
       )}
 
-      {/* 4. Blog Posts Feed */}
+      {/* 3. Blog Posts Feed */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredPosts.map((post) => {
           const meta = CATEGORY_META[post.category] || { name: '일반', icon: '■', bg: 'bg-slate-100', color: 'text-slate-800', border: 'border-slate-200' };

@@ -279,8 +279,6 @@ export default function App() {
                 11년차 직장인이 정리하는 급여, 세금, 부동산, 연금 실전 정보 및 생활 금융 계산기입니다.
               </p>
               <div className="flex flex-wrap items-center gap-3 text-slate-500 text-[11px] pt-1">
-                <span>이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span></span>
-                <span>·</span>
                 <button
                   type="button"
                   onClick={() => setIsAdSenseAuditModalOpen(true)}

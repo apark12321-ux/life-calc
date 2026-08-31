@@ -126,7 +126,7 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
             칼럼 내용 중 법령 개정으로 인한 수정 필요 사항이나 계산기 오류를 발견하신 경우 아래 이메일로 제보해 주시면 즉시 검토 후 반영하겠습니다.
           </p>
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-xs space-y-1">
-            <p><strong className="text-slate-900">제보 및 문의:</strong> <span className="font-mono text-indigo-700 font-bold">contact@park-money.kr</span></p>
+            <p><strong className="text-slate-900">제보 및 문의:</strong> 본 사이트 게시판 및 칼럼 댓글란을 통해 상시 접수</p>
             <p><strong className="text-slate-900">운영자:</strong> 박과장의 생활경제 노트</p>
           </div>
         </div>

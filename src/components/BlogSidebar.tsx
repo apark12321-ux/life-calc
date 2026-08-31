@@ -60,9 +60,8 @@ export default function BlogSidebar({
         </p>
 
         <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
-          <span className="flex items-center gap-1 font-mono text-[11px] font-semibold text-slate-700">
-            <Mail className="w-3.5 h-3.5 text-slate-500" />
-            contact@park-money.kr
+          <span className="text-[11px] text-slate-500 font-medium">
+            실전 금융·노무 칼럼 연재
           </span>
           <button
             type="button"
