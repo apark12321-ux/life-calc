@@ -7,6 +7,7 @@ import {
   List
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
+import AdSenseMock from './AdSenseMock';
 
 interface BlogPostViewProps {
   post: PostItem;
@@ -215,6 +216,9 @@ export default function BlogPostView({
         </div>
       )}
 
+      {/* Top Banner AdSlot */}
+      <AdSenseMock slotId="1001-post-top" type="banner" className="no-print" />
+
       {/* 4.1 Mobile Table of Contents */}
       <div className="lg:hidden">
         <TableOfContents content={post.content} variant="inline" title="글 목차" />
@@ -380,6 +384,9 @@ export default function BlogPostView({
           </span>
         ))}
       </div>
+
+      {/* Bottom Inline AdSlot */}
+      <AdSenseMock slotId="1002-post-bottom" type="inline" className="no-print" />
 
       {/* 9. Author Persona Box */}
       <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4">

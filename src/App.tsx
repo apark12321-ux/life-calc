@@ -11,7 +11,8 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import SitemapView from './components/SitemapView';
 import AutoPostDashboardModal from './components/AutoPostDashboardModal';
-import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles, Bot } from 'lucide-react';
+import AdSenseAuditModal from './components/AdSenseAuditModal';
+import { ShieldCheck, Mail, Heart, Check, X, Shield, Cookie, ChevronUp, BookOpen, Calculator, Sparkles, Bot, Award } from 'lucide-react';
 
 export default function App() {
   const [posts, setPosts] = useState<PostItem[]>(ALL_BLOG_POSTS);
@@ -22,6 +23,7 @@ export default function App() {
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
   const [isAutoPostModalOpen, setIsAutoPostModalOpen] = useState<boolean>(false);
+  const [isAdSenseAuditModalOpen, setIsAdSenseAuditModalOpen] = useState<boolean>(false);
 
   // Fetch posts from backend (incorporating scheduled & auto-generated posts)
   const fetchPosts = useCallback(async () => {
@@ -51,9 +53,13 @@ export default function App() {
       const cat = params.get('cat') || params.get('c') || params.get('category');
       const calcId = params.get('calc') || params.get('s');
       const openScheduler = params.get('autopost') || params.get('admin');
+      const openAudit = params.get('adsense') || params.get('audit');
 
       if (openScheduler) {
         setIsAutoPostModalOpen(true);
+      }
+      if (openAudit) {
+        setIsAdSenseAuditModalOpen(true);
       }
 
       if (postId) {
@@ -246,6 +252,13 @@ export default function App() {
         onPostsUpdated={fetchPosts}
       />
 
+      {/* AdSense Audit & Review Modal */}
+      <AdSenseAuditModal
+        isOpen={isAdSenseAuditModalOpen}
+        onClose={() => setIsAdSenseAuditModalOpen(false)}
+        posts={posts}
+      />
+
       {/* 3. Footer */}
       <footer className="bg-slate-950 text-slate-400 mt-16 border-t border-slate-800 text-xs leading-relaxed font-body">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -265,9 +278,18 @@ export default function App() {
               <p className="text-slate-400 text-xs max-w-md leading-relaxed">
                 11년차 직장인이 정리하는 급여, 세금, 부동산, 연금 실전 정보 및 생활 금융 계산기입니다.
               </p>
-              <p className="text-slate-500 text-[11px]">
-                이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span>
-              </p>
+              <div className="flex flex-wrap items-center gap-3 text-slate-500 text-[11px] pt-1">
+                <span>이메일: <span className="font-mono text-slate-300">contact@park-money.kr</span></span>
+                <span>·</span>
+                <button
+                  type="button"
+                  onClick={() => setIsAdSenseAuditModalOpen(true)}
+                  className="text-emerald-400 hover:text-emerald-300 font-bold flex items-center gap-1 cursor-pointer"
+                >
+                  <Award className="w-3.5 h-3.5" />
+                  <span>애드센스 승인 심사 점검표 (10/10 PASS)</span>
+                </button>
+              </div>
             </div>
 
             {/* Col 2: Category Quick Links */}
@@ -313,6 +335,11 @@ export default function App() {
                 <li>
                   <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-indigo-400 transition cursor-pointer">
                     🗺️ 전체 사이트맵
+                  </button>
+                </li>
+                <li>
+                  <button onClick={() => setIsAdSenseAuditModalOpen(true)} className="hover:text-emerald-400 transition cursor-pointer text-emerald-400/90 font-medium flex items-center gap-1">
+                    <span>🏆 애드센스 심사 점검표</span>
                   </button>
                 </li>
                 <li>
