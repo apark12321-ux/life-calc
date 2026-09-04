@@ -120,13 +120,13 @@ export default function TermsOfService({ onBack }: TermsOfServiceProps) {
         {/* 제 5 조 */}
         <div className="space-y-2">
           <h2 className="font-heading text-sm sm:text-base font-black text-slate-900 border-l-4 border-indigo-600 pl-3">
-            제 5 조 (문의 및 오류 제보)
+            제 5 조 (오류 제보 및 정정)
           </h2>
           <p>
-            칼럼 내용 중 법령 개정으로 인한 수정 필요 사항이나 계산기 오류를 발견하신 경우 아래 이메일로 제보해 주시면 즉시 검토 후 반영하겠습니다.
+            칼럼 내용 중 법령 개정으로 인한 수정 필요 사항이나 계산기 오류를 발견하신 경우 칼럼별 댓글란을 통해 알려주시면 즉시 검토 후 반영하겠습니다.
           </p>
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-xs space-y-1">
-            <p><strong className="text-slate-900">제보 및 문의:</strong> 본 사이트 게시판 및 칼럼 댓글란을 통해 상시 접수</p>
+            <p><strong className="text-slate-900">오류 제보:</strong> 본 사이트 칼럼 댓글란을 통해 상시 접수</p>
             <p><strong className="text-slate-900">운영자:</strong> 박과장의 생활경제 노트</p>
           </div>
         </div>

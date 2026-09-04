@@ -184,7 +184,7 @@ async function startServer() {
         xml += `    <link>https://www.life-calc.kr/?post=${p.id}</link>\n`;
         xml += `    <description><![CDATA[${p.summary}]]></description>\n`;
         xml += `    <category>${p.categoryName}</category>\n`;
-        xml += `    <author>contact@life-calc.kr (${p.author})</author>\n`;
+        xml += `    <author>noreply@life-calc.kr (${p.author})</author>\n`;
         xml += `    <pubDate>${new Date(p.date).toUTCString()}</pubDate>\n`;
         xml += `    <guid>https://www.life-calc.kr/?post=${p.id}</guid>\n`;
         xml += `  </item>\n`;

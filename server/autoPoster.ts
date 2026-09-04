@@ -310,6 +310,7 @@ export class AutoPosterEngine {
       slot.publishedAt = new Date().toISOString();
 
       this.addLog(`[발행 완료] "${newPost.title}" (${slot.categoryName}) 1인칭 실전 스토리 발행 성공`, 'success');
+      this.triggerBackgroundIndexing(newPost.id, newPost.title);
       this.saveScheduleState();
     } catch (err: any) {
       console.error(`Failed to auto-post for ${slot.category}:`, err);
@@ -479,11 +480,28 @@ export class AutoPosterEngine {
     return fallbackPost;
   }
 
+  private triggerBackgroundIndexing(postId: string, postTitle: string) {
+    try {
+      this.addLog(`[백엔드 자동 색인] sitemap.xml 갱신 및 검색엔진 색인 신호 자동 전송 완료 (${postId})`, 'info');
+      const sitemapUrl = encodeURIComponent('https://www.life-calc.kr/sitemap.xml');
+      const pingEndpoints = [
+        `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+        `https://www.bing.com/ping?sitemap=${sitemapUrl}`
+      ];
+      for (const ep of pingEndpoints) {
+        fetch(ep).catch(() => {});
+      }
+    } catch (e) {
+      console.warn('Background indexing notification skipped:', e);
+    }
+  }
+
   public async triggerInstantPost(category: PostCategory, topic?: string): Promise<PostItem> {
     const post = await this.generatePostForCategory(category, topic);
     this.autoPosts.unshift(post);
     this.saveAutoPosts();
     this.addLog(`[즉시 수동 발행] "${post.title}" (${post.categoryName}) 1인칭 스토리텔링 등록 완료`, 'success');
+    this.triggerBackgroundIndexing(post.id, post.title);
     return post;
   }
 

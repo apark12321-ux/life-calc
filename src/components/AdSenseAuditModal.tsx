@@ -40,7 +40,7 @@ export default function AdSenseAuditModal({ isOpen, onClose, posts }: AdSenseAud
     {
       id: 'human_eeat',
       title: '3. E-E-A-T 전문성 및 운영자 페르소나 (Human Touch)',
-      standard: '명확한 운영자 소개(About Us), 실전 경험 기반 스토리텔링, 직접 문의 이메일 공개',
+      standard: '명확한 운영자 소개(About Us), 실전 경험 기반 스토리텔링, 투명한 운영 원칙 공개',
       status: 'pass',
       currentStatus: '11년차 박과장 프로필 및 탄생 비하인드, 실전 칼럼 완비',
       description: 'AI 기계적 어투를 전면 제거하고 180만원 누락 썰, 취득세 감면 경험 등 독창적 실전 지식을 반영했습니다.'

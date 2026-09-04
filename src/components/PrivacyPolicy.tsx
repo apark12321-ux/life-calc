@@ -160,15 +160,15 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         {/* 제 5 조 */}
         <div className="space-y-2">
           <h2 className="font-heading text-sm sm:text-base font-black text-slate-900 border-l-4 border-indigo-600 pl-3">
-            제 5 조 (개인정보 보호책임자 및 고충처리 연락처)
+            제 5 조 (개인정보 관리 및 고충처리 안내)
           </h2>
           <p>
-            본 블로그의 개인정보 처리 및 프라이버시 정책과 관련하여 문의사항, 의견 또는 불만 제기가 있으신 경우 아래 운영자에게 연락해 주시면 신속하고 성실하게 답변해 드리겠습니다.
+            본 블로그의 개인정보 처리 및 프라이버시 정책과 관련하여 개선 의견이 있으신 경우 칼럼별 댓글란을 통해 남겨주시면 신속하고 성실하게 검토하겠습니다.
           </p>
           <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-2 text-xs space-y-1">
             <p><strong className="text-slate-900">운영 주체:</strong> 박과장의 생활경제 노트 운영팀</p>
             <p><strong className="text-slate-900">대표 운영자:</strong> 박과장 (데이터 기획자)</p>
-            <p><strong className="text-slate-900">소통 창구:</strong> 본 사이트 하단 피드백 및 칼럼별 댓글 피드</p>
+            <p><strong className="text-slate-900">소통 창구:</strong> 본 사이트 칼럼별 댓글 피드</p>
             <p><strong className="text-slate-900">블로그 공식 URL:</strong> <span className="font-mono text-slate-600">https://www.life-calc.kr/</span></p>
           </div>
         </div>
