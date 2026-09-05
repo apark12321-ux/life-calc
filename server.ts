@@ -210,6 +210,14 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
     res.send(robots);
   });
 
+  // 7. Ads.txt for Google AdSense Crawler
+  app.get(["/ads.txt", "/app-ads.txt"], (req, res) => {
+    const adsTxt = "google.com, pub-9552509372228899, DIRECT, f08c47fec0942fa0\n";
+    res.header("Content-Type", "text/plain; charset=utf-8");
+    res.header("Cache-Control", "public, max-age=3600");
+    res.send(adsTxt);
+  });
+
   // Vite middleware for development vs Static serving for production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

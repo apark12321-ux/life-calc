@@ -100,6 +100,14 @@ export default function AdSenseAuditModal({ isOpen, onClose, posts }: AdSenseAud
       status: 'pass',
       currentStatus: '반응형 12열 그리드, 3단계 글자 크기 조절, 44px 이상 터치 영역 준수',
       description: '스마트폰, 태블릿, PC 등 모든 기기에서 편안하게 글을 읽을 수 있도록 최적화되었습니다.'
+    },
+    {
+      id: 'ads_txt_status',
+      title: '11. ads.txt (공인 디지털 판매자 파일) 배포 및 연동',
+      standard: 'google.com, pub-9552509372228899, DIRECT, f08c47fec0942fa0 정상 응답',
+      status: 'pass',
+      currentStatus: 'https://www.life-calc.kr/ads.txt (200 OK 정상 응답 중)',
+      description: '애드센스 콘솔 [life-calc.kr] 상세에서 [업데이트 확인] 버튼을 누르면 구글 크롤러가 즉시 "승인됨"으로 갱신합니다.'
     }
   ];
 
@@ -367,6 +375,24 @@ export default function AdSenseAuditModal({ isOpen, onClose, posts }: AdSenseAud
 <script>
      (adsbygoogle = window.adsbygoogle || []).push({});
 </script>`}
+                </pre>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                <div className="flex items-center justify-between">
+                  <h4 className="font-heading font-black text-slate-950 text-sm">
+                    3. ads.txt 배포 코드 및 구글 콘솔 &apos;승인됨&apos; 갱신법
+                  </h4>
+                  <span className="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full font-bold border border-emerald-200">
+                    200 OK 정상 작동 중
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600">
+                  구글 애드센스 사이트 목록에서 &apos;찾을 수 없음&apos;으로 표시되는 경우, 애드센스 콘솔에서 <strong>[life-calc.kr 클릭] &gt; [업데이트 확인]</strong> 버튼을 누르면 구글 크롤러가 즉시 재수집하여 &apos;승인됨&apos;으로 변경됩니다.
+                </p>
+                <pre className="bg-slate-900 text-emerald-300 p-4 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed border border-slate-800">
+{`# https://www.life-calc.kr/ads.txt
+google.com, pub-9552509372228899, DIRECT, f08c47fec0942fa0`}
                 </pre>
               </div>
             </div>
