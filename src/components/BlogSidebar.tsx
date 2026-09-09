@@ -23,8 +23,8 @@ export default function BlogSidebar({
 }: BlogSidebarProps) {
   // 5 most recent posts
   const recentPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
-  // 5 top popular posts
-  const popularPosts = [...posts].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0)).slice(0, 5);
+  // 5 recommended posts
+  const recommendedPosts = posts.slice(0, 5);
 
   const categories: { id: CategoryType; name: string; count: number }[] = [
     { id: 'work', name: '직장 · 급여 · 퇴직', count: posts.filter(p => p.category === 'work').length },
@@ -96,10 +96,10 @@ export default function BlogSidebar({
         </h4>
         <ul className="space-y-2 text-xs text-gray-700 font-body">
           <li className="line-clamp-1 hover:text-blue-600 cursor-pointer" onClick={() => onSelectCategory('about')}>
-            • 2026년 세법 개정안 및 최저임금(10,030원) 전면 적용 안내
+            • 2026년 최저임금(10,030원) 및 개정 법령 안내
           </li>
           <li className="line-clamp-1 hover:text-blue-600 cursor-pointer" onClick={() => onSelectCategory('about')}>
-            • 퇴직금 누락 산정 및 연차수당 정산 검증 요청 접수 안내
+            • 칼럼 내 모든 산식은 관계 법령과 공공기관 고시를 준용합니다.
           </li>
         </ul>
       </div>
@@ -169,26 +169,24 @@ export default function BlogSidebar({
         </ul>
       </div>
 
-      {/* 5. Popular Posts (인기글 TOP 5) */}
+      {/* 5. Recommended Posts (추천 칼럼) */}
       <div className="bg-white border border-gray-200 rounded-lg p-5">
         <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 font-heading">
-          인기글
+          추천 칼럼
         </h4>
         <ul className="space-y-2.5 text-xs">
-          {popularPosts.map((p, idx) => (
+          {recommendedPosts.map((p) => (
             <li
               key={p.id}
               onClick={() => onSelectPost(p)}
-              className="flex items-start gap-2 group cursor-pointer"
+              className="group cursor-pointer"
             >
-              <span className={`text-xs font-bold px-1.5 py-0.2 rounded shrink-0 font-num ${
-                idx === 0 ? 'bg-gray-900 text-white' : idx < 3 ? 'bg-gray-200 text-gray-800' : 'text-gray-400'
-              }`}>
-                {idx + 1}
-              </span>
-              <p className="text-gray-800 group-hover:text-blue-600 group-hover:underline line-clamp-1 font-medium transition leading-snug min-w-0">
+              <p className="text-gray-800 group-hover:text-blue-600 group-hover:underline line-clamp-1 font-medium transition leading-snug">
                 {p.title}
               </p>
+              <span className="text-[11px] text-gray-400 font-num">
+                {p.date.split(' ')[0]}
+              </span>
             </li>
           ))}
         </ul>
@@ -214,24 +212,6 @@ export default function BlogSidebar({
               #{tag}
             </span>
           ))}
-        </div>
-      </div>
-
-      {/* 8. Visitor Counter - Classic Tistory Style */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 text-center text-xs text-gray-500 font-num">
-        <div className="grid grid-cols-3 divide-x divide-gray-100 py-1">
-          <div>
-            <div className="text-[11px] text-gray-400">TODAY</div>
-            <div className="font-bold text-gray-800 text-sm mt-0.5">1,482</div>
-          </div>
-          <div>
-            <div className="text-[11px] text-gray-400">YESTERDAY</div>
-            <div className="font-bold text-gray-800 text-sm mt-0.5">3,210</div>
-          </div>
-          <div>
-            <div className="text-[11px] text-gray-400">TOTAL</div>
-            <div className="font-bold text-gray-800 text-sm mt-0.5">184,920</div>
-          </div>
         </div>
       </div>
     </aside>

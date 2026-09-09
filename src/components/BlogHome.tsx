@@ -26,7 +26,7 @@ export default function BlogHome({
   onNavigateToCalculator,
 }: BlogHomeProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<'latest' | 'views'>('latest');
+  const [sortBy, setSortBy] = useState<'latest' | 'oldest'>('latest');
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -49,8 +49,8 @@ export default function BlogHome({
     }
 
     // Sort
-    if (sortBy === 'views') {
-      return [...list].sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0));
+    if (sortBy === 'oldest') {
+      return [...list].sort((a, b) => a.date.localeCompare(b.date));
     }
     return [...list].sort((a, b) => b.date.localeCompare(a.date));
   }, [currentCategory, searchQuery, posts, sortBy]);
@@ -112,12 +112,12 @@ export default function BlogHome({
             <span className="text-gray-300">|</span>
             <button
               type="button"
-              onClick={() => setSortBy('views')}
+              onClick={() => setSortBy('oldest')}
               className={`hover:text-gray-900 transition-colors ${
-                sortBy === 'views' ? 'font-bold text-gray-900' : 'text-gray-400'
+                sortBy === 'oldest' ? 'font-bold text-gray-900' : 'text-gray-400'
               }`}
             >
-              조회순
+              과거순
             </button>
           </div>
         </div>
@@ -170,14 +170,8 @@ export default function BlogHome({
                       <span className="text-gray-600 font-medium">{post.author || '박과장'}</span>
                       <span>·</span>
                       <span>{post.date.split(' ')[0]}</span>
-                      {post.viewCount && (
-                        <>
-                          <span>·</span>
-                          <span>조회 {post.viewCount.toLocaleString()}</span>
-                        </>
-                      )}
                       <span>·</span>
-                      <span>댓글 2</span>
+                      <span>읽는 시간 약 {post.readTimeMinutes || 5}분</span>
                     </div>
 
                     {/* Tags */}

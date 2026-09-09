@@ -58,7 +58,7 @@ export default function BlogHeader({
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span className="font-medium text-gray-600">2026년 최신 세법 및 고시 기준 검증 완료</span>
+            <span className="font-medium text-gray-600">2026년 최저임금(10,030원) 및 관계 법령 기준 준용</span>
           </div>
           <div className="flex items-center gap-4 text-[11px] text-gray-500">
             {/* Font Size Adjuster */}

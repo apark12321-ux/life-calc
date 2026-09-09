@@ -364,7 +364,7 @@ export default function App() {
 
             <div className="text-[11px] text-gray-400 text-left sm:text-right shrink-0">
               <p>Copyright &copy; 2026 박과장의 생활경제 노트. All rights reserved.</p>
-              <p className="text-gray-400 mt-0.5">Powered by Tistory / Blog Template</p>
+              <p className="text-gray-400 mt-0.5">생활금융 정보 및 실무 가이드</p>
             </div>
           </div>
 

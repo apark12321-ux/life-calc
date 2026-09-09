@@ -48,26 +48,39 @@ export default function BlogPostView({
   onNavigateToCalculator
 }: BlogPostViewProps) {
   const [copied, setCopied] = useState(false);
-  const [liked, setLiked] = useState(false);
   
-  // Realistic reader discussions with author replies
-  const [comments, setComments] = useState([
-    {
-      id: 'default-1',
-      author: '7년차이직러김대리',
-      date: post.date,
-      content: '박과장님 글 보고 지난주에 인사팀에 상여금 3/12 산입 여부 재확인 요청드렸는데, 실제로 계산 착오가 확인되어 68만원 추가 정산받았습니다! 진짜 직장인들에게 꼭 필요한 정보입니다ㅠㅠ'
-    },
-    {
-      id: 'default-2',
-      author: '박과장 (작성자)',
-      date: post.date,
-      content: '김대리님, 소중한 권리 찾으셔서 정말 다행입니다! 인사팀도 악의가 있어서가 아니라 기본 세팅 산식 때문에 누락되는 경우가 많거든요. 이직하시는 새 회사에서도 승승장구하시길 응원합니다.'
+  // Real like state per post
+  const [liked, setLiked] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(`liked_${post.id}`) === 'true';
+    } catch {
+      return false;
     }
-  ]);
+  });
+
+  // Real reader comments per post (no fake hardcoded comments)
+  const [comments, setComments] = useState<Array<{ id: string; author: string; date: string; content: string }>>(() => {
+    try {
+      const saved = localStorage.getItem(`comments_${post.id}`);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [newCommentName, setNewCommentName] = useState('');
   const [newCommentText, setNewCommentText] = useState('');
   const [commentSubmitted, setCommentSubmitted] = useState(false);
+
+  useEffect(() => {
+    try {
+      const savedComments = localStorage.getItem(`comments_${post.id}`);
+      setComments(savedComments ? JSON.parse(savedComments) : []);
+      setLiked(localStorage.getItem(`liked_${post.id}`) === 'true');
+    } catch {
+      setComments([]);
+      setLiked(false);
+    }
+  }, [post.id]);
 
   // Find previous and next posts
   const currentIndex = ALL_BLOG_POSTS.findIndex(p => p.id === post.id);
@@ -91,7 +104,13 @@ export default function BlogPostView({
   };
 
   const handleToggleLike = () => {
-    setLiked(prev => !prev);
+    const nextState = !liked;
+    setLiked(nextState);
+    try {
+      localStorage.setItem(`liked_${post.id}`, String(nextState));
+    } catch {
+      // ignore
+    }
   };
 
   const handleAddComment = (e: React.FormEvent) => {
@@ -105,7 +124,13 @@ export default function BlogPostView({
       content: newCommentText.trim()
     };
 
-    setComments(prev => [newComment, ...prev]);
+    const updated = [newComment, ...comments];
+    setComments(updated);
+    try {
+      localStorage.setItem(`comments_${post.id}`, JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
     setNewCommentName('');
     setNewCommentText('');
     setCommentSubmitted(true);
@@ -196,7 +221,7 @@ export default function BlogPostView({
               }`}
             >
               <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-red-500 text-red-500' : ''}`} />
-              <span>{liked ? '공감 1' : '공감'}</span>
+              <span>{liked ? '공감 완료' : '공감'}</span>
             </button>
             <button
               type="button"
@@ -226,14 +251,14 @@ export default function BlogPostView({
           <span className="text-gray-700 font-medium">{post.author || '박과장'}</span>
           <span>·</span>
           <span>{post.date}</span>
-          {post.viewCount && (
+          <span>·</span>
+          <span>읽는 시간 약 {post.readTimeMinutes || 5}분</span>
+          {comments.length > 0 && (
             <>
               <span>·</span>
-              <span>조회 {post.viewCount.toLocaleString()}</span>
+              <span>댓글 {comments.length}</span>
             </>
           )}
-          <span>·</span>
-          <span>댓글 {comments.length}</span>
         </div>
       </header>
 
@@ -537,19 +562,25 @@ export default function BlogPostView({
         </form>
 
         {/* Comments List */}
-        <div className="space-y-3">
-          {comments.map((comment) => (
-            <div key={comment.id} className="p-3.5 bg-gray-50 rounded border border-gray-100 space-y-1.5 text-xs">
-              <div className="flex items-center justify-between font-medium">
-                <span className="text-gray-900 font-bold">{comment.author}</span>
-                <span className="text-gray-400 text-[11px]">{comment.date}</span>
+        {comments.length === 0 ? (
+          <div className="py-6 text-center text-xs text-gray-400 bg-gray-50 rounded border border-gray-100">
+            등록된 댓글이 없습니다. 첫 번째 의견을 남겨보세요.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {comments.map((comment) => (
+              <div key={comment.id} className="p-3.5 bg-gray-50 rounded border border-gray-100 space-y-1.5 text-xs">
+                <div className="flex items-center justify-between font-medium">
+                  <span className="text-gray-900 font-bold">{comment.author}</span>
+                  <span className="text-gray-400 text-[11px]">{comment.date}</span>
+                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  {comment.content}
+                </p>
               </div>
-              <p className="text-gray-700 leading-relaxed">
-                {comment.content}
-              </p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </article>
   );
