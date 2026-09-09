@@ -7,13 +7,11 @@ interface AdSenseProps {
 }
 
 export default function AdSenseMock({ slotId, type = 'banner', className = '' }: AdSenseProps) {
-  const isApproved = import.meta.env.VITE_ADSENSE_APPROVED === 'true';
-  const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "pub-9552509372228899";
+  const pubId = import.meta.env.VITE_ADSENSE_PUBLISHER_ID || "ca-pub-9552509372228899";
+  const formattedClient = pubId.startsWith('ca-') ? pubId : `ca-${pubId}`;
   const isPushed = useRef(false);
 
   useEffect(() => {
-    if (!isApproved) return;
-    // Only push once per component mount
     if (isPushed.current) return;
     try {
       if (typeof window !== 'undefined') {
@@ -21,22 +19,18 @@ export default function AdSenseMock({ slotId, type = 'banner', className = '' }:
         isPushed.current = true;
       }
     } catch (e) {
-      console.warn("AdSense push execution skipped or ad blocker detected:", e);
+      // Ad blocker or script loading
     }
-  }, [isApproved, slotId]);
-
-  if (!isApproved) {
-    return null;
-  }
+  }, [slotId]);
 
   const getSlotLayout = () => {
     switch (type) {
       case 'banner':
-        return 'min-h-[90px] md:min-h-[120px] max-w-[970px]';
+        return 'min-h-[90px] md:min-h-[100px] max-w-[970px]';
       case 'sidebar':
-        return 'min-h-[250px] md:min-h-[600px] w-full';
+        return 'min-h-[250px] md:min-h-[300px] w-full';
       case 'inline':
-        return 'min-h-[100px] md:min-h-[250px] w-full';
+        return 'min-h-[90px] md:min-h-[120px] w-full';
       case 'sticky':
         return 'h-[60px] w-full';
       default:
@@ -45,12 +39,12 @@ export default function AdSenseMock({ slotId, type = 'banner', className = '' }:
   };
 
   return (
-    <div className={`w-full flex justify-center items-center my-3 overflow-hidden ${className}`}>
-      {/* Standard Google AdSense Insertion Tag */}
+    <div className={`w-full flex flex-col justify-center items-center my-4 overflow-hidden ${className}`}>
+      {/* Official Google AdSense Tag */}
       <ins
-        className={`adsbygoogle block w-full ${getSlotLayout()}`}
+        className={`adsbygoogle block w-full ${getSlotLayout()} text-center`}
         style={{ display: 'block' }}
-        data-ad-client={`ca-${pubId}`}
+        data-ad-client={formattedClient}
         data-ad-slot={slotId}
         data-ad-format="auto"
         data-full-width-responsive="true"
