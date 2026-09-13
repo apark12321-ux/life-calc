@@ -3,7 +3,8 @@ import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
   Calendar, User, Share2, Printer, ChevronRight, ChevronLeft, 
-  ShieldCheck, MessageSquare, Send, Check, Heart, ExternalLink, Bookmark
+  ShieldCheck, MessageSquare, Send, Check, Heart, ExternalLink, Bookmark,
+  ThumbsUp, ThumbsDown, HelpCircle, CheckCircle2
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 import AdSenseMock from './AdSenseMock';
@@ -32,7 +33,7 @@ function renderFormattedText(text: string): React.ReactNode {
     // Handle inline code `...`
     if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
       return (
-        <code key={index} className="bg-gray-100 text-blue-700 px-1.5 py-0.5 rounded text-xs font-mono">
+        <code key={index} className="bg-gray-100 text-[#1078b9] px-1.5 py-0.5 rounded text-xs font-mono">
           {part.slice(1, -1)}
         </code>
       );
@@ -48,6 +49,7 @@ export default function BlogPostView({
   onNavigateToCalculator
 }: BlogPostViewProps) {
   const [copied, setCopied] = useState(false);
+  const [feedbackVote, setFeedbackVote] = useState<'none' | 'up' | 'down' | 'suggest'>('none');
   
   // Real like state per post
   const [liked, setLiked] = useState<boolean>(() => {
@@ -76,9 +78,12 @@ export default function BlogPostView({
       const savedComments = localStorage.getItem(`comments_${post.id}`);
       setComments(savedComments ? JSON.parse(savedComments) : []);
       setLiked(localStorage.getItem(`liked_${post.id}`) === 'true');
+      const savedVote = localStorage.getItem(`feedback_${post.id}`) as 'up' | 'down' | 'suggest' | null;
+      setFeedbackVote(savedVote || 'none');
     } catch {
       setComments([]);
       setLiked(false);
+      setFeedbackVote('none');
     }
   }, [post.id]);
 
@@ -113,6 +118,15 @@ export default function BlogPostView({
     }
   };
 
+  const handleVoteFeedback = (type: 'up' | 'down' | 'suggest') => {
+    setFeedbackVote(type);
+    try {
+      localStorage.setItem(`feedback_${post.id}`, type);
+    } catch {
+      // ignore
+    }
+  };
+
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCommentName.trim() || !newCommentText.trim()) return;
@@ -138,6 +152,7 @@ export default function BlogPostView({
   };
 
   const meta = CATEGORY_META[post.category] || { name: '실전 칼럼' };
+  const readTime = post.readTimeMinutes || 5;
 
   // Generate comprehensive E-E-A-T Schema.org JSON-LD structured data
   const jsonLdSchema = {
@@ -168,73 +183,101 @@ export default function BlogPostView({
     'publisher': {
       '@type': 'Organization',
       '@id': 'https://www.life-calc.kr/#organization',
-      'name': '박과장의 생활경제 노트',
+      'name': '박과장의 생활경제 Q&A',
       'url': 'https://www.life-calc.kr'
     }
   };
 
   useEffect(() => {
     const prevTitle = document.title;
-    document.title = `${post.title} | 박과장의 생활경제 노트`;
+    document.title = `${post.title} | 박과장의 생활경제 Q&A`;
     return () => {
       document.title = prevTitle;
     };
   }, [post]);
 
   return (
-    <article className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 md:p-10 space-y-6">
+    <div className="space-y-4">
       {/* 0. Embedded JSON-LD Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdSchema) }}
       />
 
-      {/* 1. Breadcrumbs Navigation - Classic Tistory Style */}
-      <nav className="flex items-center space-x-2 text-xs text-gray-500 font-medium no-print">
-        <button 
-          onClick={() => onSelectCategory('all')}
-          className="hover:text-blue-600 transition"
-        >
-          홈
-        </button>
-        <span>&gt;</span>
-        <button 
-          onClick={() => onSelectCategory(post.category)}
-          className="hover:text-blue-600 transition font-semibold"
-        >
-          {meta.name}
-        </button>
-      </nav>
-
-      {/* 2. Post Header */}
-      <header className="space-y-3 pb-6 border-b border-gray-200">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-xs font-semibold text-blue-600">
+      {/* 1. #question Card - Benchmarked from ko.phongnhaexplorer.com DWQA Question Card */}
+      <div id="question" className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs space-y-3">
+        {/* Breadcrumbs Navigation */}
+        <nav className="flex items-center space-x-1.5 text-xs text-gray-500 font-medium no-print">
+          <button 
+            onClick={() => onSelectCategory('all')}
+            className="hover:text-[#1078b9] transition"
+          >
+            홈
+          </button>
+          <span>&gt;</span>
+          <button 
+            onClick={() => onSelectCategory(post.category)}
+            className="hover:text-[#1078b9] transition font-semibold"
+          >
             {meta.name}
-          </span>
-          <div className="flex items-center gap-2 text-xs text-gray-500 no-print">
+          </button>
+          <span>&gt;</span>
+          <span className="text-gray-400 truncate max-w-[200px] sm:max-w-xs">{post.title}</span>
+        </nav>
+
+        {/* Top Badges & Actions */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            {/* dwqa-status */}
+            <span className="bg-[#e8f5e9] text-[#2e7d32] border border-[#a5d6a7] text-[11px] font-bold px-2 py-0.5 rounded">
+              답변 완료
+            </span>
+
+            {/* Category Pill */}
+            <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
+              {meta.name}
+            </span>
+
+            <span className="text-gray-300">·</span>
+
+            {/* Date */}
+            <span className="text-gray-500 text-xs">
+              게시: {post.date.split(' ')[0]}
+            </span>
+
+            <span className="text-gray-300">·</span>
+
+            {/* Read Time */}
+            <span className="text-gray-500 text-xs">
+              <strong className="text-gray-900 font-bold">{readTime}</strong>
+              <sup className="text-[10px] text-gray-500 font-semibold ml-0.5">m</sup> 읽기
+            </span>
+          </div>
+
+          {/* Action buttons (Like, Share, Print) */}
+          <div className="flex items-center gap-1.5 text-xs text-gray-500 no-print">
             <button
               type="button"
               onClick={handleToggleLike}
-              className={`px-2.5 py-1 rounded border text-xs transition flex items-center gap-1 ${
+              className={`px-2 py-1 rounded-md border text-xs transition flex items-center gap-1 ${
                 liked ? 'bg-red-50 border-red-200 text-red-600 font-bold' : 'border-gray-200 hover:bg-gray-50'
               }`}
             >
               <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-red-500 text-red-500' : ''}`} />
-              <span>{liked ? '공감 완료' : '공감'}</span>
+              <span>{liked ? '공감됨' : '공감'}</span>
             </button>
             <button
               type="button"
               onClick={handleShare}
-              className="px-2.5 py-1 rounded border border-gray-200 hover:bg-gray-50 text-xs transition flex items-center gap-1"
+              className="px-2 py-1 rounded-md border border-gray-200 hover:bg-gray-50 text-xs transition flex items-center gap-1"
             >
               <Share2 className="w-3.5 h-3.5 text-gray-500" />
-              <span>{copied ? '복사됨!' : '공유'}</span>
+              <span>{copied ? '복사됨' : '공유'}</span>
             </button>
             <button
               type="button"
               onClick={() => window.print()}
-              className="p-1 rounded border border-gray-200 hover:bg-gray-50 text-xs transition"
+              className="p-1 rounded-md border border-gray-200 hover:bg-gray-50 text-xs transition"
               title="인쇄하기"
             >
               <Printer className="w-3.5 h-3.5 text-gray-500" />
@@ -242,209 +285,267 @@ export default function BlogPostView({
           </div>
         </div>
 
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 leading-snug tracking-tight font-heading">
+        {/* Main Question Title (h1) in Phong Nha Explorer deep blue #056cad */}
+        <h1 className="text-xl sm:text-2xl font-bold text-[#056cad] leading-snug tracking-tight font-heading pt-1">
           {post.title}
         </h1>
 
-        {/* Post Meta */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 pt-1 font-body">
-          <span className="text-gray-700 font-medium">{post.author || '박과장'}</span>
-          <span>·</span>
-          <span>{post.date}</span>
-          <span>·</span>
-          <span>읽는 시간 약 {post.readTimeMinutes || 5}분</span>
-          {comments.length > 0 && (
-            <>
-              <span>·</span>
-              <span>댓글 {comments.length}</span>
-            </>
-          )}
+        {/* Author Metadata */}
+        <div className="flex items-center gap-2 text-xs text-gray-500 pt-1 border-t border-gray-100">
+          <span className="text-gray-800 font-semibold">작성자: {post.author || '박과장'}</span>
+          <span className="text-gray-400">({post.authorRole || '11년차 데이터 기획자'})</span>
         </div>
-      </header>
-
-      {/* Top Banner AdSlot - Standard Clean Google AdSense Unit */}
-      <AdSenseMock slotId="1001-post-top" type="banner" className="no-print my-4" />
-
-      {/* Author Note Callout */}
-      {post.authorNote && (
-        <div className="bg-blue-50/70 border-l-4 border-blue-600 p-4 rounded-r text-gray-800 text-xs sm:text-sm leading-relaxed">
-          <p className="font-bold text-blue-900 mb-1">💡 박과장의 핵심 메모</p>
-          <p>{post.authorNote}</p>
-        </div>
-      )}
-
-      {/* Table of Contents - Clean Tistory Box */}
-      <div className="bg-gray-50 border border-gray-200 rounded p-4">
-        <TableOfContents content={post.content} variant="inline" title="목차" />
       </div>
 
-      {/* Main Post Content */}
-      <div className="text-gray-800 text-base leading-relaxed space-y-6 font-body">
-        {(() => {
-          let h2Count = 0;
-          let h3Count = 0;
+      {/* Top Banner AdSlot - Clean Google AdSense Unit */}
+      <div className="no-print">
+        <AdSenseMock slotId="1001-post-top" type="banner" />
+      </div>
 
-          return post.content.split('\n\n').map((paragraph, idx) => {
-            if (paragraph.startsWith('## ')) {
-              const headingId = `toc-heading-h2-${h2Count++}`;
-              const text = paragraph.replace('## ', '');
-              return (
-                <h2 
-                  key={idx} 
-                  id={headingId}
-                  className="scroll-mt-24 text-xl sm:text-2xl font-bold text-gray-900 mt-10 mb-4 pb-2 border-b border-gray-200 font-heading"
-                >
-                  {text}
-                </h2>
-              );
-            }
-            if (paragraph.startsWith('### ')) {
-              const headingId = `toc-heading-h3-${h3Count++}`;
-              const text = paragraph.replace('### ', '');
-              return (
-                <h3 
-                  key={idx} 
-                  id={headingId}
-                  className="scroll-mt-24 text-lg font-bold text-gray-900 mt-6 mb-2 font-heading"
-                >
-                  {text}
-                </h3>
-              );
-            }
-            if (paragraph.startsWith('#### ')) {
-              const text = paragraph.replace('#### ', '');
-              return (
-                <h4 key={idx} className="font-bold text-gray-900 mt-4 mb-1">
-                  {text}
-                </h4>
-              );
-            }
-            if (paragraph.startsWith('> ')) {
-              return (
-                <blockquote key={idx} className="bg-gray-50 border-l-4 border-gray-400 p-4 text-gray-700 text-sm my-4 italic">
-                  {renderFormattedText(paragraph.replace('> ', ''))}
-                </blockquote>
-              );
-            }
-            if (paragraph.startsWith('|')) {
-              // Parse Markdown table
-              const rows = paragraph.trim().split('\n').filter(r => r.trim().startsWith('|'));
-              if (rows.length >= 2) {
-                const headerRow = rows[0].split('|').map(c => c.trim()).filter(Boolean);
-                const dataRows = rows.slice(2).map(r => r.split('|').map(c => c.trim()).filter(Boolean));
+      {/* 2. #best-answer Card - The Signature Core Feature of ko.phongnhaexplorer.com */}
+      <div id="best-answer" className="bg-[#f6ffec] border border-[#a5d6a7] rounded-xl p-5 sm:p-6 shadow-xs space-y-2.5">
+        <div className="flex items-center gap-2 text-[#2e7d32] font-bold text-sm sm:text-base font-heading pb-1 border-b border-[#c3e6cb]">
+          <span className="text-lg">💡</span>
+          <span>핵심 답변 (Best Answer / 박과장의 실무 정리)</span>
+        </div>
+        <p className="text-sm sm:text-[15px] text-gray-800 leading-relaxed font-body">
+          {post.authorNote || post.summary}
+        </p>
+      </div>
+
+      {/* 3. Table of Contents Card */}
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 shadow-xs">
+        <TableOfContents content={post.content} variant="inline" title="칼럼 목차" />
+      </div>
+
+      {/* 4. #more-information Card - Main Detailed Post Content */}
+      <article id="more-information" className="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 space-y-6 shadow-xs">
+        <div className="text-gray-800 text-base leading-relaxed space-y-6 font-body">
+          {(() => {
+            let h2Count = 0;
+            let h3Count = 0;
+
+            return post.content.split('\n\n').map((paragraph, idx) => {
+              if (paragraph.startsWith('## ')) {
+                const headingId = `toc-heading-h2-${h2Count++}`;
+                const text = paragraph.replace('## ', '');
                 return (
-                  <div key={idx} className="overflow-x-auto my-5 border border-gray-200 rounded">
-                    <table className="w-full text-xs sm:text-sm text-left">
-                      <thead className="bg-gray-100 text-gray-800 font-bold">
-                        <tr>
-                          {headerRow.map((h, hi) => (
-                            <th key={hi} className="px-4 py-2.5 border-b border-r border-gray-200 last:border-r-0">
-                              {renderFormattedText(h)}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {dataRows.map((row, ri) => (
-                          <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}>
-                            {row.map((cell, ci) => (
-                              <td key={ci} className="px-4 py-2.5 border-r border-gray-200 last:border-r-0 text-gray-700">
-                                {renderFormattedText(cell)}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <h2 
+                    key={idx} 
+                    id={headingId}
+                    className="scroll-mt-24 text-xl sm:text-2xl font-bold text-[#056cad] mt-10 mb-4 pb-2 border-b border-gray-200 font-heading"
+                  >
+                    {text}
+                  </h2>
                 );
               }
-            }
-            if (paragraph.startsWith('- ')) {
+              if (paragraph.startsWith('### ')) {
+                const headingId = `toc-heading-h3-${h3Count++}`;
+                const text = paragraph.replace('### ', '');
+                return (
+                  <h3 
+                    key={idx} 
+                    id={headingId}
+                    className="scroll-mt-24 text-lg font-bold text-gray-900 mt-6 mb-2 font-heading"
+                  >
+                    {text}
+                  </h3>
+                );
+              }
+              if (paragraph.startsWith('#### ')) {
+                const text = paragraph.replace('#### ', '');
+                return (
+                  <h4 key={idx} className="font-bold text-gray-900 mt-4 mb-1">
+                    {text}
+                  </h4>
+                );
+              }
+              if (paragraph.startsWith('> ')) {
+                return (
+                  <blockquote key={idx} className="bg-gray-50 border-l-4 border-[#1078b9] p-4 text-gray-700 text-sm my-4 italic rounded-r">
+                    {renderFormattedText(paragraph.replace('> ', ''))}
+                  </blockquote>
+                );
+              }
+              if (paragraph.startsWith('|')) {
+                // Parse Markdown table
+                const rows = paragraph.trim().split('\n').filter(r => r.trim().startsWith('|'));
+                if (rows.length >= 2) {
+                  const headerRow = rows[0].split('|').map(c => c.trim()).filter(Boolean);
+                  const dataRows = rows.slice(2).map(r => r.split('|').map(c => c.trim()).filter(Boolean));
+                  return (
+                    <div key={idx} className="overflow-x-auto my-5 border border-gray-200 rounded-lg shadow-xs">
+                      <table className="w-full text-xs sm:text-sm text-left">
+                        <thead className="bg-[#f0f4f9] text-gray-900 font-bold">
+                          <tr>
+                            {headerRow.map((h, hi) => (
+                              <th key={hi} className="px-4 py-2.5 border-b border-r border-gray-200 last:border-r-0">
+                                {renderFormattedText(h)}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200">
+                          {dataRows.map((row, ri) => (
+                            <tr key={ri} className={ri % 2 === 0 ? 'bg-white' : 'bg-[#fafbfc]'}>
+                              {row.map((cell, ci) => (
+                                <td key={ci} className="px-4 py-2.5 border-r border-gray-200 last:border-r-0 text-gray-700">
+                                  {renderFormattedText(cell)}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                }
+              }
+              if (paragraph.startsWith('- ')) {
+                return (
+                  <ul key={idx} className="list-disc pl-5 space-y-1.5 text-gray-700 text-sm sm:text-base">
+                    {paragraph.split('\n').map((item, itemIdx) => (
+                      <li key={itemIdx} className="leading-relaxed">
+                        {renderFormattedText(item.replace(/^- /, ''))}
+                      </li>
+                    ))}
+                  </ul>
+                );
+              }
+              if (paragraph.match(/^\d+\. /)) {
+                return (
+                  <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-gray-700 text-sm sm:text-base">
+                    {paragraph.split('\n').map((item, itemIdx) => (
+                      <li key={itemIdx} className="leading-relaxed">
+                        {renderFormattedText(item.replace(/^\d+\. /, ''))}
+                      </li>
+                    ))}
+                  </ol>
+                );
+              }
               return (
-                <ul key={idx} className="list-disc pl-5 space-y-1.5 text-gray-700 text-sm sm:text-base">
-                  {paragraph.split('\n').map((item, itemIdx) => (
-                    <li key={itemIdx} className="leading-relaxed">
-                      {renderFormattedText(item.replace(/^- /, ''))}
-                    </li>
-                  ))}
-                </ul>
+                <p key={idx} className="text-gray-800 text-sm sm:text-base leading-relaxed whitespace-pre-line">
+                  {renderFormattedText(paragraph)}
+                </p>
               );
-            }
-            if (paragraph.match(/^\d+\. /)) {
-              return (
-                <ol key={idx} className="list-decimal pl-5 space-y-1.5 text-gray-700 text-sm sm:text-base">
-                  {paragraph.split('\n').map((item, itemIdx) => (
-                    <li key={itemIdx} className="leading-relaxed">
-                      {renderFormattedText(item.replace(/^\d+\. /, ''))}
-                    </li>
-                  ))}
-                </ol>
-              );
-            }
-            return (
-              <p key={idx} className="text-gray-800 text-sm sm:text-base leading-relaxed whitespace-pre-line">
-                {renderFormattedText(paragraph)}
+            });
+          })()}
+        </div>
+
+        {/* Key Takeaways Box (.tkaw-box style from phongnhaexplorer) */}
+        <div className="bg-[#f8fafc] border-l-4 border-[#1078b9] border-y border-r border-gray-200/80 rounded-r-lg p-5 my-6">
+          <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-2 flex items-center gap-1.5">
+            <span>📌</span>
+            <span>요약 & 핵심 체크포인트</span>
+          </h4>
+          <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5 list-disc pl-5">
+            <li>모든 세액 공제 및 법정 수당은 최신 2026년 기준 법령 및 고시를 준수합니다.</li>
+            <li>개별 계약 조건 및 사업장 상시 근로자 수에 따라 세부 적용 규정이 달라질 수 있습니다.</li>
+            <li>정확한 모의계산 결과는 하단의 무료 실무 계산기에서 즉시 확인 가능합니다.</li>
+          </ul>
+        </div>
+
+        {/* Statutory Legal Basis */}
+        {post.legalBasis && (
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-xs text-gray-700 flex items-start gap-2">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-bold text-gray-900">관련 법령 및 행정 고시:</span>{' '}
+              <span>{post.legalBasis}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Calculator Link CTA */}
+        {post.relatedCalculatorId && (
+          <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-sm sm:text-base font-bold text-gray-900">
+                📊 관련 실무 계산기: {post.relatedCalculatorName}
               </p>
-            );
-          });
-        })()}
+              <p className="text-xs text-gray-600 mt-0.5">
+                2026년 공식이 적용된 무료 모의계산기로 내 조건에 맞게 직접 시뮬레이션해보세요.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                if (post.relatedCalculatorId) {
+                  onNavigateToCalculator(post.relatedCalculatorId);
+                }
+              }}
+              className="px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-lg text-xs font-bold transition shrink-0 shadow-xs"
+            >
+              계산기 바로가기
+            </button>
+          </div>
+        )}
+
+        {/* Post Tags */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 pt-4 border-t border-gray-100">
+            <span className="text-xs text-gray-400 self-center mr-1">태그:</span>
+            {post.tags.map((tag, idx) => (
+              <span key={idx} className="text-xs text-gray-600 bg-gray-50 hover:bg-gray-100 px-2.5 py-1 rounded-md border border-gray-200 transition">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </article>
+
+      {/* Bottom AdSlot - Standard AdSense Unit */}
+      <div className="no-print">
+        <AdSenseMock slotId="1002-post-bottom" type="inline" />
       </div>
 
-      {/* Statutory Legal Basis */}
-      {post.legalBasis && (
-        <div className="bg-gray-50 border border-gray-200 rounded p-4 text-xs text-gray-700 flex items-start gap-2">
-          <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-          <div>
-            <span className="font-bold text-gray-900">관련 법령 및 행정 고시:</span>{' '}
-            <span>{post.legalBasis}</span>
+      {/* 5. Helpful Feedback Box - Benchmarked from ko.phongnhaexplorer.com popup group */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs text-center space-y-3 no-print">
+        <p className="font-bold text-gray-800 text-sm sm:text-base font-heading">
+          이 실무 답변이 도움이 되셨나요?
+        </p>
+        <p className="text-xs text-gray-500">
+          독자 여러분의 피드백은 더 정확하고 유용한 콘텐츠를 작성하는 데 큰 힘이 됩니다.
+        </p>
+
+        {feedbackVote === 'none' ? (
+          <div className="flex items-center justify-center gap-2 pt-1">
+            <button
+              type="button"
+              onClick={() => handleVoteFeedback('up')}
+              className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 text-xs font-semibold text-gray-700 flex items-center gap-1.5 transition"
+            >
+              <ThumbsUp className="w-3.5 h-3.5 text-emerald-600" />
+              <span>유용함</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleVoteFeedback('down')}
+              className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-red-50 hover:border-red-300 hover:text-red-700 text-xs font-semibold text-gray-700 flex items-center gap-1.5 transition"
+            >
+              <ThumbsDown className="w-3.5 h-3.5 text-red-500" />
+              <span>유용하지 않음</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleVoteFeedback('suggest')}
+              className="px-4 py-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 hover:border-blue-300 hover:text-[#1078b9] text-xs font-semibold text-gray-700 flex items-center gap-1.5 transition"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-[#1078b9]" />
+              <span>내용 보완 제안</span>
+            </button>
           </div>
-        </div>
-      )}
-
-      {/* Calculator Link CTA */}
-      {post.relatedCalculatorId && (
-        <div className="bg-gray-50 border border-gray-300 rounded-lg p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-sm sm:text-base font-bold text-gray-900">
-              📊 관련 실무 계산기: {post.relatedCalculatorName}
-            </p>
-            <p className="text-xs text-gray-600 mt-0.5">
-              2026년 공식을 적용한 무료 모의계산기로 내 조건에 맞게 직접 계산해보세요.
-            </p>
+        ) : (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-xs text-emerald-800 font-semibold flex items-center justify-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>소중한 피드백 감사합니다! 지속적으로 법령과 실무 기준을 업데이트하겠습니다.</span>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              if (post.relatedCalculatorId) {
-                onNavigateToCalculator(post.relatedCalculatorId);
-              }
-            }}
-            className="px-4 py-2 bg-gray-900 hover:bg-blue-600 text-white rounded text-xs font-bold transition shrink-0"
-          >
-            계산기 바로가기
-          </button>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Post Tags */}
-      {post.tags && post.tags.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 pt-4 border-t border-gray-100">
-          <span className="text-xs text-gray-400 self-center mr-1">태그:</span>
-          {post.tags.map((tag, idx) => (
-            <span key={idx} className="text-xs text-gray-600 bg-gray-50 hover:bg-gray-100 px-2.5 py-1 rounded border border-gray-200 transition">
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Bottom AdSlot - Official Google AdSense Unit */}
-      <AdSenseMock slotId="1002-post-bottom" type="inline" className="no-print my-6" />
-
-      {/* Author Card - Classic Korean Blog Style */}
-      <div className="bg-gray-50 border border-gray-200 rounded p-5 flex items-start gap-4">
-        <div className="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-base font-heading shrink-0">
+      {/* 6. Author Profile Card - E-E-A-T Real Background */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs flex items-start gap-4">
+        <div className="w-12 h-12 rounded-full bg-[#1078b9] text-white flex items-center justify-center font-bold text-base font-heading shrink-0 shadow-xs">
           박
         </div>
         <div className="min-w-0 space-y-1">
@@ -460,18 +561,18 @@ export default function BlogPostView({
         </div>
       </div>
 
-      {/* Previous / Next Post Links */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-gray-200 text-xs no-print">
+      {/* 7. Previous / Next Post Links */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs no-print">
         {prevPost ? (
           <div
             onClick={() => onSelectPost(prevPost)}
-            className="p-3 border border-gray-200 rounded hover:bg-gray-50 transition cursor-pointer group space-y-1"
+            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 shadow-xs"
           >
-            <span className="text-gray-400 flex items-center gap-1 group-hover:text-blue-600">
+            <span className="text-gray-400 flex items-center gap-1 group-hover:text-[#1078b9]">
               <ChevronLeft className="w-3.5 h-3.5" />
-              이전글
+              이전 질문 & 칼럼
             </span>
-            <p className="text-gray-800 group-hover:text-blue-600 font-medium line-clamp-1">
+            <p className="text-gray-800 group-hover:text-[#1078b9] font-medium line-clamp-1">
               {prevPost.title}
             </p>
           </div>
@@ -480,33 +581,33 @@ export default function BlogPostView({
         {nextPost && (
           <div
             onClick={() => onSelectPost(nextPost)}
-            className="p-3 border border-gray-200 rounded hover:bg-gray-50 transition cursor-pointer group space-y-1 text-right"
+            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 text-right shadow-xs"
           >
-            <span className="text-gray-400 flex items-center justify-end gap-1 group-hover:text-blue-600">
-              다음글
+            <span className="text-gray-400 flex items-center justify-end gap-1 group-hover:text-[#1078b9]">
+              다음 질문 & 칼럼
               <ChevronRight className="w-3.5 h-3.5" />
             </span>
-            <p className="text-gray-800 group-hover:text-blue-600 font-medium line-clamp-1">
+            <p className="text-gray-800 group-hover:text-[#1078b9] font-medium line-clamp-1">
               {nextPost.title}
             </p>
           </div>
         )}
       </div>
 
-      {/* Related Posts in same category */}
+      {/* 8. Related Posts in same category */}
       {relatedPosts.length > 0 && (
-        <div className="pt-6 border-t border-gray-200 no-print">
+        <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs no-print">
           <h3 className="text-sm font-bold text-gray-900 mb-3 font-heading">
-            &apos;{meta.name}&apos; 카테고리의 다른 글
+            &apos;{meta.name}&apos; 분야의 다른 실무 지식
           </h3>
           <ul className="divide-y divide-gray-100 text-xs">
             {relatedPosts.map(rel => (
               <li
                 key={rel.id}
                 onClick={() => onSelectPost(rel)}
-                className="py-2.5 flex items-center justify-between group cursor-pointer hover:bg-gray-50 px-2 rounded"
+                className="py-2.5 flex items-center justify-between group cursor-pointer hover:bg-blue-50/50 px-2 rounded-lg transition"
               >
-                <span className="text-gray-800 group-hover:text-blue-600 group-hover:underline line-clamp-1 font-medium">
+                <span className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium">
                   {rel.title}
                 </span>
                 <span className="text-gray-400 shrink-0 ml-4 font-num">
@@ -518,15 +619,15 @@ export default function BlogPostView({
         </div>
       )}
 
-      {/* Reader Comments Section */}
-      <div className="space-y-4 pt-6 border-t border-gray-200 no-print">
+      {/* 9. Reader Comments Section */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs space-y-4 no-print">
         <h3 className="text-base font-bold text-gray-900 flex items-center gap-1.5 font-heading">
-          <MessageSquare className="w-4 h-4 text-gray-700" />
-          <span>댓글 ({comments.length})</span>
+          <MessageSquare className="w-4 h-4 text-[#1078b9]" />
+          <span>의견 및 질문 ({comments.length})</span>
         </h3>
 
         {/* Comment Form */}
-        <form onSubmit={handleAddComment} className="bg-gray-50 border border-gray-200 rounded p-4 space-y-3">
+        <form onSubmit={handleAddComment} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
           <div className="w-full sm:w-48">
             <input
               type="text"
@@ -534,7 +635,7 @@ export default function BlogPostView({
               value={newCommentName}
               onChange={(e) => setNewCommentName(e.target.value)}
               placeholder="작성자 닉네임"
-              className="w-full bg-white text-gray-800 text-xs rounded p-2 border border-gray-300 focus:outline-none focus:border-gray-500"
+              className="w-full bg-white text-gray-800 text-xs rounded-lg p-2 border border-gray-300 focus:outline-none focus:border-[#1078b9]"
             />
           </div>
           <textarea
@@ -542,8 +643,8 @@ export default function BlogPostView({
             rows={3}
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="궁금한 점이나 의견을 남겨주세요..."
-            className="w-full bg-white text-gray-800 text-xs rounded p-2.5 border border-gray-300 focus:outline-none focus:border-gray-500"
+            placeholder="본 실무 가이드에 대한 의견이나 궁금한 점을 남겨주시면 검토 후 답변드립니다..."
+            className="w-full bg-white text-gray-800 text-xs rounded-lg p-2.5 border border-gray-300 focus:outline-none focus:border-[#1078b9]"
           />
           <div className="flex items-center justify-between">
             {commentSubmitted && (
@@ -554,7 +655,7 @@ export default function BlogPostView({
             )}
             <button
               type="submit"
-              className="ml-auto px-4 py-1.5 bg-gray-900 hover:bg-gray-800 text-white rounded text-xs font-medium transition cursor-pointer"
+              className="ml-auto px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-xs"
             >
               댓글 등록
             </button>
@@ -563,13 +664,13 @@ export default function BlogPostView({
 
         {/* Comments List */}
         {comments.length === 0 ? (
-          <div className="py-6 text-center text-xs text-gray-400 bg-gray-50 rounded border border-gray-100">
-            등록된 댓글이 없습니다. 첫 번째 의견을 남겨보세요.
+          <div className="py-6 text-center text-xs text-gray-400 bg-gray-50 rounded-lg border border-gray-100">
+            등록된 의견이 없습니다. 첫 번째 질문이나 소감을 남겨보세요.
           </div>
         ) : (
           <div className="space-y-3">
             {comments.map((comment) => (
-              <div key={comment.id} className="p-3.5 bg-gray-50 rounded border border-gray-100 space-y-1.5 text-xs">
+              <div key={comment.id} className="p-3.5 bg-gray-50 rounded-lg border border-gray-100 space-y-1.5 text-xs">
                 <div className="flex items-center justify-between font-medium">
                   <span className="text-gray-900 font-bold">{comment.author}</span>
                   <span className="text-gray-400 text-[11px]">{comment.date}</span>
@@ -582,7 +683,7 @@ export default function BlogPostView({
           </div>
         )}
       </div>
-    </article>
+    </div>
   );
 }
 

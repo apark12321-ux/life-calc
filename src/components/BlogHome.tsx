@@ -77,44 +77,50 @@ export default function BlogHome({
   };
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8">
-      {/* Category List Header - Classic Tistory Style */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b-2 border-gray-900 gap-2">
-        <div className="flex items-baseline gap-2">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 font-heading">
-            {getCategoryTitle()}
-          </h2>
-          <span className="text-sm font-medium text-gray-500">
-            ({filteredPosts.length})
-          </span>
+    <div className="space-y-3">
+      {/* Category / Filter Header Card */}
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div>
+          <div className="flex items-center gap-2 text-xs text-gray-500 mb-1">
+            <span>홈</span>
+            <span>&gt;</span>
+            <span className="text-[#1078b9] font-medium">{getCategoryTitle()}</span>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900 font-heading">
+              {getCategoryTitle()}
+            </h2>
+            <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">
+              총 {filteredPosts.length}건
+            </span>
+          </div>
         </div>
 
         {/* Sort Controls */}
-        <div className="flex items-center gap-3 text-xs text-gray-500">
+        <div className="flex items-center gap-3 text-xs text-gray-500 self-end sm:self-center">
           {searchQuery && (
             <button
               onClick={onClearSearch}
-              className="text-blue-600 hover:underline font-medium"
+              className="text-[#1078b9] hover:underline font-semibold mr-1"
             >
               전체글 보기
             </button>
           )}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-lg p-1">
             <button
               type="button"
               onClick={() => setSortBy('latest')}
-              className={`hover:text-gray-900 transition-colors ${
-                sortBy === 'latest' ? 'font-bold text-gray-900' : 'text-gray-400'
+              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+                sortBy === 'latest' ? 'bg-white font-bold text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-800'
               }`}
             >
               최신순
             </button>
-            <span className="text-gray-300">|</span>
             <button
               type="button"
               onClick={() => setSortBy('oldest')}
-              className={`hover:text-gray-900 transition-colors ${
-                sortBy === 'oldest' ? 'font-bold text-gray-900' : 'text-gray-400'
+              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+                sortBy === 'oldest' ? 'bg-white font-bold text-gray-900 shadow-xs' : 'text-gray-500 hover:text-gray-800'
               }`}
             >
               과거순
@@ -123,88 +129,96 @@ export default function BlogHome({
         </div>
       </div>
 
-      {/* Post List Items - Classic Korean Blog Feed */}
+      {/* Post List Items - DWQA Benchmarked Card Style from ko.phongnhaexplorer.com */}
       {paginatedPosts.length === 0 ? (
-        <div className="py-16 text-center text-gray-500 space-y-3">
-          <p className="text-base font-medium">검색 결과가 없습니다.</p>
-          <p className="text-xs text-gray-400">다른 키워드로 검색하거나 전체글 목록을 확인해보세요.</p>
+        <div className="bg-white border border-gray-200 rounded-xl py-16 text-center text-gray-500 space-y-3">
+          <p className="text-base font-medium text-gray-800">검색 결과가 없습니다.</p>
+          <p className="text-xs text-gray-500">다른 실무 키워드로 검색하거나 전체 카테고리 목록을 확인해보세요.</p>
           {searchQuery && (
             <button
               onClick={onClearSearch}
-              className="mt-2 inline-block px-4 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs rounded font-medium transition"
+              className="mt-2 inline-block px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white text-xs rounded-lg font-semibold transition"
             >
               전체글로 돌아가기
             </button>
           )}
         </div>
       ) : (
-        <div className="divide-y divide-gray-100">
+        <div className="space-y-3">
           {paginatedPosts.map((post, index) => {
             const meta = CATEGORY_META[post.category] || { name: '실전 칼럼' };
+            const readTime = post.readTimeMinutes || 5;
+
             return (
               <React.Fragment key={post.id}>
                 <article
                   onClick={() => onSelectPost(post)}
-                  className="py-6 first:pt-0 last:pb-0 group cursor-pointer flex flex-col sm:flex-row items-start justify-between gap-6"
+                  className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:border-[#1078b9] hover:shadow-xs transition duration-150 cursor-pointer group"
                 >
-                  <div className="flex-1 min-w-0 space-y-2">
-                    {/* Category Name */}
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-blue-600">
+                  <div className="space-y-2">
+                    {/* Top Meta Bar: Status badge + Category + Date + Read Time */}
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      {/* dwqa-status badge */}
+                      <span className="bg-[#e8f5e9] text-[#2e7d32] border border-[#a5d6a7] text-[11px] font-bold px-2 py-0.5 rounded">
+                        답변 완료
+                      </span>
+
+                      {/* Category Badge */}
+                      <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
                         {meta.name}
+                      </span>
+
+                      <span className="text-gray-400 text-[11px]">·</span>
+
+                      {/* Post Date */}
+                      <span className="text-gray-500 text-xs">
+                        게시: {post.date.split(' ')[0]}
+                      </span>
+
+                      <span className="text-gray-400 text-[11px]">·</span>
+
+                      {/* dwqa-answers-count / read time */}
+                      <span className="text-gray-500 text-xs">
+                        <strong className="text-gray-900 font-bold">{readTime}</strong>
+                        <sup className="text-[10px] text-gray-500 font-semibold ml-0.5">m</sup> 읽기
                       </span>
                     </div>
 
-                    {/* Post Title */}
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 group-hover:underline transition-colors font-heading leading-snug">
+                    {/* Question / Post Title */}
+                    <h3 className="text-[17px] sm:text-[18px] font-bold text-gray-900 group-hover:text-[#1078b9] transition-colors font-heading leading-snug">
                       {post.title}
                     </h3>
 
-                    {/* Excerpt / Summary */}
-                    <p className="text-sm text-gray-600 line-clamp-2 sm:line-clamp-3 leading-relaxed font-body">
+                    {/* Summary Excerpt */}
+                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed font-body">
                       {post.summary}
                     </p>
 
-                    {/* Meta Bar */}
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-400 pt-1">
-                      <span className="text-gray-600 font-medium">{post.author || '박과장'}</span>
-                      <span>·</span>
-                      <span>{post.date.split(' ')[0]}</span>
-                      <span>·</span>
-                      <span>읽는 시간 약 {post.readTimeMinutes || 5}분</span>
-                    </div>
-
-                    {/* Tags */}
-                    {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {post.tags.slice(0, 3).map((tag, tIdx) => (
+                    {/* Tags & Author Footer */}
+                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {post.tags && post.tags.slice(0, 3).map((tag, tIdx) => (
                           <span
                             key={tIdx}
-                            className="text-[11px] text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-200"
+                            className="text-[11px] text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-200 group-hover:border-gray-300 transition"
                           >
                             #{tag}
                           </span>
                         ))}
                       </div>
-                    )}
-                  </div>
 
-                  {/* Thumbnail / Visual Box */}
-                  <div className="w-full sm:w-36 h-24 bg-gray-50 border border-gray-200 rounded-md overflow-hidden shrink-0 flex items-center justify-center p-3 text-center group-hover:border-blue-200 transition-colors">
-                    <div className="space-y-1">
-                      <div className="text-xs font-bold text-gray-700 font-heading">
-                        {meta.name}
-                      </div>
-                      <div className="text-[11px] text-gray-400">
-                        2026 실무
-                      </div>
+                      {/* Author */}
+                      <span className="text-gray-400 text-[11px]">
+                        작성자: <span className="text-gray-600 font-medium">{post.author || '박과장'}</span>
+                      </span>
                     </div>
                   </div>
                 </article>
 
-                {/* Ad Placement between 3rd and 4th post (standard in Korean blogs) */}
+                {/* Ad Placement between 3rd and 4th post (Standard AdSense unit) */}
                 {index === 2 && (
-                  <div className="py-4 border-t border-b border-gray-100 my-2">
+                  <div className="bg-white border border-gray-200 rounded-xl p-3 my-3">
                     <AdSenseMock slotId="home-infeed-ad" type="inline" />
                   </div>
                 )}
@@ -214,14 +228,15 @@ export default function BlogHome({
         </div>
       )}
 
-      {/* Bottom Pagination - Classic Korean Blog Style */}
+      {/* Bottom Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1.5 mt-10 pt-6 border-t border-gray-100">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 flex items-center justify-center gap-1.5 shadow-xs">
           <button
             type="button"
             onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
             disabled={currentPage === 1}
-            className="px-2.5 py-1.5 text-xs text-gray-600 border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-30 disabled:pointer-events-none transition"
+            className="px-2.5 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:pointer-events-none transition"
+            aria-label="이전 페이지"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -234,9 +249,9 @@ export default function BlogHome({
                 setCurrentPage(page);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className={`px-3 py-1.5 text-xs font-medium rounded transition ${
+              className={`min-w-[32px] px-2.5 py-1.5 text-xs font-semibold rounded-lg transition ${
                 currentPage === page
-                  ? 'bg-gray-900 text-white font-bold'
+                  ? 'bg-[#1078b9] text-white font-bold shadow-xs'
                   : 'text-gray-700 border border-gray-200 hover:bg-gray-50'
               }`}
             >
@@ -248,7 +263,8 @@ export default function BlogHome({
             type="button"
             onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
             disabled={currentPage === totalPages}
-            className="px-2.5 py-1.5 text-xs text-gray-600 border border-gray-200 rounded hover:bg-gray-50 disabled:opacity-30 disabled:pointer-events-none transition"
+            className="px-2.5 py-1.5 text-xs text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-30 disabled:pointer-events-none transition"
+            aria-label="다음 페이지"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

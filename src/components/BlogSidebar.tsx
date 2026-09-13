@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS } from '../data/postsData';
-import { ChevronRight, Folder, Calculator, User, Bell, Tag } from 'lucide-react';
+import { ChevronRight, Folder, Calculator, User, Bell, Tag, Check, Share2, HelpCircle } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 import AdSenseMock from './AdSenseMock';
 
@@ -21,6 +21,8 @@ export default function BlogSidebar({
   activePost = null,
   posts = ALL_BLOG_POSTS,
 }: BlogSidebarProps) {
+  const [copiedLink, setCopiedLink] = useState(false);
+
   // 5 most recent posts
   const recentPosts = [...posts].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5);
   // 5 recommended posts
@@ -37,8 +39,20 @@ export default function BlogSidebar({
     '부동산복비', '주택담보대출', '국민연금', '건보료피부양자', 'ISA계좌'
   ];
 
+  const handleCopyLink = () => {
+    try {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(window.location.href);
+        setCopiedLink(true);
+        setTimeout(() => setCopiedLink(false), 2500);
+      }
+    } catch {
+      // fallback
+    }
+  };
+
   return (
-    <aside className="space-y-6">
+    <aside className="space-y-4">
       {/* 0. Sticky Table of Contents (Shown on desktop when reading an article) */}
       {activePost && (
         <div className="hidden lg:block sticky top-24 z-20">
@@ -46,10 +60,10 @@ export default function BlogSidebar({
         </div>
       )}
 
-      {/* 1. Blogger Profile Widget - Classic Tistory / Naver Style */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
+      {/* 1. Blogger Profile Widget */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
         <div className="flex items-center gap-3.5 pb-4 border-b border-gray-100">
-          <div className="w-12 h-12 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold text-base font-heading shrink-0">
+          <div className="w-12 h-12 rounded-full bg-[#1078b9] text-white flex items-center justify-center font-bold text-base font-heading shrink-0 shadow-xs">
             박
           </div>
           <div className="min-w-0">
@@ -68,66 +82,67 @@ export default function BlogSidebar({
           <button
             type="button"
             onClick={() => onSelectCategory('about')}
-            className="text-gray-700 hover:text-blue-600 font-medium transition"
+            className="text-gray-700 hover:text-[#1078b9] font-medium transition"
           >
-            소개글 보기
+            블로그 소개
           </button>
           <span className="text-gray-300">|</span>
           <button
             type="button"
-            onClick={() => {
-              if (navigator.clipboard) {
-                navigator.clipboard.writeText(window.location.href);
-                alert('블로그 주소가 복사되었습니다.');
-              }
-            }}
-            className="text-gray-700 hover:text-blue-600 font-medium transition"
+            onClick={handleCopyLink}
+            className="text-gray-700 hover:text-[#1078b9] font-medium transition flex items-center gap-1"
           >
-            블로그 공유
+            {copiedLink ? (
+              <span className="text-emerald-600 font-bold flex items-center gap-0.5">
+                <Check className="w-3 h-3" /> 복사됨!
+              </span>
+            ) : (
+              <span>주소 공유</span>
+            )}
           </button>
         </div>
       </div>
 
       {/* 2. Notice Widget (공지사항) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 flex items-center gap-1.5 font-heading">
-          <Bell className="w-3.5 h-3.5 text-gray-700" />
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
+        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 flex items-center gap-1.5 font-heading">
+          <Bell className="w-3.5 h-3.5 text-[#1078b9]" />
           <span>공지사항</span>
         </h4>
         <ul className="space-y-2 text-xs text-gray-700 font-body">
-          <li className="line-clamp-1 hover:text-blue-600 cursor-pointer" onClick={() => onSelectCategory('about')}>
-            • 2026년 최저임금(10,030원) 및 개정 법령 안내
+          <li className="line-clamp-2 hover:text-[#1078b9] cursor-pointer transition" onClick={() => onSelectCategory('about')}>
+            • 2026년 최저임금(10,030원) 및 개정 법령이 전 칼럼에 반영되었습니다.
           </li>
-          <li className="line-clamp-1 hover:text-blue-600 cursor-pointer" onClick={() => onSelectCategory('about')}>
-            • 칼럼 내 모든 산식은 관계 법령과 공공기관 고시를 준용합니다.
+          <li className="line-clamp-2 hover:text-[#1078b9] cursor-pointer transition" onClick={() => onSelectCategory('about')}>
+            • 칼럼 내 모든 산식은 관계 법령과 공공기관 공식 고시를 준용합니다.
           </li>
         </ul>
       </div>
 
       {/* 3. Category Widget (카테고리) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 flex items-center gap-1.5 font-heading">
-          <Folder className="w-3.5 h-3.5 text-gray-700" />
-          <span>카테고리</span>
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
+        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 flex items-center gap-1.5 font-heading">
+          <Folder className="w-3.5 h-3.5 text-[#1078b9]" />
+          <span>주제별 질문 & 답변</span>
         </h4>
 
         <div className="space-y-1 text-xs font-body">
           <button
             type="button"
             onClick={() => onSelectCategory('all')}
-            className="w-full text-left py-1.5 px-2 hover:bg-gray-50 rounded flex items-center justify-between text-gray-800 transition"
+            className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-800 transition"
           >
-            <span>분류 전체보기</span>
+            <span>전체 질문 목록</span>
             <span className="text-gray-400 font-num">({posts.length})</span>
           </button>
 
-          <div className="pl-2 space-y-0.5 border-l border-gray-100 ml-2">
+          <div className="pl-2 space-y-0.5 border-l-2 border-gray-100 ml-2">
             {categories.map((cat) => (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => onSelectCategory(cat.id)}
-                className="w-full text-left py-1.5 px-2 hover:bg-gray-50 rounded flex items-center justify-between text-gray-700 transition"
+                className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition"
               >
                 <span>├ {cat.name}</span>
                 <span className="text-gray-400 font-num">({cat.count})</span>
@@ -137,19 +152,20 @@ export default function BlogSidebar({
             <button
               type="button"
               onClick={() => onNavigateToCalculator('wage_salary')}
-              className="w-full text-left py-1.5 px-2 hover:bg-gray-50 rounded flex items-center justify-between text-gray-700 transition"
+              className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition"
             >
               <span>└ 실무 금융 계산기</span>
-              <span className="text-blue-600 font-bold font-num">(8종)</span>
+              <span className="text-[#1078b9] font-bold font-num">(8종)</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* 4. Recent Posts (최근에 올라온 글) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 font-heading">
-          최근에 올라온 글
+      {/* 4. Recent Posts (최근 질문 & 칼럼) */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
+        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 font-heading flex items-center gap-1.5">
+          <HelpCircle className="w-3.5 h-3.5 text-[#1078b9]" />
+          <span>최근 등록된 질문</span>
         </h4>
         <ul className="space-y-2.5 text-xs">
           {recentPosts.map((p) => (
@@ -158,7 +174,7 @@ export default function BlogSidebar({
               onClick={() => onSelectPost(p)}
               className="group cursor-pointer"
             >
-              <p className="text-gray-800 group-hover:text-blue-600 group-hover:underline line-clamp-1 font-medium transition leading-snug">
+              <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
                 {p.title}
               </p>
               <span className="text-[11px] text-gray-400 font-num">
@@ -169,10 +185,10 @@ export default function BlogSidebar({
         </ul>
       </div>
 
-      {/* 5. Recommended Posts (추천 칼럼) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 font-heading">
-          추천 칼럼
+      {/* 5. Recommended Posts (인기 Q&A 칼럼) */}
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
+        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 font-heading">
+          인기 실무 Q&A
         </h4>
         <ul className="space-y-2.5 text-xs">
           {recommendedPosts.map((p) => (
@@ -181,7 +197,7 @@ export default function BlogSidebar({
               onClick={() => onSelectPost(p)}
               className="group cursor-pointer"
             >
-              <p className="text-gray-800 group-hover:text-blue-600 group-hover:underline line-clamp-1 font-medium transition leading-snug">
+              <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
                 {p.title}
               </p>
               <span className="text-[11px] text-gray-400 font-num">
@@ -193,21 +209,21 @@ export default function BlogSidebar({
       </div>
 
       {/* 6. Sidebar Ad Placement */}
-      <div className="border border-gray-200 rounded-lg p-2 bg-gray-50/50">
+      <div className="border border-gray-200 rounded-xl p-2 bg-white shadow-xs">
         <AdSenseMock slotId="sidebar-display-ad" type="sidebar" />
       </div>
 
       {/* 7. Tags (태그 모음) */}
-      <div className="bg-white border border-gray-200 rounded-lg p-5">
-        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-900 pb-2 mb-3 flex items-center gap-1.5 font-heading">
-          <Tag className="w-3.5 h-3.5 text-gray-700" />
-          <span>태그</span>
+      <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
+        <h4 className="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3 flex items-center gap-1.5 font-heading">
+          <Tag className="w-3.5 h-3.5 text-[#1078b9]" />
+          <span>인기 태그</span>
         </h4>
         <div className="flex flex-wrap gap-1.5">
           {popularTags.map((tag) => (
             <span
               key={tag}
-              className="text-[11px] text-gray-600 bg-gray-50 hover:bg-gray-100 hover:text-blue-600 px-2 py-1 rounded border border-gray-200 cursor-pointer transition"
+              className="text-[11px] text-gray-600 bg-gray-50 hover:bg-blue-50 hover:text-[#1078b9] px-2 py-1 rounded-md border border-gray-200 cursor-pointer transition"
             >
               #{tag}
             </span>

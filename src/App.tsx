@@ -218,9 +218,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-body text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-[#f0f4f9] flex flex-col font-body text-gray-800 antialiased selection:bg-blue-100 selection:text-blue-900">
       
-      {/* 1. Top Header & Navigation - Classic Tistory / Naver Style */}
+      {/* 1. Top Header & Navigation - Phong Nha Explorer Blue Style */}
       <BlogHeader
         currentCategory={currentCategory}
         onSelectCategory={handleSelectCategory}
@@ -235,8 +235,8 @@ export default function App() {
         onOpenAutoPoster={() => setIsAutoPostModalOpen(true)}
       />
 
-      {/* 2. Main Content Container (Classic Korean Blog 2-Column or Full Width) */}
-      <div className="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      {/* 2. Main Content Container */}
+      <div className="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-6">
         
         {currentCategory === 'calculators' ? (
           <CalculatorsHub
@@ -329,42 +329,42 @@ export default function App() {
           
           {/* Footer Navigation Links */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 pb-4 border-b border-gray-100 font-medium">
-            <button onClick={() => handleSelectCategory('all')} className="hover:text-gray-900 transition">홈</button>
+            <button onClick={() => handleSelectCategory('all')} className="hover:text-[#1078b9] transition">홈</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('work')} className="hover:text-gray-900 transition">직장·급여</button>
+            <button onClick={() => handleSelectCategory('work')} className="hover:text-[#1078b9] transition">직장·급여</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('property')} className="hover:text-gray-900 transition">부동산·세금</button>
+            <button onClick={() => handleSelectCategory('property')} className="hover:text-[#1078b9] transition">부동산·세금</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('finance')} className="hover:text-gray-900 transition">연금·금융</button>
+            <button onClick={() => handleSelectCategory('finance')} className="hover:text-[#1078b9] transition">연금·금융</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('calculators')} className="hover:text-gray-900 transition">실무 계산기</button>
+            <button onClick={() => handleSelectCategory('calculators')} className="hover:text-[#1078b9] transition">실무 계산기</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('about')} className="hover:text-gray-900 transition">블로그 소개</button>
+            <button onClick={() => handleSelectCategory('about')} className="hover:text-[#1078b9] transition">블로그 소개</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('privacy')} className="hover:text-gray-900 transition font-bold text-gray-700">개인정보처리방침</button>
+            <button onClick={() => handleSelectCategory('privacy')} className="hover:text-[#1078b9] transition font-bold text-gray-700">개인정보처리방침</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('terms')} className="hover:text-gray-900 transition">이용약관</button>
+            <button onClick={() => handleSelectCategory('terms')} className="hover:text-[#1078b9] transition">이용약관</button>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-gray-900 transition">사이트맵</button>
+            <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-[#1078b9] transition">사이트맵</button>
           </div>
 
           {/* Blog Description & Legal Disclaimer */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs leading-relaxed text-gray-500">
             <div className="space-y-1">
               <p className="font-bold text-gray-800 text-sm font-heading">
-                박과장의 생활경제 노트
+                박과장의 생활경제 Q&A
               </p>
               <p className="text-[11px] text-gray-500">
                 11년차 직장인이 전하는 2026년 급여·퇴직금, 4대보험, 부동산 취득세·복비, 연금·절세 실전 경험담과 간편 금융 계산기를 제공합니다.
               </p>
               <p className="text-[11px] text-gray-400">
-                본 블로그에 수록된 모든 글과 계산기는 공공기관 고시 및 세법을 바탕으로 제작되었으며, 개별적인 법률·세무 자문을 대신할 수 없습니다.
+                본 사이트에 수록된 모든 글과 계산기는 공공기관 고시 및 세법을 바탕으로 제작되었으며, 개별적인 법률·세무 자문을 대신할 수 없습니다.
               </p>
             </div>
 
             <div className="text-[11px] text-gray-400 text-left sm:text-right shrink-0">
-              <p>Copyright &copy; 2026 박과장의 생활경제 노트. All rights reserved.</p>
-              <p className="text-gray-400 mt-0.5">생활금융 정보 및 실무 가이드</p>
+              <p>Copyright &copy; 2026 박과장의 생활경제 Q&A. All rights reserved.</p>
+              <p className="text-gray-400 mt-0.5">생활금융 정보 및 실무 Q&A 포털</p>
             </div>
           </div>
 
@@ -376,7 +376,7 @@ export default function App() {
         <button
           type="button"
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 p-2.5 bg-gray-800 hover:bg-gray-900 text-white rounded-full shadow-md transition cursor-pointer no-print"
+          className="fixed bottom-6 right-6 z-50 p-2.5 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-full shadow-lg transition cursor-pointer no-print"
           aria-label="맨 위로 이동"
         >
           <ChevronUp className="w-4 h-4" />
