@@ -3,7 +3,7 @@ import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
   Calendar, User, Share2, Printer, ChevronRight, ChevronLeft, 
-  ShieldCheck, MessageSquare, Send, Check, Heart, ExternalLink, Bookmark,
+  ShieldCheck, Heart, ExternalLink, Bookmark,
   ThumbsUp, ThumbsDown, HelpCircle, CheckCircle2
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
@@ -60,28 +60,12 @@ export default function BlogPostView({
     }
   });
 
-  // Real reader comments per post (no fake hardcoded comments)
-  const [comments, setComments] = useState<Array<{ id: string; author: string; date: string; content: string }>>(() => {
-    try {
-      const saved = localStorage.getItem(`comments_${post.id}`);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-  const [newCommentName, setNewCommentName] = useState('');
-  const [newCommentText, setNewCommentText] = useState('');
-  const [commentSubmitted, setCommentSubmitted] = useState(false);
-
   useEffect(() => {
     try {
-      const savedComments = localStorage.getItem(`comments_${post.id}`);
-      setComments(savedComments ? JSON.parse(savedComments) : []);
       setLiked(localStorage.getItem(`liked_${post.id}`) === 'true');
       const savedVote = localStorage.getItem(`feedback_${post.id}`) as 'up' | 'down' | 'suggest' | null;
       setFeedbackVote(savedVote || 'none');
     } catch {
-      setComments([]);
       setLiked(false);
       setFeedbackVote('none');
     }
@@ -125,30 +109,6 @@ export default function BlogPostView({
     } catch {
       // ignore
     }
-  };
-
-  const handleAddComment = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCommentName.trim() || !newCommentText.trim()) return;
-
-    const newComment = {
-      id: `user-${Date.now()}`,
-      author: newCommentName.trim(),
-      date: new Date().toISOString().split('T')[0],
-      content: newCommentText.trim()
-    };
-
-    const updated = [newComment, ...comments];
-    setComments(updated);
-    try {
-      localStorage.setItem(`comments_${post.id}`, JSON.stringify(updated));
-    } catch {
-      // ignore
-    }
-    setNewCommentName('');
-    setNewCommentText('');
-    setCommentSubmitted(true);
-    setTimeout(() => setCommentSubmitted(false), 3000);
   };
 
   const meta = CATEGORY_META[post.category] || { name: '실전 칼럼' };
@@ -618,71 +578,6 @@ export default function BlogPostView({
           </ul>
         </div>
       )}
-
-      {/* 9. Reader Comments Section */}
-      <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs space-y-4 no-print">
-        <h3 className="text-base font-bold text-gray-900 flex items-center gap-1.5 font-heading">
-          <MessageSquare className="w-4 h-4 text-[#1078b9]" />
-          <span>의견 및 질문 ({comments.length})</span>
-        </h3>
-
-        {/* Comment Form */}
-        <form onSubmit={handleAddComment} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
-          <div className="w-full sm:w-48">
-            <input
-              type="text"
-              required
-              value={newCommentName}
-              onChange={(e) => setNewCommentName(e.target.value)}
-              placeholder="작성자 닉네임"
-              className="w-full bg-white text-gray-800 text-xs rounded-lg p-2 border border-gray-300 focus:outline-none focus:border-[#1078b9]"
-            />
-          </div>
-          <textarea
-            required
-            rows={3}
-            value={newCommentText}
-            onChange={(e) => setNewCommentText(e.target.value)}
-            placeholder="본 실무 가이드에 대한 의견이나 궁금한 점을 남겨주시면 검토 후 답변드립니다..."
-            className="w-full bg-white text-gray-800 text-xs rounded-lg p-2.5 border border-gray-300 focus:outline-none focus:border-[#1078b9]"
-          />
-          <div className="flex items-center justify-between">
-            {commentSubmitted && (
-              <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                <Check className="w-4 h-4" />
-                댓글이 등록되었습니다.
-              </span>
-            )}
-            <button
-              type="submit"
-              className="ml-auto px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-xs"
-            >
-              댓글 등록
-            </button>
-          </div>
-        </form>
-
-        {/* Comments List */}
-        {comments.length === 0 ? (
-          <div className="py-6 text-center text-xs text-gray-400 bg-gray-50 rounded-lg border border-gray-100">
-            등록된 의견이 없습니다. 첫 번째 질문이나 소감을 남겨보세요.
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {comments.map((comment) => (
-              <div key={comment.id} className="p-3.5 bg-gray-50 rounded-lg border border-gray-100 space-y-1.5 text-xs">
-                <div className="flex items-center justify-between font-medium">
-                  <span className="text-gray-900 font-bold">{comment.author}</span>
-                  <span className="text-gray-400 text-[11px]">{comment.date}</span>
-                </div>
-                <p className="text-gray-700 leading-relaxed">
-                  {comment.content}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
