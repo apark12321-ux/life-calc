@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Menu, X, CheckCircle2, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Menu, X, ChevronRight } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface BlogHeaderProps {
@@ -17,31 +17,8 @@ export default function BlogHeader({
   onSearch,
   searchQuery,
 }: BlogHeaderProps) {
-  const [fontSize, setFontSize] = useState<'normal' | 'large' | 'xlarge'>('normal');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('blog_font_size') as 'normal' | 'large' | 'xlarge' | null;
-      if (saved && ['normal', 'large', 'xlarge'].includes(saved)) {
-        setFontSize(saved);
-        document.documentElement.setAttribute('data-font-size', saved);
-      }
-    } catch (e) {
-      console.warn('Font size load failed:', e);
-    }
-  }, []);
-
-  const handleFontSizeChange = (size: 'normal' | 'large' | 'xlarge') => {
-    setFontSize(size);
-    document.documentElement.setAttribute('data-font-size', size);
-    try {
-      localStorage.setItem('blog_font_size', size);
-    } catch (e) {
-      console.warn('Font size save failed:', e);
-    }
-  };
 
   const navItems: { id: CategoryType; label: string; badge?: string }[] = [
     { id: 'all', label: '홈' },
@@ -54,49 +31,6 @@ export default function BlogHeader({
 
   return (
     <header className="sticky top-0 z-40 bg-[#1078b9] text-white shadow-sm">
-      {/* Top Utility Bar - Benchmarked from clean knowledge portals */}
-      <div className="bg-[#0b5f94] text-white/80 text-[11px] py-1 px-4 border-b border-[#005f8d]/60">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-1.5 truncate">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
-            <span className="font-normal text-white/90 truncate">
-              2026년 최저임금(10,030원) 및 관계 법령·공공기관 고시 기준 준용
-            </span>
-          </div>
-          <div className="flex items-center gap-3 shrink-0 text-white/70">
-            <div className="flex items-center gap-1">
-              <span className="text-white/60">글자:</span>
-              <button
-                type="button"
-                onClick={() => handleFontSizeChange('normal')}
-                className={`px-1 rounded text-[11px] ${
-                  fontSize === 'normal' ? 'bg-white/20 text-white font-bold' : 'hover:text-white'
-                }`}
-              >
-                보통
-              </button>
-              <button
-                type="button"
-                onClick={() => handleFontSizeChange('large')}
-                className={`px-1 rounded text-[11px] ${
-                  fontSize === 'large' ? 'bg-white/20 text-white font-bold' : 'hover:text-white'
-                }`}
-              >
-                크게
-              </button>
-            </div>
-            <span className="hidden sm:inline text-white/30">|</span>
-            <button
-              type="button"
-              onClick={() => onSelectCategory('about')}
-              className="hover:text-white transition-colors hidden sm:inline"
-            >
-              박과장 프로필
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main Header Bar - Deep Blue (#1078b9) Phong Nha Explorer Style */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16 gap-4">

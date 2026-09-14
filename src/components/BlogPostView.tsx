@@ -7,7 +7,6 @@ import {
   ThumbsUp, ThumbsDown, HelpCircle, CheckCircle2
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
-import AdSenseMock from './AdSenseMock';
 
 interface BlogPostViewProps {
   post: PostItem;
@@ -443,11 +442,6 @@ export default function BlogPostView({
           </div>
         )}
       </article>
-
-      {/* Bottom AdSlot - Standard AdSense Unit */}
-      <div className="no-print">
-        <AdSenseMock slotId="1002-post-bottom" type="inline" />
-      </div>
 
       {/* 5. Helpful Feedback Box - Benchmarked from ko.phongnhaexplorer.com popup group */}
       <div className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs text-center space-y-3 no-print">

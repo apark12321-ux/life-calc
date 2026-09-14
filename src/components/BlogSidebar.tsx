@@ -3,7 +3,6 @@ import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS } from '../data/postsData';
 import { ChevronRight, Folder, Calculator, User, Bell, Tag, Check, Share2, HelpCircle } from 'lucide-react';
 import TableOfContents from './TableOfContents';
-import AdSenseMock from './AdSenseMock';
 
 interface BlogSidebarProps {
   onSelectPost: (post: PostItem) => void;
@@ -206,11 +205,6 @@ export default function BlogSidebar({
             </li>
           ))}
         </ul>
-      </div>
-
-      {/* 6. Sidebar Ad Placement */}
-      <div className="border border-gray-200 rounded-xl p-2 bg-white shadow-xs">
-        <AdSenseMock slotId="sidebar-display-ad" type="sidebar" />
       </div>
 
       {/* 7. Tags (태그 모음) */}

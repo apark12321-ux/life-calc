@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { ChevronRight, Calendar, User, Eye, MessageSquare, ChevronLeft } from 'lucide-react';
-import AdSenseMock from './AdSenseMock';
 
 interface BlogHomeProps {
   currentCategory: CategoryType;
@@ -210,13 +209,6 @@ export default function BlogHome({
                     </div>
                   </div>
                 </article>
-
-                {/* Ad Placement between 3rd and 4th post (Standard AdSense unit) */}
-                {index === 2 && (
-                  <div className="bg-white border border-gray-200 rounded-xl p-3 my-3">
-                    <AdSenseMock slotId="home-infeed-ad" type="inline" />
-                  </div>
-                )}
               </React.Fragment>
             );
           })}
