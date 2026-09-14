@@ -156,13 +156,8 @@ export default function BlogHome({
                   className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:border-[#1078b9] hover:shadow-xs transition duration-150 cursor-pointer group"
                 >
                   <div className="space-y-2">
-                    {/* Top Meta Bar: Status badge + Category + Date + Read Time */}
+                    {/* Top Meta Bar: Category + Date + Read Time */}
                     <div className="flex flex-wrap items-center gap-2 text-xs">
-                      {/* dwqa-status badge */}
-                      <span className="bg-[#e8f5e9] text-[#2e7d32] border border-[#a5d6a7] text-[11px] font-bold px-2 py-0.5 rounded">
-                        답변 완료
-                      </span>
-
                       {/* Category Badge */}
                       <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
                         {meta.name}

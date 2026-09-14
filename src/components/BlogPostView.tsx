@@ -188,11 +188,6 @@ export default function BlogPostView({
         {/* Top Badges & Actions */}
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            {/* dwqa-status */}
-            <span className="bg-[#e8f5e9] text-[#2e7d32] border border-[#a5d6a7] text-[11px] font-bold px-2 py-0.5 rounded">
-              답변 완료
-            </span>
-
             {/* Category Pill */}
             <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
               {meta.name}

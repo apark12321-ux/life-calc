@@ -2,7 +2,7 @@ export interface ToolTipProps {
   text: string;
 }
 
-export type CategoryType = 'all' | 'work' | 'property' | 'finance' | 'calculators' | 'about' | 'policy' | 'privacy' | 'terms' | 'sitemap';
+export type CategoryType = 'all' | 'work' | 'property' | 'finance' | 'calculators' | 'about' | 'policy' | 'privacy' | 'terms';
 
 export type PostCategory = 'work' | 'property' | 'finance';
 

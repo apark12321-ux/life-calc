@@ -9,7 +9,6 @@ import CalculatorsHub from './components/CalculatorsHub';
 import AboutApp from './components/AboutApp';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
-import SitemapView from './components/SitemapView';
 import AutoPostDashboardModal from './components/AutoPostDashboardModal';
 import AdSenseAuditModal from './components/AdSenseAuditModal';
 import { ShieldCheck, ChevronUp, BookOpen, Calculator, Sparkles, Shield, Cookie, Check } from 'lucide-react';
@@ -75,22 +74,21 @@ export default function App() {
       if (calcId) {
         setCurrentCategory('calculators');
         setActiveCalculatorSubId(calcId);
-        document.title = `실전 금융 계산기 | 박과장의 생활경제 노트`;
-      } else if (cat && ['work', 'property', 'finance', 'calculators', 'about', 'privacy', 'terms', 'sitemap'].includes(cat)) {
+        document.title = `실전 금융 계산기 | 박과장의 생활경제 Q&A`;
+      } else if (cat && ['work', 'property', 'finance', 'calculators', 'about', 'privacy', 'terms'].includes(cat)) {
         setCurrentCategory(cat as CategoryType);
         const titles: Record<string, string> = {
-          work: '직장·급여·퇴직 실전 칼럼 | 박과장의 생활경제 노트',
-          property: '부동산·세금 실전 칼럼 | 박과장의 생활경제 노트',
-          finance: '연금·금융·절세 실전 칼럼 | 박과장의 생활경제 노트',
-          about: '블로그 소개 및 편집 원칙 | 박과장의 생활경제 노트',
-          privacy: '개인정보처리방침 | 박과장의 생활경제 노트',
-          terms: '이용약관 및 법적 고지 | 박과장의 생활경제 노트',
-          sitemap: '전체 사이트맵 | 박과장의 생활경제 노트',
+          work: '직장·급여·퇴직 실전 Q&A | 박과장의 생활경제 Q&A',
+          property: '부동산·세금 실전 Q&A | 박과장의 생활경제 Q&A',
+          finance: '연금·금융·절세 실전 Q&A | 박과장의 생활경제 Q&A',
+          about: '블로그 소개 및 편집 원칙 | 박과장의 생활경제 Q&A',
+          privacy: '개인정보처리방침 | 박과장의 생활경제 Q&A',
+          terms: '이용약관 및 법적 고지 | 박과장의 생활경제 Q&A',
         };
-        document.title = titles[cat] || '박과장의 생활경제 노트';
+        document.title = titles[cat] || '박과장의 생활경제 Q&A';
       } else {
         setCurrentCategory('all');
-        document.title = '박과장의 생활경제 노트 | 2026 급여, 세금, 부동산, 연금 실전 가이드';
+        document.title = '박과장의 생활경제 Q&A | 2026 급여, 세금, 부동산, 연금 실전 가이드';
       }
     } catch (e) {
       console.warn('URL parsing failed:', e);
@@ -178,17 +176,16 @@ export default function App() {
     window.history.pushState({ category: cat }, '', newUrl);
 
     const titles: Record<string, string> = {
-      all: '박과장의 생활경제 노트 | 2026 급여, 세금, 부동산, 연금 실전 가이드',
-      work: '직장·급여·퇴직 실전 칼럼 | 박과장의 생활경제 노트',
-      property: '부동산·세금 실전 칼럼 | 박과장의 생활경제 노트',
-      finance: '연금·금융·절세 실전 칼럼 | 박과장의 생활경제 노트',
-      calculators: '실전 금융 계산기 | 박과장의 생활경제 노트',
-      about: '블로그 소개 및 편집 원칙 | 박과장의 생활경제 노트',
-      privacy: '개인정보처리방침 | 박과장의 생활경제 노트',
-      terms: '이용약관 및 법적 고지 | 박과장의 생활경제 노트',
-      sitemap: '전체 사이트맵 | 박과장의 생활경제 노트',
+      all: '박과장의 생활경제 Q&A | 2026 급여, 세금, 부동산, 연금 실전 가이드',
+      work: '직장·급여·퇴직 실전 Q&A | 박과장의 생활경제 Q&A',
+      property: '부동산·세금 실전 Q&A | 박과장의 생활경제 Q&A',
+      finance: '연금·금융·절세 실전 Q&A | 박과장의 생활경제 Q&A',
+      calculators: '실전 금융 계산기 | 박과장의 생활경제 Q&A',
+      about: '블로그 소개 및 편집 원칙 | 박과장의 생활경제 Q&A',
+      privacy: '개인정보처리방침 | 박과장의 생활경제 Q&A',
+      terms: '이용약관 및 법적 고지 | 박과장의 생활경제 Q&A',
     };
-    document.title = titles[cat] || '박과장의 생활경제 노트';
+    document.title = titles[cat] || '박과장의 생활경제 Q&A';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -227,7 +224,7 @@ export default function App() {
         onSearch={(q) => {
           setSearchQuery(q);
           if (selectedPost) setSelectedPost(null);
-          if (currentCategory === 'calculators' || currentCategory === 'about' || currentCategory === 'privacy' || currentCategory === 'terms' || currentCategory === 'sitemap') {
+          if (currentCategory === 'calculators' || currentCategory === 'about' || currentCategory === 'privacy' || currentCategory === 'terms') {
             setCurrentCategory('all');
           }
         }}
@@ -250,16 +247,6 @@ export default function App() {
         ) : currentCategory === 'terms' ? (
           <div className="max-w-4xl mx-auto">
             <TermsOfService onBack={() => handleSelectCategory('all')} />
-          </div>
-        ) : currentCategory === 'sitemap' ? (
-          <div className="max-w-5xl mx-auto">
-            <SitemapView
-              posts={posts}
-              onSelectPost={handleSelectPost}
-              onSelectCategory={handleSelectCategory}
-              onNavigateToCalculator={handleNavigateToCalculator}
-              onBack={() => handleSelectCategory('all')}
-            />
           </div>
         ) : currentCategory === 'about' ? (
           <div className="max-w-4xl mx-auto">
@@ -344,8 +331,6 @@ export default function App() {
             <button onClick={() => handleSelectCategory('privacy')} className="hover:text-[#1078b9] transition font-bold text-gray-700">개인정보처리방침</button>
             <span className="text-gray-300">|</span>
             <button onClick={() => handleSelectCategory('terms')} className="hover:text-[#1078b9] transition">이용약관</button>
-            <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('sitemap')} className="hover:text-[#1078b9] transition">사이트맵</button>
           </div>
 
           {/* Blog Description & Legal Disclaimer */}

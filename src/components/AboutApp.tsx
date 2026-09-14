@@ -140,7 +140,7 @@ export default function AboutApp({ onSelectCategory, onNavigateToCalculator }: A
         </h3>
         <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
           정부 정책, 세법 및 4대보험 요율 개정 시 관련 칼럼과 모의계산기를 즉시 갱신합니다. 
-          칼럼 내용에 대한 의견이나 계산 산식에 관한 의견은 각 칼럼 하단의 독자 댓글란을 통해 작성해주시면 신속히 검토하여 반영하고 있습니다.
+          칼럼 내용에 대한 의견이나 계산 산식에 관한 보완 제안은 각 칼럼 하단의 독자 피드백 위젯을 통해 남겨주시면 신속히 검토하여 반영하고 있습니다.
         </p>
       </section>
 

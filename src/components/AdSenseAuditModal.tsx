@@ -63,11 +63,11 @@ export default function AdSenseAuditModal({ isOpen, onClose, posts }: AdSenseAud
     },
     {
       id: 'site_navigation',
-      title: '6. 명확한 탐색 구조 및 사이트맵 (Navigation & Sitemap)',
-      standard: '깨진 링크 0개, 헤더·푸터 내비게이션, 전체 포스팅 사이트맵 페이지 제공',
+      title: '6. 명확한 탐색 구조 및 메뉴 (Navigation & Categories)',
+      standard: '깨진 링크 0개, 헤더·푸터 내비게이션, 직관적인 주제별 탐색 제공',
       status: 'pass',
-      currentStatus: '상단 네비게이션, 반응형 사이드바, 푸터 퀵링크 및 인터랙티브 사이트맵 완비',
-      description: '방문자와 검색 로봇이 어떤 페이지든 1~2회 클릭 내로 도달할 수 있도록 설계되었습니다.'
+      currentStatus: '상단 네비게이션, 반응형 사이드바, 푸터 퀵링크 및 실무 계산기 연결 완비',
+      description: '방문자와 검색 로봇이 어떤 칼럼이든 1~2회 클릭 내로 도달할 수 있도록 설계되었습니다.'
     },
     {
       id: 'seo_meta_tags',
