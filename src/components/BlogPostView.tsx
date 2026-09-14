@@ -252,11 +252,6 @@ export default function BlogPostView({
         </div>
       </div>
 
-      {/* Top Banner AdSlot - Clean Google AdSense Unit */}
-      <div className="no-print">
-        <AdSenseMock slotId="1001-post-top" type="banner" />
-      </div>
-
       {/* 2. #best-answer Card - The Signature Core Feature of ko.phongnhaexplorer.com */}
       <div id="best-answer" className="bg-[#f6ffec] border border-[#a5d6a7] rounded-xl p-5 sm:p-6 shadow-xs space-y-2.5">
         <div className="flex items-center gap-2 text-[#2e7d32] font-bold text-sm sm:text-base font-heading pb-1 border-b border-[#c3e6cb]">
