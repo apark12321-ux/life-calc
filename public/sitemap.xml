@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- 메인 허브 -->
   <url>
-    <loc>https://life-calc.kr/</loc>
+    <loc>https://www.life-calc.kr/</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -10,19 +10,19 @@
 
   <!-- 카테고리 허브 -->
   <url>
-    <loc>https://life-calc.kr/?cat=work</loc>
+    <loc>https://www.life-calc.kr/?cat=work</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?cat=property</loc>
+    <loc>https://www.life-calc.kr/?cat=property</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?cat=finance</loc>
+    <loc>https://www.life-calc.kr/?cat=finance</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
@@ -30,127 +30,127 @@
 
   <!-- 실전 블로그 칼럼 21편 (개별 색인 필수) -->
   <url>
-    <loc>https://life-calc.kr/?p=post-work-01</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-01</loc>
     <lastmod>2026-09-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-01</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-01</loc>
     <lastmod>2026-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-01</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-01</loc>
     <lastmod>2026-09-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-02</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-02</loc>
     <lastmod>2026-09-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-03</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-03</loc>
     <lastmod>2026-09-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-02</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-02</loc>
     <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-03</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-03</loc>
     <lastmod>2026-09-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-02</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-02</loc>
     <lastmod>2026-09-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-03</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-03</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-04</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-04</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-05</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-05</loc>
     <lastmod>2026-08-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-04</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-04</loc>
     <lastmod>2026-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-05</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-05</loc>
     <lastmod>2026-08-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-04</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-04</loc>
     <lastmod>2026-08-26</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-05</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-05</loc>
     <lastmod>2026-08-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-06</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-06</loc>
     <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-work-07</loc>
+    <loc>https://www.life-calc.kr/?p=post-work-07</loc>
     <lastmod>2026-08-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-06</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-06</loc>
     <lastmod>2026-08-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-prop-07</loc>
+    <loc>https://www.life-calc.kr/?p=post-prop-07</loc>
     <lastmod>2026-08-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-06</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-06</loc>
     <lastmod>2026-08-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?p=post-fin-07</loc>
+    <loc>https://www.life-calc.kr/?p=post-fin-07</loc>
     <lastmod>2026-08-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
@@ -158,55 +158,55 @@
 
   <!-- 실전 생활 금융 계산기 허브 -->
   <url>
-    <loc>https://life-calc.kr/?calc=wage_salary</loc>
+    <loc>https://www.life-calc.kr/?calc=wage_salary</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=wage_hourly</loc>
+    <loc>https://www.life-calc.kr/?calc=wage_hourly</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=wage_retirement</loc>
+    <loc>https://www.life-calc.kr/?calc=wage_retirement</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=wage_unemployment</loc>
+    <loc>https://www.life-calc.kr/?calc=wage_unemployment</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=insurance</loc>
+    <loc>https://www.life-calc.kr/?calc=insurance</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=property_tax</loc>
+    <loc>https://www.life-calc.kr/?calc=property_tax</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=property_agent</loc>
+    <loc>https://www.life-calc.kr/?calc=property_agent</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=finance_loan</loc>
+    <loc>https://www.life-calc.kr/?calc=finance_loan</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?calc=finance_savings</loc>
+    <loc>https://www.life-calc.kr/?calc=finance_savings</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -214,25 +214,25 @@
 
   <!-- 신뢰도 및 법적 고지 (E-E-A-T) -->
   <url>
-    <loc>https://life-calc.kr/?cat=about</loc>
+    <loc>https://www.life-calc.kr/?cat=about</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?cat=privacy</loc>
+    <loc>https://www.life-calc.kr/?cat=privacy</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?cat=terms</loc>
+    <loc>https://www.life-calc.kr/?cat=terms</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://life-calc.kr/?cat=sitemap</loc>
+    <loc>https://www.life-calc.kr/?cat=sitemap</loc>
     <lastmod>2026-09-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

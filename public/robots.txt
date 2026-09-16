@@ -10,4 +10,4 @@ Allow: /
 User-agent: Yeti
 Allow: /
 
-Sitemap: https://life-calc.kr/sitemap.xml
+Sitemap: https://www.life-calc.kr/sitemap.xml

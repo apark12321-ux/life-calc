@@ -135,8 +135,33 @@ export default function BlogPostView({
   useEffect(() => {
     const prevTitle = document.title;
     document.title = `${post.title} | 박과장의 생활경제 Q&A`;
+
+    // Dynamic Meta Description & Open Graph update for search crawlers & social sharing
+    let metaDesc = document.querySelector('meta[name="description"]');
+    const prevDesc = metaDesc?.getAttribute('content') || '';
+    if (metaDesc) {
+      metaDesc.setAttribute('content', post.summary);
+    }
+
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', `${post.title} | 박과장의 생활경제 Q&A`);
+
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', post.summary);
+
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.setAttribute('content', `https://www.life-calc.kr/?p=${post.id}`);
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    const prevCanonical = canonical?.getAttribute('href') || 'https://www.life-calc.kr/';
+    if (canonical) {
+      canonical.setAttribute('href', `https://www.life-calc.kr/?p=${post.id}`);
+    }
+
     return () => {
       document.title = prevTitle;
+      if (metaDesc && prevDesc) metaDesc.setAttribute('content', prevDesc);
+      if (canonical && prevCanonical) canonical.setAttribute('href', prevCanonical);
     };
   }, [post]);
 

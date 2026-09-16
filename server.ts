@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { autoPosterEngine } from "./server/autoPoster";
 import { PostCategory } from "./src/types";
@@ -152,7 +153,7 @@ async function startServer() {
 
       // Add all posts (including newly auto-published posts)
       for (const p of allPosts) {
-        xml += `  <url>\n    <loc>https://www.life-calc.kr/?post=${p.id}</loc>\n    <lastmod>${p.date}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+        xml += `  <url>\n    <loc>https://www.life-calc.kr/?p=${p.id}</loc>\n    <lastmod>${p.date}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
       }
 
       xml += `</urlset>`;
@@ -219,17 +220,134 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
   });
 
   // Vite middleware for development vs Static serving for production
+  const renderIndexWithMeta = (req: express.Request, rawHtml: string): string => {
+    try {
+      const postId = (req.query.p || req.query.post) as string | undefined;
+      const calcId = (req.query.calc || req.query.s) as string | undefined;
+      const catId = (req.query.cat || req.query.category) as string | undefined;
+
+      if (postId) {
+        const post = autoPosterEngine.getAllPosts().find(p => p.id === postId);
+        if (post) {
+          const postTitle = `${post.title} | 박과장의 생활경제 Q&A`;
+          const postDesc = post.summary.replace(/"/g, '&quot;');
+          const postUrl = `https://www.life-calc.kr/?p=${post.id}`;
+
+          let modified = rawHtml;
+          // Title replacement
+          modified = modified.replace(/<title>.*?<\/title>/i, `<title>${postTitle}</title>`);
+          // Meta description replacement
+          modified = modified.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${postDesc}" />`);
+          // Canonical replacement
+          modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${postUrl}" />`);
+          // OG replacements
+          modified = modified.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${postTitle}" />`);
+          modified = modified.replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${postDesc}" />`);
+          modified = modified.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${postUrl}" />`);
+          // Twitter replacements
+          modified = modified.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${postTitle}" />`);
+          modified = modified.replace(/<meta name="twitter:description" content=".*?" \/>/i, `<meta name="twitter:description" content="${postDesc}" />`);
+
+          // Schema.org BlogPosting
+          const jsonLd = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "description": post.summary,
+            "datePublished": post.date.includes(' ') ? `${post.date.replace(' ', 'T')}+09:00` : `${post.date}T09:00:00+09:00`,
+            "dateModified": post.date.includes(' ') ? `${post.date.replace(' ', 'T')}+09:00` : `${post.date}T18:00:00+09:00`,
+            "author": {
+              "@type": "Person",
+              "name": post.author || "박과장",
+              "url": "https://www.life-calc.kr/about"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "박과장의 생활경제 Q&A",
+              "url": "https://www.life-calc.kr"
+            },
+            "mainEntityOfPage": postUrl
+          };
+          const jsonLdScript = `\n    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+          modified = modified.replace('</head>', `${jsonLdScript}\n  </head>`);
+
+          return modified;
+        }
+      }
+
+      if (calcId) {
+        const calcTitle = "2026 실전 금융 & 급여 계산기 모음 | 박과장의 생활경제 노트";
+        const calcDesc = "최저임금 주휴수당, 연봉 실수령액, 퇴직금, 부동산 취득세, 중개보수, 대출이자 계산기.";
+        const calcUrl = `https://www.life-calc.kr/?calc=${calcId}`;
+        let modified = rawHtml;
+        modified = modified.replace(/<title>.*?<\/title>/i, `<title>${calcTitle}</title>`);
+        modified = modified.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${calcDesc}" />`);
+        modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${calcUrl}" />`);
+        return modified;
+      }
+
+      if (catId) {
+        const catNames: Record<string, string> = {
+          work: '직장·급여·퇴직 실전 가이드',
+          property: '부동산·세금 실전 가이드',
+          finance: '연금·금융·절세 실전 가이드',
+          calculators: '실생활 금융 계산기 모음',
+          about: '박과장 소개 및 운영 철학',
+          privacy: '개인정보처리방침',
+          terms: '이용약관',
+          sitemap: '사이트맵'
+        };
+        const catName = catNames[catId] || catId;
+        const catTitle = `${catName} | 박과장의 생활경제 노트`;
+        let modified = rawHtml;
+        modified = modified.replace(/<title>.*?<\/title>/i, `<title>${catTitle}</title>`);
+        modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="https://www.life-calc.kr/?cat=${catId}" />`);
+        return modified;
+      }
+    } catch (e) {
+      console.error("Meta injection error:", e);
+    }
+    return rawHtml;
+  };
+
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
+    // Intercept index.html requests for crawlers in dev
+    app.use(async (req, res, next) => {
+      const isHtmlRequest = req.headers.accept?.includes("text/html") || req.path === "/" || req.path === "/index.html";
+      if (isHtmlRequest && !req.path.startsWith("/api") && !req.path.startsWith("/@") && !req.path.includes(".")) {
+        try {
+          const indexPath = path.join(process.cwd(), "index.html");
+          let template = fs.readFileSync(indexPath, "utf-8");
+          template = await vite.transformIndexHtml(req.originalUrl, template);
+          const finalHtml = renderIndexWithMeta(req, template);
+          res.status(200).set({ "Content-Type": "text/html; charset=utf-8" }).send(finalHtml);
+          return;
+        } catch (e) {
+          vite.ssrFixStacktrace(e as Error);
+          next(e);
+          return;
+        }
+      }
+      next();
+    });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { index: false }));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+      try {
+        const indexPath = path.join(distPath, "index.html");
+        const rawHtml = fs.readFileSync(indexPath, "utf-8");
+        const finalHtml = renderIndexWithMeta(req, rawHtml);
+        res.status(200).set({ "Content-Type": "text/html; charset=utf-8" }).send(finalHtml);
+      } catch (err) {
+        console.error("Error serving index.html:", err);
+        res.sendFile(path.join(distPath, "index.html"));
+      }
     });
   }
 
