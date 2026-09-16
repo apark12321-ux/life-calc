@@ -550,7 +550,7 @@ export default function FinanceCalculator() {
               </div>
 
               <div className="mt-4 bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                <span className="font-display text-xs text-slate-400 font-bold block mb-2">📊 월별 납입 스케줄 시뮬레이션 (최대 6회 예증)</span>
+                <span className="font-display text-xs text-slate-400 font-bold block mb-2">[월별 납입 스케줄 시뮬레이션] (최대 6회 예증)</span>
                 <div className="space-y-2 font-num text-xs max-h-[120px] overflow-y-auto pr-1">
                   {loanRes.schedule.map((item) => (
                     <div key={item.month} className="flex justify-between text-slate-300 border-b border-slate-900 pb-1.5">

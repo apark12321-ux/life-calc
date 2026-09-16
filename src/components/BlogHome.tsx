@@ -146,7 +146,6 @@ export default function BlogHome({
         <div className="space-y-3">
           {paginatedPosts.map((post, index) => {
             const meta = CATEGORY_META[post.category] || { name: '실전 칼럼' };
-            const readTime = post.readTimeMinutes || 5;
 
             return (
               <React.Fragment key={post.id}>
@@ -155,7 +154,7 @@ export default function BlogHome({
                   className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:border-[#1078b9] hover:shadow-xs transition duration-150 cursor-pointer group"
                 >
                   <div className="space-y-2">
-                    {/* Top Meta Bar: Category + Date + Read Time */}
+                    {/* Top Meta Bar: Category + Date */}
                     <div className="flex flex-wrap items-center gap-2 text-xs">
                       {/* Category Badge */}
                       <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
@@ -167,14 +166,6 @@ export default function BlogHome({
                       {/* Post Date */}
                       <span className="text-gray-500 text-xs">
                         게시: {post.date.split(' ')[0]}
-                      </span>
-
-                      <span className="text-gray-400 text-[11px]">·</span>
-
-                      {/* dwqa-answers-count / read time */}
-                      <span className="text-gray-500 text-xs">
-                        <strong className="text-gray-900 font-bold">{readTime}</strong>
-                        <sup className="text-[10px] text-gray-500 font-semibold ml-0.5">m</sup> 읽기
                       </span>
                     </div>
 

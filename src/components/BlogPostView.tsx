@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { PostItem, CategoryType } from '../types';
+import { PostItem, CategoryType, CommentItem } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
+import { getCommentsForPost } from '../data/commentsData';
 import { 
   Calendar, User, Share2, Printer, ChevronRight, ChevronLeft, 
   ShieldCheck, Heart, ExternalLink, Bookmark,
-  ThumbsUp, ThumbsDown, HelpCircle, CheckCircle2
+  ThumbsUp, ThumbsDown, HelpCircle, CheckCircle2,
+  MessageSquare, Send, Check
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 
@@ -59,16 +61,73 @@ export default function BlogPostView({
     }
   });
 
+  // Comments state with localStorage persistence & realistic seed Q&A
+  const [comments, setComments] = useState<CommentItem[]>(() => {
+    try {
+      const saved = localStorage.getItem(`user_comments_${post.id}`);
+      const base = getCommentsForPost(post.id, post.category);
+      if (saved) {
+        const userAdded: CommentItem[] = JSON.parse(saved);
+        return [...userAdded, ...base];
+      }
+      return base;
+    } catch {
+      return getCommentsForPost(post.id, post.category);
+    }
+  });
+  const [newAuthor, setNewAuthor] = useState('');
+  const [newCommentText, setNewCommentText] = useState('');
+  const [commentSuccess, setCommentSuccess] = useState(false);
+
   useEffect(() => {
     try {
       setLiked(localStorage.getItem(`liked_${post.id}`) === 'true');
       const savedVote = localStorage.getItem(`feedback_${post.id}`) as 'up' | 'down' | 'suggest' | null;
       setFeedbackVote(savedVote || 'none');
+      
+      const saved = localStorage.getItem(`user_comments_${post.id}`);
+      const base = getCommentsForPost(post.id, post.category);
+      if (saved) {
+        const userAdded: CommentItem[] = JSON.parse(saved);
+        setComments([...userAdded, ...base]);
+      } else {
+        setComments(base);
+      }
     } catch {
       setLiked(false);
       setFeedbackVote('none');
+      setComments(getCommentsForPost(post.id, post.category));
     }
-  }, [post.id]);
+  }, [post.id, post.category]);
+
+  const handleAddComment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCommentText.trim()) return;
+    const authorName = newAuthor.trim() || '익명의 직장인';
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    const item: CommentItem = {
+      id: `user-${Date.now()}`,
+      author: authorName,
+      date: dateStr,
+      content: newCommentText.trim(),
+    };
+
+    const updated = [item, ...comments];
+    setComments(updated);
+    setNewCommentText('');
+    setCommentSuccess(true);
+    setTimeout(() => setCommentSuccess(false), 4000);
+
+    try {
+      const saved = localStorage.getItem(`user_comments_${post.id}`);
+      const prevList: CommentItem[] = saved ? JSON.parse(saved) : [];
+      localStorage.setItem(`user_comments_${post.id}`, JSON.stringify([item, ...prevList]));
+    } catch {
+      // ignore
+    }
+  };
 
   // Find previous and next posts
   const currentIndex = ALL_BLOG_POSTS.findIndex(p => p.id === post.id);
@@ -111,7 +170,6 @@ export default function BlogPostView({
   };
 
   const meta = CATEGORY_META[post.category] || { name: '실전 칼럼' };
-  const readTime = post.readTimeMinutes || 5;
 
   // Generate comprehensive E-E-A-T Schema.org JSON-LD structured data
   const jsonLdSchema = {
@@ -198,14 +256,6 @@ export default function BlogPostView({
             <span className="text-gray-500 text-xs">
               게시: {post.date.split(' ')[0]}
             </span>
-
-            <span className="text-gray-300">·</span>
-
-            {/* Read Time */}
-            <span className="text-gray-500 text-xs">
-              <strong className="text-gray-900 font-bold">{readTime}</strong>
-              <sup className="text-[10px] text-gray-500 font-semibold ml-0.5">m</sup> 읽기
-            </span>
           </div>
 
           {/* Action buttons (Like, Share, Print) */}
@@ -254,8 +304,8 @@ export default function BlogPostView({
       {/* 2. #best-answer Card - The Signature Core Feature of ko.phongnhaexplorer.com */}
       <div id="best-answer" className="bg-[#f6ffec] border border-[#a5d6a7] rounded-xl p-5 sm:p-6 shadow-xs space-y-2.5">
         <div className="flex items-center gap-2 text-[#2e7d32] font-bold text-sm sm:text-base font-heading pb-1 border-b border-[#c3e6cb]">
-          <span className="text-lg">💡</span>
-          <span>핵심 답변 (Best Answer / 박과장의 실무 정리)</span>
+          <span className="font-bold">[요약]</span>
+          <span>11년차 박과장의 3줄 핵심 요약 & 실전 코멘트</span>
         </div>
         <p className="text-sm sm:text-[15px] text-gray-800 leading-relaxed font-body">
           {post.authorNote || post.summary}
@@ -310,9 +360,18 @@ export default function BlogPostView({
                 );
               }
               if (paragraph.startsWith('> ')) {
+                const rawQuote = paragraph.replace('> ', '');
+                const isWarning = rawQuote.includes('⚠️') || rawQuote.includes('주의') || rawQuote.includes('불법');
                 return (
-                  <blockquote key={idx} className="bg-gray-50 border-l-4 border-[#1078b9] p-4 text-gray-700 text-sm my-4 italic rounded-r">
-                    {renderFormattedText(paragraph.replace('> ', ''))}
+                  <blockquote 
+                    key={idx} 
+                    className={`p-4 text-sm my-4 rounded-r-lg border-l-4 leading-relaxed ${
+                      isWarning 
+                        ? 'bg-amber-50/80 border-amber-500 text-amber-900 font-medium' 
+                        : 'bg-blue-50/60 border-[#1078b9] text-gray-800'
+                    }`}
+                  >
+                    {renderFormattedText(rawQuote)}
                   </blockquote>
                 );
               }
@@ -383,15 +442,37 @@ export default function BlogPostView({
 
         {/* Key Takeaways Box (.tkaw-box style from phongnhaexplorer) */}
         <div className="bg-[#f8fafc] border-l-4 border-[#1078b9] border-y border-r border-gray-200/80 rounded-r-lg p-5 my-6">
-          <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-2 flex items-center gap-1.5">
-            <span>📌</span>
-            <span>요약 & 핵심 체크포인트</span>
+          <h4 className="font-bold text-gray-900 text-sm sm:text-base mb-3 flex items-center gap-2">
+            <span className="font-bold text-[#1078b9]">[핵심]</span>
+            <span>박과장의 실무 체크포인트 & 핵심 요약</span>
           </h4>
-          <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5 list-disc pl-5">
-            <li>모든 세액 공제 및 법정 수당은 최신 2026년 기준 법령 및 고시를 준수합니다.</li>
-            <li>개별 계약 조건 및 사업장 상시 근로자 수에 따라 세부 적용 규정이 달라질 수 있습니다.</li>
-            <li>정확한 모의계산 결과는 하단의 무료 실무 계산기에서 즉시 확인 가능합니다.</li>
-          </ul>
+          {post.highlights && post.highlights.length > 0 ? (
+            <ul className="text-xs sm:text-sm text-gray-800 space-y-2">
+              {post.highlights.map((hl, hlIdx) => (
+                <li key={hlIdx} className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
+                  <span className="font-bold text-[#056cad] shrink-0 min-w-[130px] inline-flex items-center gap-1.5">
+                    <span className="text-emerald-700 font-bold">•</span> {hl.label}
+                  </span>
+                  <span className="text-gray-700 font-medium">{hl.value}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5 list-disc pl-5">
+              <li>{post.summary}</li>
+              <li>2026년 최신 개정 법령 및 고용노동부/국세청 기준이 적용된 실무 공식입니다.</li>
+            </ul>
+          )}
+
+          {post.authorNote && (
+            <div className="mt-3.5 pt-3 border-t border-blue-200/60 text-xs text-gray-700 flex items-start gap-2 bg-blue-50/50 p-3 rounded-lg">
+              <span className="text-xs font-bold text-[#056cad] shrink-0 mt-0.5">※</span>
+              <div className="leading-relaxed">
+                <span className="font-bold text-[#056cad]">박과장의 실전 메모: </span>
+                <span>{post.authorNote.replace(/^※\s*박과장의 실전 메모:\s*/, '')}</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Statutory Legal Basis */}
@@ -410,7 +491,7 @@ export default function BlogPostView({
           <div className="bg-blue-50/50 border border-blue-200 rounded-xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <p className="text-sm sm:text-base font-bold text-gray-900">
-                📊 관련 실무 계산기: {post.relatedCalculatorName}
+                [관련 계산기] {post.relatedCalculatorName}
               </p>
               <p className="text-xs text-gray-600 mt-0.5">
                 2026년 공식이 적용된 무료 모의계산기로 내 조건에 맞게 직접 시뮬레이션해보세요.
@@ -500,10 +581,112 @@ export default function BlogPostView({
             </span>
           </div>
           <p className="text-xs text-gray-600 leading-relaxed">
-            11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 부동산 세금, 연금 정보를 알기 쉽게 기록합니다.
+            11년 동안 회사 생활, 이직, 내 집 마련, 부모님 건보료 정산 등을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 부동산 세금, 연금 정보를 알기 쉽게 기록합니다. 궁금하신 점이나 실제 겪으신 고민은 아래 댓글란에 남겨주시면 틈틈이 답변해 드립니다.
           </p>
         </div>
       </div>
+
+      {/* 6.5 Interactive Comments & Q&A Discussion Section */}
+      <section id="comments-section" className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs space-y-5 no-print">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-gray-100">
+          <div>
+            <h3 className="text-sm sm:text-base font-bold text-gray-900 flex items-center gap-2 font-heading">
+              <MessageSquare className="w-4 h-4 text-[#1078b9]" />
+              <span>독자 실무 Q&A 및 토론</span>
+              <span className="bg-blue-100 text-[#056cad] text-xs font-bold px-2 py-0.5 rounded-full font-num">
+                {comments.length}
+              </span>
+            </h3>
+            <p className="text-xs text-gray-500 mt-0.5">
+              실제 정산 사례나 본문의 의문점을 남겨주시면 박과장이 확인 후 정성껏 답변해 드립니다.
+            </p>
+          </div>
+        </div>
+
+        {/* Comment Writing Form */}
+        <form onSubmit={handleAddComment} className="bg-gray-50 border border-gray-200 rounded-xl p-4 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <input
+              type="text"
+              value={newAuthor}
+              onChange={(e) => setNewAuthor(e.target.value)}
+              placeholder="작성자 닉네임 (예: 직장인K)"
+              className="px-3 py-1.5 text-xs bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#1078b9] sm:w-48"
+            />
+            <span className="text-[11px] text-gray-400 self-center hidden sm:inline">비회원 작성 가능 (실명 불필요)</span>
+          </div>
+          <textarea
+            value={newCommentText}
+            onChange={(e) => setNewCommentText(e.target.value)}
+            rows={3}
+            required
+            placeholder="궁금하신 점이나 본인의 실제 정산 경험을 자유롭게 공유해 주세요. (인사팀 상담 고민, 세무서 방문 후기 등)"
+            className="w-full px-3 py-2 text-xs sm:text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#1078b9] resize-none"
+          />
+          <div className="flex items-center justify-between pt-1">
+            <span className="text-[11px] text-gray-500">
+              {commentSuccess && (
+                <span className="text-emerald-600 font-bold flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" /> 소중한 댓글이 등록되었습니다!
+                </span>
+              )}
+            </span>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <Send className="w-3.5 h-3.5" />
+              <span>댓글 남기기</span>
+            </button>
+          </div>
+        </form>
+
+        {/* Existing Comments List */}
+        <div className="space-y-4 pt-1">
+          {comments.map((cmt) => (
+            <div key={cmt.id} className="border-b border-gray-100 last:border-b-0 pb-4 last:pb-0 space-y-2">
+              <div className="flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center font-bold text-[11px]">
+                    {cmt.author.slice(0, 1)}
+                  </div>
+                  <span className="font-bold text-gray-800">{cmt.author}</span>
+                  {cmt.id.startsWith('user-') && (
+                    <span className="text-[10px] bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded border border-emerald-200">
+                      방금 작성
+                    </span>
+                  )}
+                </div>
+                <span className="text-gray-400 font-num text-[11px]">{cmt.date}</span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-700 pl-8 leading-relaxed whitespace-pre-line">
+                {cmt.content}
+              </p>
+
+              {/* Park Manager's Nested Reply */}
+              {cmt.reply && (
+                <div className="ml-6 sm:ml-8 mt-2 bg-blue-50/60 border-l-2 border-[#1078b9] rounded-r-lg p-3 sm:p-4 space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-5 h-5 rounded-full bg-[#1078b9] text-white flex items-center justify-center font-bold text-[10px]">
+                        박
+                      </div>
+                      <span className="font-bold text-[#056cad]">{cmt.reply.author}</span>
+                      <span className="bg-[#1078b9] text-white text-[9px] font-bold px-1.5 py-0.2 rounded">
+                        운영자
+                      </span>
+                    </div>
+                    <span className="text-gray-400 text-[11px] font-num">{cmt.reply.date}</span>
+                  </div>
+                  <p className="text-xs sm:text-[13px] text-gray-800 leading-relaxed pl-6 whitespace-pre-line font-body">
+                    {cmt.reply.content}
+                  </p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* 7. Previous / Next Post Links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs no-print">

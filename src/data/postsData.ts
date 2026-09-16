@@ -1,4 +1,5 @@
 import { PostItem, PostCategory } from '../types';
+import { RECENT_BLOG_POSTS } from './recentPostsData';
 
 export const CATEGORY_META: Record<PostCategory, { name: string; icon: string; color: string; bg: string; border: string; description: string }> = {
   work: {
@@ -27,7 +28,7 @@ export const CATEGORY_META: Record<PostCategory, { name: string; icon: string; c
   }
 };
 
-export const ALL_BLOG_POSTS: PostItem[] = [
+const INITIAL_BLOG_POSTS: PostItem[] = [
   {
 id: 'post-work-01',
     title: '퇴직금 정산서에서 180만원 누락을 직접 잡아낸 실전 검증법',
@@ -1185,3 +1186,5 @@ id: 'post-fin-07',
 환급금은 관할 세무서 검토를 거쳐 **6월 20일~30일 사이에 국세가 입금**되고, **7월 초에 지방소득세 10%가 추가 입금**됩니다.`
   }
 ];
+
+export const ALL_BLOG_POSTS: PostItem[] = [...RECENT_BLOG_POSTS, ...INITIAL_BLOG_POSTS];

@@ -194,8 +194,8 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
         {/* Modal Header */}
         <div className="p-5 sm:p-6 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-slate-800">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 text-xl">
-              👨‍💼
+            <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
+              <Bot className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -330,7 +330,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                   const { displayTime, diffText, isPast } = formatTimeSlot(slot);
                   const isDone = slot.status === 'published';
                   const isFailed = slot.status === 'failed';
-                  const catMeta = CATEGORY_META[slot.category] || { bg: 'bg-slate-100', border: 'border-slate-200', icon: '💼', name: slot.categoryName };
+                  const catMeta = CATEGORY_META[slot.category] || { bg: 'bg-slate-100', border: 'border-slate-200', icon: '■', name: slot.categoryName };
 
                   return (
                     <div
@@ -355,8 +355,9 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
                             <span className="font-heading font-black text-slate-900 text-sm">
                               {catMeta.name || slot.categoryName}
                             </span>
-                            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
-                              🕒 {displayTime}
+                            <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 flex items-center gap-1">
+                              <Clock className="w-3 h-3 text-slate-500" />
+                              <span>{displayTime}</span>
                             </span>
                             <span className="text-[10px] text-slate-400 font-normal">
                               (슬롯 #{idx + 1})
@@ -396,7 +397,7 @@ export default function AutoPostDashboardModal({ isOpen, onClose, onSelectPost, 
               {/* Information Banner */}
               <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200 text-xs text-slate-600 space-y-1.5">
                 <p className="font-bold text-slate-800 flex items-center gap-1">
-                  <span>💡</span>
+                  <span className="font-bold text-indigo-700">[원리]</span>
                   <span>1인칭 실전 포스팅 원리</span>
                 </p>
                 <p className="leading-relaxed">

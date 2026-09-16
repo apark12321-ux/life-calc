@@ -372,35 +372,35 @@ export default function PropertyCalculator() {
                     onClick={() => { setPropertyType('house'); setNegotiatedRate(''); }}
                     className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'house' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    <span className="text-sm">🏠 주택 / 아파트</span>
+                    <span className="text-sm">[주택] 아파트·단독</span>
                     <span className="text-[10px] font-medium text-slate-400 mt-1">상한요율 0.3% ~ 0.7%</span>
                   </button>
                   <button
                     onClick={() => { setPropertyType('officetel_living'); setNegotiatedRate(''); }}
                     className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'officetel_living' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    <span className="text-sm">🏢 주거용 오피스텔</span>
+                    <span className="text-sm">[오피스텔] 주거용</span>
                     <span className="text-[10px] font-medium text-slate-400 mt-1">전용 85㎡이하 (매매0.5%/임대0.4%)</span>
                   </button>
                   <button
                     onClick={() => { setPropertyType('officetel_business'); setNegotiatedRate(''); }}
                     className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'officetel_business' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    <span className="text-sm">💼 일반 오피스텔</span>
+                    <span className="text-sm">[오피스텔] 업무용</span>
                     <span className="text-[10px] font-medium text-slate-400 mt-1">업무용 / 전용 85㎡ 초과 (상한 0.9%)</span>
                   </button>
                   <button
                     onClick={() => { setPropertyType('commercial'); setNegotiatedRate(''); }}
                     className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold flex flex-col justify-between ${propertyType === 'commercial' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    <span className="text-sm">🏪 상가 / 오피스</span>
+                    <span className="text-sm">[상가] 점포·사무실</span>
                     <span className="text-[10px] font-medium text-slate-400 mt-1">점포, 상업 매장, 사무실 (상한 0.9%)</span>
                   </button>
                   <button
                     onClick={() => { setPropertyType('land'); setNegotiatedRate(''); }}
                     className={`p-2.5 text-left border text-xs rounded-xl transition-all font-bold col-span-2 flex flex-col justify-between ${propertyType === 'land' ? 'bg-white text-blue-700 border-blue-400 shadow-xs' : 'bg-slate-100 text-slate-600 border-slate-200/60 hover:bg-slate-200'}`}
                   >
-                    <span className="text-sm">🏔 토지 / 임야 / 기타주택외</span>
+                    <span className="text-sm">[토지] 임야·기타자산</span>
                     <span className="text-[10px] font-medium text-slate-400 mt-1">농지, 임야, 잡종지, 주택 외 기타 자산 (상한 0.9%)</span>
                   </button>
                 </div>
@@ -600,10 +600,10 @@ export default function PropertyCalculator() {
                   <div className="flex justify-between">
                     <span>선택 부동산 대분류</span>
                     <span className="text-slate-100 font-bold">
-                      {propertyType === 'house' ? '🏠 주택 / 아파트' :
-                       propertyType === 'officetel_living' ? '🏢 주거형 오피스텔 (≤ 85㎡)' :
-                       propertyType === 'officetel_business' ? '💼 일반 오피스텔 (> 85㎡)' :
-                       propertyType === 'commercial' ? '🏪 상가 (상업 점포)' : '🏔 토지 / 임야 / 기타'}
+                      {propertyType === 'house' ? '주택 / 아파트' :
+                       propertyType === 'officetel_living' ? '주거형 오피스텔 (≤ 85㎡)' :
+                       propertyType === 'officetel_business' ? '일반 오피스텔 (> 85㎡)' :
+                       propertyType === 'commercial' ? '상가 (상업 점포)' : '토지 / 임야 / 기타'}
                     </span>
                   </div>
                   <div className="flex justify-between">
@@ -621,7 +621,7 @@ export default function PropertyCalculator() {
 
                   {dealType === 'lease' && leaseType === 'monthly' && (
                     <div className="text-[10px] bg-slate-800/80 p-2.5 rounded-lg text-slate-300 leading-relaxed border border-slate-700/50 space-y-1">
-                      <strong className="text-yellow-300">💡 법정 월세 환산보증금 적용정보:</strong>
+                      <strong className="text-yellow-300">[법정 월세 환산보증금 적용정보]</strong>
                       <div className="font-mono">
                         {deposit.toLocaleString()}원 + ({monthlyRent.toLocaleString()}원 × {brokerageRes.transactionAmount < 50000000 ? '70' : '100'})
                       </div>

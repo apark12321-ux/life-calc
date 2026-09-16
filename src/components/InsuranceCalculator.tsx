@@ -415,7 +415,7 @@ export default function InsuranceCalculator() {
 
         {/* Dynamic SEO Accordion FAQ */}
         <div className="bg-slate-50 rounded-2xl p-5 md:p-6 border border-slate-200 shadow-2xs">
-          <h3 className="font-heading text-sm sm:text-base font-extrabold text-slate-900 mb-3">💡 4대보험 자주 묻는 질문 FAQ</h3>
+          <h3 className="font-heading text-sm sm:text-base font-extrabold text-slate-900 mb-3">[FAQ] 4대보험 자주 묻는 질문</h3>
           <ul className="space-y-3.5 text-slate-700">
             <li>
               <strong className="font-heading text-xs sm:text-sm text-slate-900 font-bold block">Q. 비과세 급여는 왜 4대보험 계산에서 빠지나요?</strong>

@@ -284,7 +284,7 @@ export default function AdSenseAuditModal({ isOpen, onClose, posts }: AdSenseAud
                         <strong className="text-slate-700">심사 기준:</strong> {item.standard}
                       </p>
                       <p className="text-indigo-900 font-bold bg-indigo-50/70 p-2 rounded-lg border border-indigo-100/70">
-                        🎯 현재 반영 상태: {item.currentStatus}
+                        [현재 반영 상태] {item.currentStatus}
                       </p>
                       <p className="text-slate-600">
                         {item.description}

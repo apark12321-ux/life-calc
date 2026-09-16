@@ -103,7 +103,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
           </div>
 
           <div className="space-y-1.5 pt-1 text-xs">
-            <p className="font-bold text-slate-900">🔗 쿠키 및 광고 맞춤설정 해제 안내 링크:</p>
+            <p className="font-bold text-slate-900">[안내] 쿠키 및 광고 맞춤설정 해제 안내 링크:</p>
             <ul className="space-y-1 pl-1">
               <li>
                 <a
