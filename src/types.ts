@@ -49,15 +49,3 @@ export interface PostItem {
   status?: 'published' | 'scheduled';
   scheduledTime?: string;
 }
-
-export interface CommentItem {
-  id: string;
-  author: string;
-  date: string;
-  content: string;
-  reply?: {
-    author: string;
-    date: string;
-    content: string;
-  };
-}
