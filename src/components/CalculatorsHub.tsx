@@ -3,7 +3,7 @@ import InsuranceCalculator from './InsuranceCalculator';
 import WageCalculator from './WageCalculator';
 import FinanceCalculator from './FinanceCalculator';
 import PropertyCalculator from './PropertyCalculator';
-import { Calculator, Shield, Clock, DollarSign, Home, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface CalculatorsHubProps {

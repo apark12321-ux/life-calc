@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
-import { ChevronRight, Calendar, User, Eye, MessageSquare, ChevronLeft } from 'lucide-react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface BlogHomeProps {
   currentCategory: CategoryType;

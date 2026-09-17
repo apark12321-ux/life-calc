@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Landmark, TrendingUp, HelpCircle, RefreshCw, BookOpen, Receipt, AlignJustify, Printer } from 'lucide-react';
+import { Landmark, BookOpen, Printer } from 'lucide-react';
 
 export default function FinanceCalculator() {
   const [activeTab, setActiveTab] = useState<'savings' | 'loan'>('savings');

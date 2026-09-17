@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, BookOpen, Clock, Globe, ArrowLeft, ExternalLink, Cookie, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Shield, Clock, ArrowLeft, ExternalLink, Cookie, CheckCircle2 } from 'lucide-react';
 
 interface PrivacyPolicyProps {
   onBack?: () => void;

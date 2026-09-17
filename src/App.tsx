@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { CategoryType, PostItem } from './types';
 import { ALL_BLOG_POSTS } from './data/postsData';
 import BlogHeader from './components/BlogHeader';
 import BlogSidebar from './components/BlogSidebar';
 import BlogHome from './components/BlogHome';
 import BlogPostView from './components/BlogPostView';
-import CalculatorsHub from './components/CalculatorsHub';
-import AboutApp from './components/AboutApp';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
-import AutoPostDashboardModal from './components/AutoPostDashboardModal';
-import AdSenseAuditModal from './components/AdSenseAuditModal';
-import { ShieldCheck, ChevronUp, BookOpen, Calculator, Sparkles, Shield, Cookie, Check } from 'lucide-react';
+import { ChevronUp, Cookie, Check } from 'lucide-react';
+
+const CalculatorsHub = lazy(() => import('./components/CalculatorsHub'));
+const AboutApp = lazy(() => import('./components/AboutApp'));
+const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./components/TermsOfService'));
 
 export default function App() {
   const [posts, setPosts] = useState<PostItem[]>(ALL_BLOG_POSTS);
@@ -21,8 +20,6 @@ export default function App() {
   const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('wage_salary');
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
-  const [isAutoPostModalOpen, setIsAutoPostModalOpen] = useState<boolean>(false);
-  const [isAdSenseAuditModalOpen, setIsAdSenseAuditModalOpen] = useState<boolean>(false);
 
   // Fetch posts from backend (incorporating scheduled & auto-generated posts)
   const fetchPosts = useCallback(async () => {
@@ -50,14 +47,6 @@ export default function App() {
       const postId = params.get('p') || params.get('post');
       const cat = params.get('cat') || params.get('c') || params.get('category');
       const calcId = params.get('calc') || params.get('s');
-      const adminCode = params.get('admin');
-
-      // Secret admin access (not exposed to public visitors)
-      if (adminCode === 'autopost' || adminCode === 'manage') {
-        setIsAutoPostModalOpen(true);
-      } else if (adminCode === 'audit') {
-        setIsAdSenseAuditModalOpen(true);
-      }
 
       if (postId) {
         const found = posts.find(p => p.id === postId) || ALL_BLOG_POSTS.find(p => p.id === postId);
@@ -108,17 +97,6 @@ export default function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, [syncStateFromUrl]);
-
-  // Admin secret shortcut: Ctrl + Shift + A
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
-        setIsAdSenseAuditModalOpen(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   // Track scroll position for "Back to top" button
   useEffect(() => {
@@ -229,86 +207,78 @@ export default function App() {
           }
         }}
         searchQuery={searchQuery}
-        onOpenAutoPoster={() => setIsAutoPostModalOpen(true)}
       />
 
       {/* 2. Main Content Container */}
       <div className="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-6">
-        
-        {currentCategory === 'calculators' ? (
-          <CalculatorsHub
-            initialTab={activeCalculatorSubId}
-            onBackToBlog={() => handleSelectCategory('all')}
-          />
-        ) : currentCategory === 'privacy' ? (
-          <div className="max-w-4xl mx-auto">
-            <PrivacyPolicy onBack={() => handleSelectCategory('all')} />
+        <Suspense fallback={
+          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-xs flex items-center justify-center min-h-[300px]">
+            <div className="flex flex-col items-center gap-2 text-gray-500 text-xs font-medium">
+              <div className="w-6 h-6 border-2 border-[#1078b9] border-t-transparent rounded-full animate-spin"></div>
+              <span>페이지 불러오는 중...</span>
+            </div>
           </div>
-        ) : currentCategory === 'terms' ? (
-          <div className="max-w-4xl mx-auto">
-            <TermsOfService onBack={() => handleSelectCategory('all')} />
-          </div>
-        ) : currentCategory === 'about' ? (
-          <div className="max-w-4xl mx-auto">
-            <AboutApp
-              onSelectCategory={handleSelectCategory}
-              onNavigateToCalculator={handleNavigateToCalculator}
+        }>
+          {currentCategory === 'calculators' ? (
+            <CalculatorsHub
+              initialTab={activeCalculatorSubId}
+              onBackToBlog={() => handleSelectCategory('all')}
             />
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Main Column (8 cols on lg) */}
-            <main className="lg:col-span-8">
-              {selectedPost ? (
-                <BlogPostView
-                  post={selectedPost}
-                  onSelectPost={handleSelectPost}
-                  onSelectCategory={handleSelectCategory}
-                  onNavigateToCalculator={handleNavigateToCalculator}
-                />
-              ) : (
-                <BlogHome
-                  currentCategory={currentCategory}
-                  onSelectCategory={handleSelectCategory}
-                  onSelectPost={handleSelectPost}
-                  searchQuery={searchQuery}
-                  onClearSearch={() => setSearchQuery('')}
-                  posts={posts}
-                  onNavigateToCalculator={handleNavigateToCalculator}
-                />
-              )}
-            </main>
-
-            {/* Sidebar Column (4 cols on lg) */}
-            <div className="lg:col-span-4 no-print">
-              <BlogSidebar
-                onSelectPost={handleSelectPost}
+          ) : currentCategory === 'privacy' ? (
+            <div className="max-w-4xl mx-auto">
+              <PrivacyPolicy onBack={() => handleSelectCategory('all')} />
+            </div>
+          ) : currentCategory === 'terms' ? (
+            <div className="max-w-4xl mx-auto">
+              <TermsOfService onBack={() => handleSelectCategory('all')} />
+            </div>
+          ) : currentCategory === 'about' ? (
+            <div className="max-w-4xl mx-auto">
+              <AboutApp
                 onSelectCategory={handleSelectCategory}
                 onNavigateToCalculator={handleNavigateToCalculator}
-                activePost={selectedPost}
-                posts={posts}
               />
             </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              
+              {/* Main Column (8 cols on lg) */}
+              <main className="lg:col-span-8">
+                {selectedPost ? (
+                  <BlogPostView
+                    post={selectedPost}
+                    onSelectPost={handleSelectPost}
+                    onSelectCategory={handleSelectCategory}
+                    onNavigateToCalculator={handleNavigateToCalculator}
+                  />
+                ) : (
+                  <BlogHome
+                    currentCategory={currentCategory}
+                    onSelectCategory={handleSelectCategory}
+                    onSelectPost={handleSelectPost}
+                    searchQuery={searchQuery}
+                    onClearSearch={() => setSearchQuery('')}
+                    posts={posts}
+                    onNavigateToCalculator={handleNavigateToCalculator}
+                  />
+                )}
+              </main>
 
-          </div>
-        )}
+              {/* Sidebar Column (4 cols on lg) */}
+              <div className="lg:col-span-4 no-print">
+                <BlogSidebar
+                  onSelectPost={handleSelectPost}
+                  onSelectCategory={handleSelectCategory}
+                  onNavigateToCalculator={handleNavigateToCalculator}
+                  activePost={selectedPost}
+                  posts={posts}
+                />
+              </div>
+
+            </div>
+          )}
+        </Suspense>
       </div>
-
-      {/* Auto-Posting System Modal (Admin Only) */}
-      <AutoPostDashboardModal
-        isOpen={isAutoPostModalOpen}
-        onClose={() => setIsAutoPostModalOpen(false)}
-        onSelectPost={handleSelectPost}
-        onPostsUpdated={fetchPosts}
-      />
-
-      {/* AdSense Compliance Audit Modal (Admin Only, triggered via Ctrl+Shift+A or ?admin=audit) */}
-      <AdSenseAuditModal
-        isOpen={isAdSenseAuditModalOpen}
-        onClose={() => setIsAdSenseAuditModalOpen(false)}
-        posts={posts}
-      />
 
       {/* 3. Classic Korean Blog Footer (Tistory / Naver Style) */}
       <footer className="bg-white border-t border-gray-200 mt-16 text-xs text-gray-500 font-body">

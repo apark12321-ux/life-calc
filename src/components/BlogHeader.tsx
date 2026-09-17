@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Menu, X, ChevronRight } from 'lucide-react';
+import { Search, Menu, X } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface BlogHeaderProps {
@@ -8,7 +8,6 @@ interface BlogHeaderProps {
   onSelectPost?: (postId: string) => void;
   onSearch: (query: string) => void;
   searchQuery: string;
-  onOpenAutoPoster?: () => void;
 }
 
 export default function BlogHeader({

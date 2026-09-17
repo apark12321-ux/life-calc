@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Compass, HelpCircle, RefreshCw, BookOpen, Scaling, Landmark, Printer } from 'lucide-react';
+import { Home, BookOpen, Printer } from 'lucide-react';
 
 export default function PropertyCalculator() {
   const [activeTab, setActiveTab] = useState<'size' | 'agent' | 'tax'>('size');

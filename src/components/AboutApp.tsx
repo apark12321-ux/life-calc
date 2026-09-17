@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, UserCheck, CalendarDays, Sparkles, BookOpenCheck, ChevronRight, FileCheck, Landmark, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, UserCheck, FileCheck, Landmark, CheckCircle2 } from 'lucide-react';
 import { CategoryType } from '../types';
 
 interface AboutAppProps {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, Calculator as CalcIcon, RefreshCw, AlertCircle, TrendingUp, DollarSign, Calendar, Landmark, BookOpen, Printer } from 'lucide-react';
+import { AlertCircle, DollarSign, BookOpen, Printer } from 'lucide-react';
 
 export default function WageCalculator() {
   const [activeSubTab, setActiveSubTab] = useState<'hourly' | 'salary' | 'retirement' | 'unemployment'>('hourly');

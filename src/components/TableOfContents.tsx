@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, ChevronDown, ChevronUp, ArrowUp, Compass, BookOpen, Check } from 'lucide-react';
+import { List, ChevronDown, ChevronUp, ArrowUp, Compass } from 'lucide-react';
 
 export interface TocHeading {
   id: string;

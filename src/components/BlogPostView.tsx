@@ -3,7 +3,7 @@ import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS, CATEGORY_META } from '../data/postsData';
 import { 
   Share2, Printer, ChevronRight, ChevronLeft, 
-  Heart, ExternalLink, ShieldCheck
+  Heart, ShieldCheck
 } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 

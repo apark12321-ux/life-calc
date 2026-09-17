@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HelpCircle, RefreshCw, Calculator as CalcIcon, Printer, CheckCircle2, Info, BookOpen } from 'lucide-react';
+import { RefreshCw, Calculator as CalcIcon, Printer, Info, BookOpen } from 'lucide-react';
 
 export default function InsuranceCalculator() {
   const [tab, setTab] = useState<'all' | 'pension' | 'health' | 'employment' | 'accident'>('all');

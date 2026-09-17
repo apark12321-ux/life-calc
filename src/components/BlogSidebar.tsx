@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS } from '../data/postsData';
-import { ChevronRight, Folder, Calculator, User, Bell, Tag, Check, Share2, HelpCircle } from 'lucide-react';
+import { Folder, Bell, Tag, Check, HelpCircle } from 'lucide-react';
 import TableOfContents from './TableOfContents';
 
 interface BlogSidebarProps {
@@ -10,7 +10,6 @@ interface BlogSidebarProps {
   onNavigateToCalculator: (calcId: string) => void;
   activePost?: PostItem | null;
   posts?: PostItem[];
-  onOpenAutoPoster?: () => void;
 }
 
 export default function BlogSidebar({
