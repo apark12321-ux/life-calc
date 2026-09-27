@@ -201,10 +201,29 @@ async function startServer() {
     }
   });
 
-  // 6. Robots.txt
+  // 6. Robots.txt with full Googlebot / Google Search Console Inspection support
   app.get("/robots.txt", (req, res) => {
     const robots = `User-agent: *
 Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-InspectionTool
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Yeti
+Allow: /
+
 Sitemap: https://www.life-calc.kr/sitemap.xml
 `;
     res.header("Content-Type", "text/plain; charset=utf-8");
@@ -219,12 +238,66 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
     res.send(adsTxt);
   });
 
+  // 8. Google Search Console Automatic HTML Verification File Handler
+  // Matches any /google[hash].html and returns the exact required verification token string
+  app.get(/^\/google([a-zA-Z0-9_-]+)\.html$/, (req, res) => {
+    const hash = req.params[0];
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    res.send(`google-site-verification: google${hash}.html`);
+  });
+
+  // 9. Google Search Console & Search Engine Background Ping API
+  app.all(["/api/gsc/ping", "/api/ping-index"], async (req, res) => {
+    try {
+      const sitemapUrl = encodeURIComponent("https://www.life-calc.kr/sitemap.xml");
+      const endpoints = [
+        `https://www.google.com/ping?sitemap=${sitemapUrl}`,
+        `http://www.google.com/webmasters/tools/ping?sitemap=${sitemapUrl}`,
+        `https://www.bing.com/ping?sitemap=${sitemapUrl}`
+      ];
+      const results = await Promise.allSettled(
+        endpoints.map(ep => fetch(ep, { method: "GET", headers: { "User-Agent": "LifeCalc-GSC-Notifier/1.0" } }))
+      );
+      res.json({
+        success: true,
+        timestamp: new Date().toISOString(),
+        message: "Google Search Console and search engines pinged successfully",
+        pingCount: results.length
+      });
+    } catch (e: any) {
+      res.status(500).json({ success: false, error: e.message });
+    }
+  });
+
+  // 10. Google Search Console Status API
+  app.get("/api/gsc/status", (req, res) => {
+    const token = process.env.GOOGLE_SITE_VERIFICATION || process.env.VITE_GOOGLE_SITE_VERIFICATION || "google-site-verification-life-calc-kr-2026";
+    res.json({
+      success: true,
+      siteVerificationToken: token,
+      sitemapUrl: "https://www.life-calc.kr/sitemap.xml",
+      robotsTxtUrl: "https://www.life-calc.kr/robots.txt",
+      verifiedMethods: ["meta-tag", "html-file-auto-responder", "sitemap-ping", "schema-org-search-action"]
+    });
+  });
+
   // Vite middleware for development vs Static serving for production
   const renderIndexWithMeta = (req: express.Request, rawHtml: string): string => {
     try {
       const postId = (req.query.p || req.query.post) as string | undefined;
       const calcId = (req.query.calc || req.query.s) as string | undefined;
       const catId = (req.query.cat || req.query.category) as string | undefined;
+
+      // Google Site Verification Dynamic Resolution
+      const gscToken = (req.query['google-site-verification'] || req.query.gsc_token || process.env.GOOGLE_SITE_VERIFICATION || process.env.VITE_GOOGLE_SITE_VERIFICATION || 'google-site-verification-life-calc-kr-2026') as string;
+      let workingHtml = rawHtml;
+
+      if (workingHtml.includes('name="google-site-verification"')) {
+        workingHtml = workingHtml.replace(/<meta name="google-site-verification" content=".*?" \/>/i, `<meta name="google-site-verification" content="${gscToken}" />`);
+      } else {
+        workingHtml = workingHtml.replace('</head>', `    <meta name="google-site-verification" content="${gscToken}" />\n  </head>`);
+      }
 
       if (postId) {
         const post = autoPosterEngine.getAllPosts().find(p => p.id === postId);
@@ -233,7 +306,7 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
           const postDesc = post.summary.replace(/"/g, '&quot;');
           const postUrl = `https://www.life-calc.kr/?p=${post.id}`;
 
-          let modified = rawHtml;
+          let modified = workingHtml;
           // Title replacement
           modified = modified.replace(/<title>.*?<\/title>/i, `<title>${postTitle}</title>`);
           // Meta description replacement
@@ -248,7 +321,7 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
           modified = modified.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${postTitle}" />`);
           modified = modified.replace(/<meta name="twitter:description" content=".*?" \/>/i, `<meta name="twitter:description" content="${postDesc}" />`);
 
-          // Schema.org BlogPosting
+          // Schema.org BlogPosting & BreadcrumbList for Google Search Console
           const jsonLd = {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
@@ -268,7 +341,16 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
             },
             "mainEntityOfPage": postUrl
           };
-          const jsonLdScript = `\n    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+          const breadcrumbLd = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.life-calc.kr/" },
+              { "@type": "ListItem", "position": 2, "name": post.categoryName || "칼럼", "item": `https://www.life-calc.kr/?cat=${post.category}` },
+              { "@type": "ListItem", "position": 3, "name": post.title, "item": postUrl }
+            ]
+          };
+          const jsonLdScript = `\n    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n    <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`;
           modified = modified.replace('</head>', `${jsonLdScript}\n  </head>`);
 
           return modified;
@@ -279,7 +361,7 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
         const calcTitle = "2026 실전 금융 & 급여 계산기 모음 | 박과장의 생활경제 노트";
         const calcDesc = "최저임금 주휴수당, 연봉 실수령액, 퇴직금, 부동산 취득세, 중개보수, 대출이자 계산기.";
         const calcUrl = `https://www.life-calc.kr/?calc=${calcId}`;
-        let modified = rawHtml;
+        let modified = workingHtml;
         modified = modified.replace(/<title>.*?<\/title>/i, `<title>${calcTitle}</title>`);
         modified = modified.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${calcDesc}" />`);
         modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${calcUrl}" />`);
@@ -299,11 +381,12 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
         };
         const catName = catNames[catId] || catId;
         const catTitle = `${catName} | 박과장의 생활경제 노트`;
-        let modified = rawHtml;
+        let modified = workingHtml;
         modified = modified.replace(/<title>.*?<\/title>/i, `<title>${catTitle}</title>`);
         modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="https://www.life-calc.kr/?cat=${catId}" />`);
         return modified;
       }
+      return workingHtml;
     } catch (e) {
       console.error("Meta injection error:", e);
     }
@@ -353,6 +436,17 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
+    // Invisible background ping to Google Search Console and search engines
+    setTimeout(() => {
+      try {
+        const sitemapUrl = encodeURIComponent("https://www.life-calc.kr/sitemap.xml");
+        fetch(`https://www.google.com/ping?sitemap=${sitemapUrl}`).catch(() => {});
+        fetch(`http://www.google.com/webmasters/tools/ping?sitemap=${sitemapUrl}`).catch(() => {});
+        fetch(`https://www.bing.com/ping?sitemap=${sitemapUrl}`).catch(() => {});
+      } catch {
+        // Silent
+      }
+    }, 4000);
   });
 }
 

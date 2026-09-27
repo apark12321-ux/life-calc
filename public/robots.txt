@@ -1,10 +1,19 @@
 User-agent: *
 Allow: /
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-InspectionTool
+Allow: /
+
 User-agent: Mediapartners-Google
 Allow: /
 
-User-agent: Googlebot
+User-agent: AdsBot-Google
 Allow: /
 
 User-agent: Yeti

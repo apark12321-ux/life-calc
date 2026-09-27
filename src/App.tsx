@@ -6,6 +6,7 @@ import BlogSidebar from './components/BlogSidebar';
 import BlogHome from './components/BlogHome';
 import BlogPostView from './components/BlogPostView';
 import { ChevronUp, Cookie, Check } from 'lucide-react';
+import { useGoogleSearchConsole } from './utils/gscIntegration';
 
 const CalculatorsHub = lazy(() => import('./components/CalculatorsHub'));
 const AboutApp = lazy(() => import('./components/AboutApp'));
@@ -20,6 +21,9 @@ export default function App() {
   const [activeCalculatorSubId, setActiveCalculatorSubId] = useState<string>('wage_salary');
   const [showCookieBanner, setShowCookieBanner] = useState<boolean>(false);
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
+
+  // Invisible Google Search Console Auto-Application & Indexing Engine
+  useGoogleSearchConsole(currentCategory, selectedPost, activeCalculatorSubId);
 
   // Fetch posts from backend (incorporating scheduled & auto-generated posts)
   const fetchPosts = useCallback(async () => {
