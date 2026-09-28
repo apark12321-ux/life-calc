@@ -290,21 +290,21 @@ export default function App() {
           
           {/* Footer Navigation Links */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 pb-4 border-b border-gray-100 font-medium">
-            <button onClick={() => handleSelectCategory('all')} className="hover:text-[#1078b9] transition">홈</button>
+            <a href="/" onClick={(e) => { e.preventDefault(); handleSelectCategory('all'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">홈</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('work')} className="hover:text-[#1078b9] transition">직장·급여</button>
+            <a href="/?cat=work" onClick={(e) => { e.preventDefault(); handleSelectCategory('work'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">직장·급여</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('property')} className="hover:text-[#1078b9] transition">부동산·세금</button>
+            <a href="/?cat=property" onClick={(e) => { e.preventDefault(); handleSelectCategory('property'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">부동산·세금</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('finance')} className="hover:text-[#1078b9] transition">연금·금융</button>
+            <a href="/?cat=finance" onClick={(e) => { e.preventDefault(); handleSelectCategory('finance'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">연금·금융</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('calculators')} className="hover:text-[#1078b9] transition">실무 계산기</button>
+            <a href="/?cat=calculators" onClick={(e) => { e.preventDefault(); handleSelectCategory('calculators'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">실무 계산기</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('about')} className="hover:text-[#1078b9] transition">블로그 소개</button>
+            <a href="/?cat=about" onClick={(e) => { e.preventDefault(); handleSelectCategory('about'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">블로그 소개</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('privacy')} className="hover:text-[#1078b9] transition font-bold text-gray-700">개인정보처리방침</button>
+            <a href="/?cat=privacy" onClick={(e) => { e.preventDefault(); handleSelectCategory('privacy'); }} className="hover:text-[#1078b9] transition font-bold text-gray-900 underline">개인정보처리방침</a>
             <span className="text-gray-300">|</span>
-            <button onClick={() => handleSelectCategory('terms')} className="hover:text-[#1078b9] transition">이용약관</button>
+            <a href="/?cat=terms" onClick={(e) => { e.preventDefault(); handleSelectCategory('terms'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">이용약관</a>
           </div>
 
           {/* Blog Description & Legal Disclaimer */}

@@ -77,18 +77,21 @@ export default function BlogSidebar({
         </div>
 
         <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-          <button
-            type="button"
-            onClick={() => onSelectCategory('about')}
-            className="text-gray-700 hover:text-[#1078b9] font-medium transition"
+          <a
+            href="/?cat=about"
+            onClick={(e) => {
+              e.preventDefault();
+              onSelectCategory('about');
+            }}
+            className="text-gray-700 hover:text-[#1078b9] font-medium transition no-underline"
           >
             블로그 소개
-          </button>
+          </a>
           <span className="text-gray-300">|</span>
           <button
             type="button"
             onClick={handleCopyLink}
-            className="text-gray-700 hover:text-[#1078b9] font-medium transition flex items-center gap-1"
+            className="text-gray-700 hover:text-[#1078b9] font-medium transition flex items-center gap-1 cursor-pointer"
           >
             {copiedLink ? (
               <span className="text-emerald-600 font-bold flex items-center gap-0.5">
@@ -108,11 +111,23 @@ export default function BlogSidebar({
           <span>공지사항</span>
         </h4>
         <ul className="space-y-2 text-xs text-gray-700 font-body">
-          <li className="line-clamp-2 hover:text-[#1078b9] cursor-pointer transition" onClick={() => onSelectCategory('about')}>
-            • 2026년 최저임금(10,030원) 및 개정 법령이 전 칼럼에 반영되었습니다.
+          <li>
+            <a
+              href="/?cat=about"
+              onClick={(e) => { e.preventDefault(); onSelectCategory('about'); }}
+              className="line-clamp-2 text-gray-700 hover:text-[#1078b9] transition no-underline block"
+            >
+              • 2026년 최저임금(10,030원) 및 개정 법령이 전 칼럼에 반영되었습니다.
+            </a>
           </li>
-          <li className="line-clamp-2 hover:text-[#1078b9] cursor-pointer transition" onClick={() => onSelectCategory('about')}>
-            • 칼럼 내 모든 산식은 관계 법령과 공공기관 공식 고시를 준용합니다.
+          <li>
+            <a
+              href="/?cat=about"
+              onClick={(e) => { e.preventDefault(); onSelectCategory('about'); }}
+              className="line-clamp-2 text-gray-700 hover:text-[#1078b9] transition no-underline block"
+            >
+              • 칼럼 내 모든 산식은 관계 법령과 공공기관 공식 고시를 준용합니다.
+            </a>
           </li>
         </ul>
       </div>
@@ -125,36 +140,45 @@ export default function BlogSidebar({
         </h4>
 
         <div className="space-y-1 text-xs font-body">
-          <button
-            type="button"
-            onClick={() => onSelectCategory('all')}
-            className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-800 transition"
+          <a
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              onSelectCategory('all');
+            }}
+            className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-800 transition no-underline"
           >
             <span>전체 질문 목록</span>
             <span className="text-gray-400 font-num">({posts.length})</span>
-          </button>
+          </a>
 
           <div className="pl-2 space-y-0.5 border-l-2 border-gray-100 ml-2">
             {categories.map((cat) => (
-              <button
+              <a
                 key={cat.id}
-                type="button"
-                onClick={() => onSelectCategory(cat.id)}
-                className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition"
+                href={`/?cat=${cat.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectCategory(cat.id);
+                }}
+                className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition no-underline"
               >
                 <span>├ {cat.name}</span>
                 <span className="text-gray-400 font-num">({cat.count})</span>
-              </button>
+              </a>
             ))}
 
-            <button
-              type="button"
-              onClick={() => onNavigateToCalculator('wage_salary')}
-              className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition"
+            <a
+              href="/?cat=calculators"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigateToCalculator('wage_salary');
+              }}
+              className="w-full text-left py-1.5 px-2 hover:bg-blue-50/60 rounded-lg flex items-center justify-between text-gray-700 transition no-underline"
             >
               <span>└ 실무 금융 계산기</span>
               <span className="text-[#1078b9] font-bold font-num">(8종)</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
@@ -167,17 +191,22 @@ export default function BlogSidebar({
         </h4>
         <ul className="space-y-2.5 text-xs">
           {recentPosts.map((p) => (
-            <li
-              key={p.id}
-              onClick={() => onSelectPost(p)}
-              className="group cursor-pointer"
-            >
-              <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
-                {p.title}
-              </p>
-              <span className="text-[11px] text-gray-400 font-num">
-                {p.date.split(' ')[0]}
-              </span>
+            <li key={p.id}>
+              <a
+                href={`/?p=${p.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectPost(p);
+                }}
+                className="group block no-underline"
+              >
+                <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
+                  {p.title}
+                </p>
+                <span className="text-[11px] text-gray-400 font-num">
+                  {p.date.split(' ')[0]}
+                </span>
+              </a>
             </li>
           ))}
         </ul>
@@ -190,17 +219,22 @@ export default function BlogSidebar({
         </h4>
         <ul className="space-y-2.5 text-xs">
           {recommendedPosts.map((p) => (
-            <li
-              key={p.id}
-              onClick={() => onSelectPost(p)}
-              className="group cursor-pointer"
-            >
-              <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
-                {p.title}
-              </p>
-              <span className="text-[11px] text-gray-400 font-num">
-                {p.date.split(' ')[0]}
-              </span>
+            <li key={p.id}>
+              <a
+                href={`/?p=${p.id}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onSelectPost(p);
+                }}
+                className="group block no-underline"
+              >
+                <p className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium transition leading-snug">
+                  {p.title}
+                </p>
+                <span className="text-[11px] text-gray-400 font-num">
+                  {p.date.split(' ')[0]}
+                </span>
+              </a>
             </li>
           ))}
         </ul>

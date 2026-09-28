@@ -4,6 +4,14 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import { autoPosterEngine } from "./server/autoPoster";
 import { PostCategory } from "./src/types";
+import {
+  renderPreRenderedPost,
+  renderPreRenderedHome,
+  renderPreRenderedCalculators,
+  renderPreRenderedAbout,
+  renderPreRenderedPrivacy,
+  renderPreRenderedTerms
+} from "./server/preRenderer";
 
 async function startServer() {
   const app = express();
@@ -288,6 +296,9 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
       const postId = (req.query.p || req.query.post) as string | undefined;
       const calcId = (req.query.calc || req.query.s) as string | undefined;
       const catId = (req.query.cat || req.query.category) as string | undefined;
+      const host = req.headers.host || "life-calc.kr";
+      const protocol = req.headers["x-forwarded-proto"] || "https";
+      const domainUrl = `${protocol}://${host}`;
 
       // Google Site Verification Dynamic Resolution
       const gscToken = (req.query['google-site-verification'] || req.query.gsc_token || process.env.GOOGLE_SITE_VERIFICATION || process.env.VITE_GOOGLE_SITE_VERIFICATION || 'google-site-verification-life-calc-kr-2026') as string;
@@ -299,27 +310,30 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
         workingHtml = workingHtml.replace('</head>', `    <meta name="google-site-verification" content="${gscToken}" />\n  </head>`);
       }
 
+      const allPosts = autoPosterEngine.getAllPosts();
+      let preRenderedBody = "";
+
       if (postId) {
-        const post = autoPosterEngine.getAllPosts().find(p => p.id === postId);
+        const post = allPosts.find(p => p.id === postId);
         if (post) {
+          preRenderedBody = renderPreRenderedPost(post, allPosts);
           const postTitle = `${post.title} | 박과장의 생활경제 Q&A`;
           const postDesc = post.summary.replace(/"/g, '&quot;');
-          const postUrl = `https://www.life-calc.kr/?p=${post.id}`;
+          const postUrl = `${domainUrl}/?p=${post.id}`;
 
-          let modified = workingHtml;
           // Title replacement
-          modified = modified.replace(/<title>.*?<\/title>/i, `<title>${postTitle}</title>`);
+          workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${postTitle}</title>`);
           // Meta description replacement
-          modified = modified.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${postDesc}" />`);
+          workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${postDesc}" />`);
           // Canonical replacement
-          modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${postUrl}" />`);
+          workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${postUrl}" />`);
           // OG replacements
-          modified = modified.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${postTitle}" />`);
-          modified = modified.replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${postDesc}" />`);
-          modified = modified.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${postUrl}" />`);
+          workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${postTitle}" />`);
+          workingHtml = workingHtml.replace(/<meta property="og:description" content=".*?" \/>/i, `<meta property="og:description" content="${postDesc}" />`);
+          workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${postUrl}" />`);
           // Twitter replacements
-          modified = modified.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${postTitle}" />`);
-          modified = modified.replace(/<meta name="twitter:description" content=".*?" \/>/i, `<meta name="twitter:description" content="${postDesc}" />`);
+          workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${postTitle}" />`);
+          workingHtml = workingHtml.replace(/<meta name="twitter:description" content=".*?" \/>/i, `<meta name="twitter:description" content="${postDesc}" />`);
 
           // Schema.org BlogPosting & BreadcrumbList for Google Search Console
           const jsonLd = {
@@ -332,12 +346,12 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
             "author": {
               "@type": "Person",
               "name": post.author || "박과장",
-              "url": "https://www.life-calc.kr/about"
+              "url": `${domainUrl}/?cat=about`
             },
             "publisher": {
               "@type": "Organization",
               "name": "박과장의 생활경제 Q&A",
-              "url": "https://www.life-calc.kr"
+              "url": domainUrl
             },
             "mainEntityOfPage": postUrl
           };
@@ -345,47 +359,62 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://www.life-calc.kr/" },
-              { "@type": "ListItem", "position": 2, "name": post.categoryName || "칼럼", "item": `https://www.life-calc.kr/?cat=${post.category}` },
+              { "@type": "ListItem", "position": 1, "name": "홈", "item": `${domainUrl}/` },
+              { "@type": "ListItem", "position": 2, "name": post.categoryName || "칼럼", "item": `${domainUrl}/?cat=${post.category}` },
               { "@type": "ListItem", "position": 3, "name": post.title, "item": postUrl }
             ]
           };
           const jsonLdScript = `\n    <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n    <script type="application/ld+json">${JSON.stringify(breadcrumbLd)}</script>`;
-          modified = modified.replace('</head>', `${jsonLdScript}\n  </head>`);
-
-          return modified;
+          workingHtml = workingHtml.replace('</head>', `${jsonLdScript}\n  </head>`);
         }
-      }
-
-      if (calcId) {
+      } else if (calcId || catId === 'calculators') {
+        preRenderedBody = renderPreRenderedCalculators();
         const calcTitle = "2026 실전 금융 & 급여 계산기 모음 | 박과장의 생활경제 노트";
         const calcDesc = "최저임금 주휴수당, 연봉 실수령액, 퇴직금, 부동산 취득세, 중개보수, 대출이자 계산기.";
-        const calcUrl = `https://www.life-calc.kr/?calc=${calcId}`;
-        let modified = workingHtml;
-        modified = modified.replace(/<title>.*?<\/title>/i, `<title>${calcTitle}</title>`);
-        modified = modified.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${calcDesc}" />`);
-        modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${calcUrl}" />`);
-        return modified;
-      }
-
-      if (catId) {
+        const calcUrl = `${domainUrl}/?cat=calculators`;
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${calcTitle}</title>`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${calcDesc}" />`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${calcUrl}" />`);
+      } else if (catId === 'about') {
+        preRenderedBody = renderPreRenderedAbout();
+        const aboutTitle = "박과장 소개 및 운영 철학 | 박과장의 생활경제 Q&A";
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${aboutTitle}</title>`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=about" />`);
+      } else if (catId === 'privacy') {
+        preRenderedBody = renderPreRenderedPrivacy();
+        const privTitle = "개인정보처리방침 | 박과장의 생활경제 Q&A";
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${privTitle}</title>`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=privacy" />`);
+      } else if (catId === 'terms') {
+        preRenderedBody = renderPreRenderedTerms();
+        const termsTitle = "이용약관 및 면책고지 | 박과장의 생활경제 Q&A";
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${termsTitle}</title>`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=terms" />`);
+      } else if (catId && ['work', 'property', 'finance'].includes(catId)) {
+        preRenderedBody = renderPreRenderedHome(allPosts, catId as any);
         const catNames: Record<string, string> = {
           work: '직장·급여·퇴직 실전 가이드',
           property: '부동산·세금 실전 가이드',
-          finance: '연금·금융·절세 실전 가이드',
-          calculators: '실생활 금융 계산기 모음',
-          about: '박과장 소개 및 운영 철학',
-          privacy: '개인정보처리방침',
-          terms: '이용약관',
-          sitemap: '사이트맵'
+          finance: '연금·금융·절세 실전 가이드'
         };
         const catName = catNames[catId] || catId;
         const catTitle = `${catName} | 박과장의 생활경제 노트`;
-        let modified = workingHtml;
-        modified = modified.replace(/<title>.*?<\/title>/i, `<title>${catTitle}</title>`);
-        modified = modified.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="https://www.life-calc.kr/?cat=${catId}" />`);
-        return modified;
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${catTitle}</title>`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=${catId}" />`);
+      } else {
+        preRenderedBody = renderPreRenderedHome(allPosts, 'all');
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/" />`);
       }
+
+      // Inject pre-rendered publisher content directly into <div id="root">
+      if (preRenderedBody) {
+        if (workingHtml.includes('<div id="root"></div>')) {
+          workingHtml = workingHtml.replace('<div id="root"></div>', `<div id="root">${preRenderedBody}</div>`);
+        } else if (workingHtml.includes('<div id="root">')) {
+          workingHtml = workingHtml.replace(/<div id="root">[\s\S]*?<\/div>(\s*<script type="module")/i, `<div id="root">${preRenderedBody}</div>$1`);
+        }
+      }
+
       return workingHtml;
     } catch (e) {
       console.error("Meta injection error:", e);

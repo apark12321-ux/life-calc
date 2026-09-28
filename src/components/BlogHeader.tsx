@@ -36,13 +36,14 @@ export default function BlogHeader({
           
           {/* Logo & Site Identity */}
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
                 onSelectCategory('all');
                 setIsMobileMenuOpen(false);
               }}
-              className="flex items-center gap-2.5 text-left group"
+              className="flex items-center gap-2.5 text-left group no-underline"
             >
               <div className="w-9 h-9 rounded-lg bg-white/15 border border-white/25 flex items-center justify-center font-bold text-white text-base shadow-xs group-hover:bg-white/25 transition">
                 Q&A
@@ -55,7 +56,7 @@ export default function BlogHeader({
                   급여 · 퇴직금 · 부동산 세금 · 연금 실무 지식 베이스
                 </span>
               </div>
-            </button>
+            </a>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -63,12 +64,16 @@ export default function BlogHeader({
             <ul className="flex items-center h-full">
               {navItems.map((item) => {
                 const isActive = currentCategory === item.id;
+                const linkHref = item.id === 'all' ? '/' : `/?cat=${item.id}`;
                 return (
                   <li key={item.id} className="h-full border-r border-[#005f8d]/60 last:border-r-0">
-                    <button
-                      type="button"
-                      onClick={() => onSelectCategory(item.id)}
-                      className={`h-full px-3.5 lg:px-4 text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer ${
+                    <a
+                      href={linkHref}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onSelectCategory(item.id);
+                      }}
+                      className={`h-full px-3.5 lg:px-4 text-sm font-semibold transition-colors flex items-center gap-1.5 cursor-pointer no-underline ${
                         isActive
                           ? 'bg-[#0a5888] text-white font-bold shadow-inner'
                           : 'text-white/90 hover:bg-[#0e69a3] hover:text-white'
@@ -80,7 +85,7 @@ export default function BlogHeader({
                           {item.badge}
                         </span>
                       )}
-                    </button>
+                    </a>
                   </li>
                 );
               })}
@@ -164,25 +169,29 @@ export default function BlogHeader({
         <div className="md:hidden bg-[#0b5f94] border-t border-[#005f8d] px-4 py-3 space-y-1">
           {navItems.map((item) => {
             const isActive = currentCategory === item.id;
+            const linkHref = item.id === 'all' ? '/' : `/?cat=${item.id}`;
             return (
-              <button
+              <a
                 key={item.id}
-                type="button"
-                onClick={() => {
+                href={linkHref}
+                onClick={(e) => {
+                  e.preventDefault();
                   onSelectCategory(item.id);
                   setIsMobileMenuOpen(false);
                 }}
-                className={`w-full text-left px-3 py-2.5 rounded text-sm font-medium transition flex items-center justify-between ${
+                className={`w-full block text-left px-3 py-2.5 rounded text-sm font-medium transition no-underline ${
                   isActive ? 'bg-[#07466e] text-white font-bold' : 'text-white/90 hover:bg-white/10'
                 }`}
               >
-                <span>{item.label}</span>
-                {item.badge && (
-                  <span className="text-[11px] bg-white/20 text-white font-semibold px-2 py-0.5 rounded">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
+                <div className="flex items-center justify-between">
+                  <span>{item.label}</span>
+                  {item.badge && (
+                    <span className="text-[11px] bg-white/20 text-white font-semibold px-2 py-0.5 rounded">
+                      {item.badge}
+                    </span>
+                  )}
+                </div>
+              </a>
             );
           })}
         </div>

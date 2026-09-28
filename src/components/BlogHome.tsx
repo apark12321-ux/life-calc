@@ -149,56 +149,62 @@ export default function BlogHome({
 
             return (
               <React.Fragment key={post.id}>
-                <article
-                  onClick={() => onSelectPost(post)}
-                  className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:border-[#1078b9] hover:shadow-xs transition duration-150 cursor-pointer group"
-                >
-                  <div className="space-y-2">
-                    {/* Top Meta Bar: Category + Date */}
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      {/* Category Badge */}
-                      <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
-                        {meta.name}
-                      </span>
+                <article className="bg-white border border-gray-200 rounded-xl hover:border-[#1078b9] hover:shadow-xs transition duration-150 group">
+                  <a
+                    href={`/?p=${post.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onSelectPost(post);
+                    }}
+                    className="block p-4 sm:p-5 no-underline"
+                  >
+                    <div className="space-y-2">
+                      {/* Top Meta Bar: Category + Date */}
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        {/* Category Badge */}
+                        <span className="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
+                          {meta.name}
+                        </span>
 
-                      <span className="text-gray-400 text-[11px]">·</span>
+                        <span className="text-gray-400 text-[11px]">·</span>
 
-                      {/* Post Date */}
-                      <span className="text-gray-500 text-xs">
-                        게시: {post.date.split(' ')[0]}
-                      </span>
-                    </div>
-
-                    {/* Question / Post Title */}
-                    <h3 className="text-[17px] sm:text-[18px] font-bold text-gray-900 group-hover:text-[#1078b9] transition-colors font-heading leading-snug">
-                      {post.title}
-                    </h3>
-
-                    {/* Summary Excerpt */}
-                    <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed font-body">
-                      {post.summary}
-                    </p>
-
-                    {/* Tags & Author Footer */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
-                      {/* Tags */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {post.tags && post.tags.slice(0, 3).map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className="text-[11px] text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-200 group-hover:border-gray-300 transition"
-                          >
-                            #{tag}
-                          </span>
-                        ))}
+                        {/* Post Date */}
+                        <span className="text-gray-500 text-xs">
+                          게시: {post.date.split(' ')[0]}
+                        </span>
                       </div>
 
-                      {/* Author */}
-                      <span className="text-gray-400 text-[11px]">
-                        작성자: <span className="text-gray-600 font-medium">{post.author || '박과장'}</span>
-                      </span>
+                      {/* Question / Post Title */}
+                      <h3 className="text-[17px] sm:text-[18px] font-bold text-gray-900 group-hover:text-[#1078b9] transition-colors font-heading leading-snug">
+                        {post.title}
+                      </h3>
+
+                      {/* Summary Excerpt */}
+                      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 leading-relaxed font-body">
+                        {post.summary}
+                      </p>
+
+                      {/* Tags & Author Footer */}
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100 text-xs">
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-1.5">
+                          {post.tags && post.tags.slice(0, 3).map((tag, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="text-[11px] text-gray-500 bg-gray-50 px-2 py-0.5 rounded border border-gray-200 group-hover:border-gray-300 transition"
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Author */}
+                        <span className="text-gray-400 text-[11px]">
+                          작성자: <span className="text-gray-600 font-medium">{post.author || '박과장'}</span>
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </a>
                 </article>
               </React.Fragment>
             );

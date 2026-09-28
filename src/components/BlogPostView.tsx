@@ -177,19 +177,21 @@ export default function BlogPostView({
       <div id="question" className="bg-white border border-gray-200 rounded-xl p-5 sm:p-6 shadow-xs space-y-3">
         {/* Breadcrumbs Navigation */}
         <nav className="flex items-center space-x-1.5 text-xs text-gray-500 font-medium no-print">
-          <button 
-            onClick={() => onSelectCategory('all')}
-            className="hover:text-[#1078b9] transition"
+          <a 
+            href="/"
+            onClick={(e) => { e.preventDefault(); onSelectCategory('all'); }}
+            className="hover:text-[#1078b9] transition text-gray-600 no-underline"
           >
             홈
-          </button>
+          </a>
           <span>&gt;</span>
-          <button 
-            onClick={() => onSelectCategory(post.category)}
-            className="hover:text-[#1078b9] transition font-semibold"
+          <a 
+            href={`/?cat=${post.category}`}
+            onClick={(e) => { e.preventDefault(); onSelectCategory(post.category); }}
+            className="hover:text-[#1078b9] transition font-semibold text-gray-700 no-underline"
           >
             {meta.name}
-          </button>
+          </a>
           <span>&gt;</span>
           <span className="text-gray-400 truncate max-w-[200px] sm:max-w-xs">{post.title}</span>
         </nav>
@@ -449,17 +451,18 @@ export default function BlogPostView({
                 2026년 공식이 적용된 무료 모의계산기로 내 조건에 맞게 직접 시뮬레이션해보세요.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => {
+            <a
+              href={`/?calc=${post.relatedCalculatorId}`}
+              onClick={(e) => {
+                e.preventDefault();
                 if (post.relatedCalculatorId) {
                   onNavigateToCalculator(post.relatedCalculatorId);
                 }
               }}
-              className="px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-lg text-xs font-bold transition shrink-0 shadow-xs"
+              className="px-4 py-2 bg-[#1078b9] hover:bg-[#0e69a3] text-white rounded-lg text-xs font-bold transition shrink-0 shadow-xs no-underline inline-block"
             >
-              계산기 바로가기
-            </button>
+              계산기 바로가기 &rarr;
+            </a>
           </div>
         )}
 
@@ -497,9 +500,13 @@ export default function BlogPostView({
       {/* 7. Previous / Next Post Links */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs no-print">
         {prevPost ? (
-          <div
-            onClick={() => onSelectPost(prevPost)}
-            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 shadow-xs"
+          <a
+            href={`/?p=${prevPost.id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              onSelectPost(prevPost);
+            }}
+            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 shadow-xs block no-underline"
           >
             <span className="text-gray-400 flex items-center gap-1 group-hover:text-[#1078b9]">
               <ChevronLeft className="w-3.5 h-3.5" />
@@ -508,13 +515,17 @@ export default function BlogPostView({
             <p className="text-gray-800 group-hover:text-[#1078b9] font-medium line-clamp-1">
               {prevPost.title}
             </p>
-          </div>
+          </a>
         ) : <div />}
 
         {nextPost && (
-          <div
-            onClick={() => onSelectPost(nextPost)}
-            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 text-right shadow-xs"
+          <a
+            href={`/?p=${nextPost.id}`}
+            onClick={(e) => {
+              e.preventDefault();
+              onSelectPost(nextPost);
+            }}
+            className="bg-white border border-gray-200 rounded-xl p-4 hover:border-[#1078b9] transition cursor-pointer group space-y-1 text-right shadow-xs block no-underline"
           >
             <span className="text-gray-400 flex items-center justify-end gap-1 group-hover:text-[#1078b9]">
               다음 질문 & 칼럼
@@ -523,7 +534,7 @@ export default function BlogPostView({
             <p className="text-gray-800 group-hover:text-[#1078b9] font-medium line-clamp-1">
               {nextPost.title}
             </p>
-          </div>
+          </a>
         )}
       </div>
 
@@ -535,17 +546,22 @@ export default function BlogPostView({
           </h3>
           <ul className="divide-y divide-gray-100 text-xs">
             {relatedPosts.map(rel => (
-              <li
-                key={rel.id}
-                onClick={() => onSelectPost(rel)}
-                className="py-2.5 flex items-center justify-between group cursor-pointer hover:bg-blue-50/50 px-2 rounded-lg transition"
-              >
-                <span className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium">
-                  {rel.title}
-                </span>
-                <span className="text-gray-400 shrink-0 ml-4 font-num">
-                  {rel.date.split(' ')[0]}
-                </span>
+              <li key={rel.id}>
+                <a
+                  href={`/?p=${rel.id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelectPost(rel);
+                  }}
+                  className="py-2.5 flex items-center justify-between group hover:bg-blue-50/50 px-2 rounded-lg transition block no-underline"
+                >
+                  <span className="text-gray-800 group-hover:text-[#1078b9] group-hover:underline line-clamp-1 font-medium">
+                    {rel.title}
+                  </span>
+                  <span className="text-gray-400 shrink-0 ml-4 font-num">
+                    {rel.date.split(' ')[0]}
+                  </span>
+                </a>
               </li>
             ))}
           </ul>
