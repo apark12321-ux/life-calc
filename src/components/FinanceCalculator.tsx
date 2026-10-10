@@ -182,7 +182,7 @@ export default function FinanceCalculator() {
       {/* Print Only Header */}
       <div className="print-only-header">
         <h2>금융 및 예적금·대출 이자 모의계산 결과 보고서 ({activeTab === 'savings' ? '예금 & 적금 이자수익' : '대출 상환이자'})</h2>
-        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+        <p>출력 일자: {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} | 박과장의 생활경제 노트 (https://www.life-calc.kr)</p>
       </div>
 
       {/* App Header */}

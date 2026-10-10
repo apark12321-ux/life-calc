@@ -42,7 +42,7 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
         <div className="flex items-center justify-between flex-wrap gap-2 font-bold text-slate-800">
           <div className="flex items-center space-x-1.5">
             <Clock className="w-4 h-4 text-indigo-600" />
-            <span>최종 개정 및 시행일자: 2026년 08월 01일</span>
+            <span>최종 개정 및 시행일자: 2026년 10월 01일</span>
           </div>
           <span className="text-slate-500 font-normal">버전 2.1</span>
         </div>

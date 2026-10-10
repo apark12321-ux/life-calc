@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
-import { autoPosterEngine } from "./server/autoPoster";
+import { autoPosterEngine, getKoreaDateString } from "./server/autoPoster";
 import { PostCategory } from "./src/types";
 import {
   renderPreRenderedPost,
@@ -137,22 +137,25 @@ async function startServer() {
   // 4. Dynamic Sitemap XML
   app.get("/sitemap.xml", (req, res) => {
     try {
-      const todayStr = new Date().toISOString().split("T")[0];
+      const todayStr = getKoreaDateString();
       const allPosts = autoPosterEngine.getAllPosts();
+      const reqHost = req.headers.host || "life-calc.kr";
+      const protocol = req.headers["x-forwarded-proto"] || "https";
+      const baseUrl = reqHost.includes("www.") ? "https://www.life-calc.kr" : (reqHost.includes("life-calc.kr") ? `${protocol}://${reqHost}` : "https://life-calc.kr");
 
       let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
       
       // Main category and portal hubs
       const baseUrls = [
-        { loc: "https://www.life-calc.kr/", priority: "1.0", changefreq: "daily" },
-        { loc: "https://www.life-calc.kr/?cat=work", priority: "0.9", changefreq: "daily" },
-        { loc: "https://www.life-calc.kr/?cat=property", priority: "0.9", changefreq: "daily" },
-        { loc: "https://www.life-calc.kr/?cat=finance", priority: "0.9", changefreq: "daily" },
-        { loc: "https://www.life-calc.kr/?cat=calculators", priority: "0.85", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=sitemap", priority: "0.8", changefreq: "weekly" },
-        { loc: "https://www.life-calc.kr/?cat=about", priority: "0.8", changefreq: "monthly" },
-        { loc: "https://www.life-calc.kr/?cat=privacy", priority: "0.5", changefreq: "monthly" },
-        { loc: "https://www.life-calc.kr/?cat=terms", priority: "0.5", changefreq: "monthly" }
+        { loc: `${baseUrl}/`, priority: "1.0", changefreq: "daily" },
+        { loc: `${baseUrl}/?cat=work`, priority: "0.9", changefreq: "daily" },
+        { loc: `${baseUrl}/?cat=property`, priority: "0.9", changefreq: "daily" },
+        { loc: `${baseUrl}/?cat=finance`, priority: "0.9", changefreq: "daily" },
+        { loc: `${baseUrl}/?cat=calculators`, priority: "0.85", changefreq: "weekly" },
+        { loc: `${baseUrl}/?cat=sitemap`, priority: "0.8", changefreq: "weekly" },
+        { loc: `${baseUrl}/?cat=about`, priority: "0.8", changefreq: "monthly" },
+        { loc: `${baseUrl}/?cat=privacy`, priority: "0.5", changefreq: "monthly" },
+        { loc: `${baseUrl}/?cat=terms`, priority: "0.5", changefreq: "monthly" }
       ];
 
       for (const u of baseUrls) {
@@ -161,7 +164,7 @@ async function startServer() {
 
       // Add all posts (including newly auto-published posts)
       for (const p of allPosts) {
-        xml += `  <url>\n    <loc>https://www.life-calc.kr/?p=${p.id}</loc>\n    <lastmod>${p.date}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+        xml += `  <url>\n    <loc>${baseUrl}/?p=${p.id}</loc>\n    <lastmod>${p.date.split(" ")[0]}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
       }
 
       xml += `</urlset>`;
@@ -179,10 +182,13 @@ async function startServer() {
     try {
       const now = new Date();
       const allPosts = autoPosterEngine.getAllPosts();
+      const reqHost = req.headers.host || "life-calc.kr";
+      const protocol = req.headers["x-forwarded-proto"] || "https";
+      const baseUrl = reqHost.includes("www.") ? "https://www.life-calc.kr" : (reqHost.includes("life-calc.kr") ? `${protocol}://${reqHost}` : "https://life-calc.kr");
 
       let xml = `<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0">\n<channel>\n`;
       xml += `  <title>박과장의 생활경제 노트</title>\n`;
-      xml += `  <link>https://www.life-calc.kr</link>\n`;
+      xml += `  <link>${baseUrl}</link>\n`;
       xml += `  <description>11년차 직장인이 정리하는 급여, 세금, 부동산, 연금 실전 정보 및 생활 금융 계산기</description>\n`;
       xml += `  <language>ko-KR</language>\n`;
       xml += `  <lastBuildDate>${now.toUTCString()}</lastBuildDate>\n`;
@@ -190,12 +196,12 @@ async function startServer() {
       for (const p of allPosts) {
         xml += `  <item>\n`;
         xml += `    <title><![CDATA[${p.title}]]></title>\n`;
-        xml += `    <link>https://www.life-calc.kr/?post=${p.id}</link>\n`;
+        xml += `    <link>${baseUrl}/?p=${p.id}</link>\n`;
         xml += `    <description><![CDATA[${p.summary}]]></description>\n`;
         xml += `    <category>${p.categoryName}</category>\n`;
         xml += `    <author>noreply@life-calc.kr (${p.author})</author>\n`;
         xml += `    <pubDate>${new Date(p.date).toUTCString()}</pubDate>\n`;
-        xml += `    <guid>https://www.life-calc.kr/?post=${p.id}</guid>\n`;
+        xml += `    <guid>${baseUrl}/?p=${p.id}</guid>\n`;
         xml += `  </item>\n`;
       }
 
@@ -211,6 +217,10 @@ async function startServer() {
 
   // 6. Robots.txt with full Googlebot / Google Search Console Inspection support
   app.get("/robots.txt", (req, res) => {
+    const reqHost = req.headers.host || "life-calc.kr";
+    const protocol = req.headers["x-forwarded-proto"] || "https";
+    const currentBaseUrl = reqHost.includes("www.") ? "https://www.life-calc.kr" : (reqHost.includes("life-calc.kr") ? `${protocol}://${reqHost}` : "https://life-calc.kr");
+
     const robots = `User-agent: *
 Allow: /
 
@@ -232,6 +242,8 @@ Allow: /
 User-agent: Yeti
 Allow: /
 
+Sitemap: ${currentBaseUrl}/sitemap.xml
+Sitemap: https://life-calc.kr/sitemap.xml
 Sitemap: https://www.life-calc.kr/sitemap.xml
 `;
     res.header("Content-Type", "text/plain; charset=utf-8");
@@ -296,9 +308,9 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
       const postId = (req.query.p || req.query.post) as string | undefined;
       const calcId = (req.query.calc || req.query.s) as string | undefined;
       const catId = (req.query.cat || req.query.category) as string | undefined;
-      const host = req.headers.host || "life-calc.kr";
+      const reqHost = req.headers.host || "life-calc.kr";
       const protocol = req.headers["x-forwarded-proto"] || "https";
-      const domainUrl = `${protocol}://${host}`;
+      const domainUrl = reqHost.includes("www.") ? "https://www.life-calc.kr" : (reqHost.includes("life-calc.kr") ? `${protocol}://${reqHost}` : (reqHost.includes("localhost") ? `${protocol}://${reqHost}` : "https://life-calc.kr"));
 
       // Google Site Verification Dynamic Resolution
       const gscToken = (req.query['google-site-verification'] || req.query.gsc_token || process.env.GOOGLE_SITE_VERIFICATION || process.env.VITE_GOOGLE_SITE_VERIFICATION || 'google-site-verification-life-calc-kr-2026') as string;
@@ -375,21 +387,42 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
         workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${calcTitle}</title>`);
         workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${calcDesc}" />`);
         workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${calcUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${calcUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${calcTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${calcTitle}" />`);
       } else if (catId === 'about') {
         preRenderedBody = renderPreRenderedAbout();
         const aboutTitle = "박과장 소개 및 운영 철학 | 박과장의 생활경제 Q&A";
+        const aboutDesc = "11년차 직장인이 직접 겪고 엑셀로 검증한 월급, 퇴직금, 부동산 세금, 연금 정보와 3대 편집 원칙을 소개합니다.";
+        const aboutUrl = `${domainUrl}/?cat=about`;
         workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${aboutTitle}</title>`);
-        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=about" />`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${aboutDesc}" />`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${aboutUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${aboutUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${aboutTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${aboutTitle}" />`);
       } else if (catId === 'privacy') {
         preRenderedBody = renderPreRenderedPrivacy();
         const privTitle = "개인정보처리방침 | 박과장의 생활경제 Q&A";
+        const privDesc = "박과장의 생활경제 노트 개인정보 보호방침, Google AdSense 쿠키 운용 고지 및 이용자 권리 안내입니다.";
+        const privUrl = `${domainUrl}/?cat=privacy`;
         workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${privTitle}</title>`);
-        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=privacy" />`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${privDesc}" />`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${privUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${privUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${privTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${privTitle}" />`);
       } else if (catId === 'terms') {
         preRenderedBody = renderPreRenderedTerms();
         const termsTitle = "이용약관 및 면책고지 | 박과장의 생활경제 Q&A";
+        const termsDesc = "박과장의 생활경제 노트 칼럼 열람 및 생활금융 모의계산기 이용에 관한 이용약관 및 법적 면책고지입니다.";
+        const termsUrl = `${domainUrl}/?cat=terms`;
         workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${termsTitle}</title>`);
-        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=terms" />`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${termsDesc}" />`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${termsUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${termsUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${termsTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${termsTitle}" />`);
       } else if (catId && ['work', 'property', 'finance'].includes(catId)) {
         preRenderedBody = renderPreRenderedHome(allPosts, catId as any);
         const catNames: Record<string, string> = {
@@ -399,11 +432,24 @@ Sitemap: https://www.life-calc.kr/sitemap.xml
         };
         const catName = catNames[catId] || catId;
         const catTitle = `${catName} | 박과장의 생활경제 노트`;
+        const catDesc = `2026년 최신 ${catName} 실전 Q&A 칼럼과 모의계산기 모음입니다.`;
+        const catUrl = `${domainUrl}/?cat=${catId}`;
         workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${catTitle}</title>`);
-        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/?cat=${catId}" />`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${catDesc}" />`);
+        workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${catUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${catUrl}" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${catTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${catTitle}" />`);
       } else {
         preRenderedBody = renderPreRenderedHome(allPosts, 'all');
+        const homeTitle = "박과장의 생활경제 노트 | 2026 급여, 세금, 부동산, 연금 실전 가이드";
+        const homeDesc = "2026년 최신 연봉별 실수령액표, 식대 등 비과세 항목 한도, 4대보험 요율 계산, 퇴직금 및 정부 지원금 신청 자격까지 11년차 직장인의 실전 가이드와 무료 생활금융 계산기로 확인하세요.";
+        workingHtml = workingHtml.replace(/<title>.*?<\/title>/i, `<title>${homeTitle}</title>`);
+        workingHtml = workingHtml.replace(/<meta name="description" content=".*?" \/>/i, `<meta name="description" content="${homeDesc}" />`);
         workingHtml = workingHtml.replace(/<link rel="canonical" href=".*?" \/>/i, `<link rel="canonical" href="${domainUrl}/" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:url" content=".*?" \/>/i, `<meta property="og:url" content="${domainUrl}/" />`);
+        workingHtml = workingHtml.replace(/<meta property="og:title" content=".*?" \/>/i, `<meta property="og:title" content="${homeTitle}" />`);
+        workingHtml = workingHtml.replace(/<meta name="twitter:title" content=".*?" \/>/i, `<meta name="twitter:title" content="${homeTitle}" />`);
       }
 
       // Inject pre-rendered publisher content directly into <div id="root">

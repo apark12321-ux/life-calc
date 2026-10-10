@@ -244,7 +244,7 @@ export default function PropertyCalculator() {
       {/* Print Only Header */}
       <div className="print-only-header">
         <h2>부동산 평형 및 법정 중개료·취득세 모의계산 결과 보고서 ({activeTab === 'size' ? '평수 상호 변환' : activeTab === 'agent' ? '법정 중개 수수료' : '취득세 모의 산정'})</h2>
-        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+        <p>출력 일자: {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} | 박과장의 생활경제 노트 (https://www.life-calc.kr)</p>
       </div>
 
       {/* App Header */}

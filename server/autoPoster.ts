@@ -8,6 +8,14 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const AUTO_POSTS_FILE = path.join(DATA_DIR, 'auto_posts.json');
 const SCHEDULE_FILE = path.join(DATA_DIR, 'schedule_state.json');
 
+export function getKoreaDateString(): string {
+  // Asia/Seoul timezone (UTC+9)
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  const kst = new Date(utc + (9 * 3600000));
+  return kst.toISOString().split('T')[0];
+}
+
 export interface AutoPostScheduleSlot {
   id: string;
   category: PostCategory;
@@ -154,7 +162,7 @@ export class AutoPosterEngine {
   }
 
   private loadScheduleState(): ScheduleState {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getKoreaDateString();
     try {
       if (fs.existsSync(SCHEDULE_FILE)) {
         const raw = fs.readFileSync(SCHEDULE_FILE, 'utf-8');
@@ -208,7 +216,7 @@ export class AutoPosterEngine {
    * Generates randomized schedule slots for today across the 3 streamlined categories.
    */
   public generateTodaySchedule(force = false): AutoPostScheduleSlot[] {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getKoreaDateString();
     const categories: PostCategory[] = ['work', 'property', 'finance'];
 
     // 3 slots spaced across day: Morning (07:00~08:00), Lunch (12:30~13:30), Evening (19:30~20:30)
@@ -254,7 +262,7 @@ export class AutoPosterEngine {
   }
 
   private verifyAndGenerateTodaySchedule() {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getKoreaDateString();
     if (this.scheduleState.date !== today || !this.scheduleState.slots || this.scheduleState.slots.length === 0) {
       this.generateTodaySchedule();
     }
@@ -277,7 +285,7 @@ export class AutoPosterEngine {
       return;
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = getKoreaDateString();
     if (this.scheduleState.date !== today) {
       this.verifyAndGenerateTodaySchedule();
     }
@@ -326,7 +334,7 @@ export class AutoPosterEngine {
    * Generates a rich 1st-person storytelling post using Gemini or procedural generator.
    */
   public async generatePostForCategory(category: PostCategory, customTopic?: string): Promise<PostItem> {
-    const today = new Date().toISOString().split('T')[0];
+    const today = getKoreaDateString();
     const meta = CATEGORY_META[category] || { name: category, icon: '💼' };
     const suggestions = TOPIC_SUGGESTIONS[category] || [];
     const chosenSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];

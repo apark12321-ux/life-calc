@@ -185,7 +185,7 @@ export default function WageCalculator() {
       {/* Print Only Header */}
       <div className="print-only-header">
         <h2>종합 임금 계산 결과 보고서 ({activeSubTab === 'hourly' ? '시급 & 주휴수당' : activeSubTab === 'salary' ? '연봉 실수령액' : activeSubTab === 'retirement' ? '퇴직금 예산' : '실업급여 모의'})</h2>
-        <p>출력 일자: 2026년 07월 09일 | 생활계산기 천국 (https://www.life-calc.kr)</p>
+        <p>출력 일자: {new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })} | 박과장의 생활경제 노트 (https://www.life-calc.kr)</p>
       </div>
 
       {/* App Header */}
