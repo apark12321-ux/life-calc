@@ -93,11 +93,11 @@ function formatInline(text: string): string {
 export function renderPreRenderedHeader(currentCat?: string): string {
   const categories = [
     { id: 'all', label: '홈', href: '/' },
-    { id: 'work', label: '직장·급여', href: '/?cat=work' },
-    { id: 'property', label: '부동산·세금', href: '/?cat=property' },
-    { id: 'finance', label: '연금·금융', href: '/?cat=finance' },
-    { id: 'calculators', label: '실무 계산기', href: '/?cat=calculators' },
-    { id: 'about', label: '소개', href: '/?cat=about' }
+    { id: 'work', label: '직장·급여', href: '/category/work' },
+    { id: 'property', label: '부동산·세금', href: '/category/property' },
+    { id: 'finance', label: '연금·금융', href: '/category/finance' },
+    { id: 'calculators', label: '실무 계산기', href: '/calculators' },
+    { id: 'about', label: '소개', href: '/about' }
   ];
 
   return `
@@ -134,19 +134,19 @@ export function renderPreRenderedFooter(): string {
     <div class="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 pb-4 border-b border-gray-100 font-medium">
       <a href="/" class="hover:text-[#1078b9] text-gray-700">홈</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=work" class="hover:text-[#1078b9] text-gray-700">직장·급여</a>
+      <a href="/category/work" class="hover:text-[#1078b9] text-gray-700">직장·급여</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=property" class="hover:text-[#1078b9] text-gray-700">부동산·세금</a>
+      <a href="/category/property" class="hover:text-[#1078b9] text-gray-700">부동산·세금</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=finance" class="hover:text-[#1078b9] text-gray-700">연금·금융</a>
+      <a href="/category/finance" class="hover:text-[#1078b9] text-gray-700">연금·금융</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=calculators" class="hover:text-[#1078b9] text-gray-700">실무 계산기</a>
+      <a href="/calculators" class="hover:text-[#1078b9] text-gray-700">실무 계산기</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=about" class="hover:text-[#1078b9] text-gray-700">블로그 소개</a>
+      <a href="/about" class="hover:text-[#1078b9] text-gray-700">블로그 소개</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=privacy" class="hover:text-[#1078b9] font-bold text-gray-900 underline">개인정보처리방침</a>
+      <a href="/privacy" class="hover:text-[#1078b9] font-bold text-gray-900 underline">개인정보처리방침</a>
       <span class="text-gray-300">|</span>
-      <a href="/?cat=terms" class="hover:text-[#1078b9] text-gray-700">이용약관</a>
+      <a href="/terms" class="hover:text-[#1078b9] text-gray-700">이용약관</a>
     </div>
 
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs leading-relaxed text-gray-500">
@@ -185,7 +185,7 @@ export function renderPreRenderedPost(post: PostItem, allPosts: PostItem[]): str
           <nav aria-label="Breadcrumb" class="text-xs text-gray-500 flex items-center gap-1.5 pb-3 border-b border-gray-100">
             <a href="/" class="hover:text-[#1078b9]">홈</a>
             <span>&gt;</span>
-            <a href="/?cat=${post.category}" class="hover:text-[#1078b9]">${post.categoryName}</a>
+            <a href="/category/${post.category}" class="hover:text-[#1078b9]">${post.categoryName}</a>
             <span>&gt;</span>
             <span class="text-gray-700 font-medium truncate max-w-xs">${post.title}</span>
           </nav>
@@ -230,7 +230,7 @@ export function renderPreRenderedPost(post: PostItem, allPosts: PostItem[]): str
               <p class="font-bold text-sm text-[#1078b9]">직접 계산해보기: ${post.relatedCalculatorName || '실무 모의 계산기'}</p>
               <p class="text-xs text-gray-600">2026년 최신 법정 요율과 세법 기준으로 내 실 수령액을 즉시 모의 연산해 보세요.</p>
             </div>
-            <a href="/?calc=${post.relatedCalculatorId}" class="px-4 py-2 bg-[#1078b9] text-white rounded-lg text-xs font-bold shrink-0 hover:bg-[#0e69a3] transition">
+            <a href="/calculators/${post.relatedCalculatorId}" class="px-4 py-2 bg-[#1078b9] text-white rounded-lg text-xs font-bold shrink-0 hover:bg-[#0e69a3] transition">
               계산기 바로가기 &rarr;
             </a>
           </div>` : ''}
@@ -248,7 +248,7 @@ export function renderPreRenderedPost(post: PostItem, allPosts: PostItem[]): str
           <ul class="divide-y divide-gray-100 text-xs">
             ${relatedPosts.map(r => `
               <li class="py-2.5 flex items-center justify-between">
-                <a href="/?p=${r.id}" class="text-gray-800 hover:text-[#1078b9] font-medium truncate max-w-md">${r.title}</a>
+                <a href="/post/${r.id}" class="text-gray-800 hover:text-[#1078b9] font-medium truncate max-w-md">${r.title}</a>
                 <span class="text-gray-400 shrink-0 ml-4">${r.date.split(' ')[0]}</span>
               </li>
             `).join('')}
@@ -269,9 +269,9 @@ export function renderPreRenderedPost(post: PostItem, allPosts: PostItem[]): str
             11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 부동산 세금, 연금 정보를 알기 쉽게 기록합니다.
           </p>
           <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-            <a href="/?cat=about" class="text-gray-700 hover:text-[#1078b9] font-medium">블로그 소개</a>
+            <a href="/about" class="text-gray-700 hover:text-[#1078b9] font-medium">블로그 소개</a>
             <span class="text-gray-300">|</span>
-            <a href="/?cat=calculators" class="text-gray-700 hover:text-[#1078b9] font-medium">실무 계산기 (8종)</a>
+            <a href="/calculators" class="text-gray-700 hover:text-[#1078b9] font-medium">실무 계산기 (8종)</a>
           </div>
         </div>
       </aside>
@@ -350,7 +350,7 @@ export function renderPreRenderedHome(allPosts: PostItem[], category: CategoryTy
         <div class="space-y-3">
           ${displayPosts.slice(0, 15).map(post => `
             <article class="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 hover:border-[#1078b9] transition shadow-xs">
-              <a href="/?p=${post.id}" class="block group no-underline">
+              <a href="/post/${post.id}" class="block group no-underline">
                 <div class="flex items-center gap-2 text-xs mb-2">
                   <span class="bg-blue-50 text-[#1078b9] border border-blue-200 text-[11px] font-semibold px-2 py-0.5 rounded">
                     ${post.categoryName}
@@ -388,9 +388,9 @@ export function renderPreRenderedHome(allPosts: PostItem[], category: CategoryTy
             11년 동안 회사 생활, 이직, 내 집 마련을 거치며 직접 겪고 엑셀로 검증한 월급, 퇴직금, 부동산 세금, 연금 정보를 알기 쉽게 기록합니다.
           </p>
           <div class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-            <a href="/?cat=about" class="text-gray-700 hover:text-[#1078b9] font-medium">블로그 소개</a>
+            <a href="/about" class="text-gray-700 hover:text-[#1078b9] font-medium">블로그 소개</a>
             <span class="text-gray-300">|</span>
-            <a href="/?cat=calculators" class="text-gray-700 hover:text-[#1078b9] font-medium">실무 계산기 (8종)</a>
+            <a href="/calculators" class="text-gray-700 hover:text-[#1078b9] font-medium">실무 계산기 (8종)</a>
           </div>
         </div>
 
@@ -398,13 +398,13 @@ export function renderPreRenderedHome(allPosts: PostItem[], category: CategoryTy
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
           <h3 class="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3">2026 실무 금융 계산기 바로가기</h3>
           <ul class="space-y-2 text-xs">
-            <li><a href="/?calc=wage_salary" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 2026 연봉 실수령액 계산기</a></li>
-            <li><a href="/?calc=wage_hourly" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 최저시급(10,030원) & 주휴수당 계산기</a></li>
-            <li><a href="/?calc=wage_severance" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 퇴직금 및 평균임금 산정 계산기</a></li>
-            <li><a href="/?calc=property_tax" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 부동산 취득세 & 감면 계산기</a></li>
-            <li><a href="/?calc=property_brokerage" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 부동산 중개보수(복비) 상한요율 계산기</a></li>
-            <li><a href="/?calc=property_loan" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 주택담보대출 원리금 상환 계산기</a></li>
-            <li><a href="/?calc=finance_deposit" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 예적금 이자 & 비과세 복리 계산기</a></li>
+            <li><a href="/calculators/wage_salary" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 2026 연봉 실수령액 계산기</a></li>
+            <li><a href="/calculators/wage_hourly" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 최저시급(10,030원) & 주휴수당 계산기</a></li>
+            <li><a href="/calculators/wage_severance" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 퇴직금 및 평균임금 산정 계산기</a></li>
+            <li><a href="/calculators/property_tax" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 부동산 취득세 & 감면 계산기</a></li>
+            <li><a href="/calculators/property_brokerage" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 부동산 중개보수(복비) 상한요율 계산기</a></li>
+            <li><a href="/calculators/property_loan" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 주택담보대출 원리금 상환 계산기</a></li>
+            <li><a href="/calculators/finance_deposit" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 예적금 이자 & 비과세 복리 계산기</a></li>
           </ul>
         </div>
       </aside>

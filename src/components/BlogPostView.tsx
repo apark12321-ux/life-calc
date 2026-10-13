@@ -105,7 +105,7 @@ export default function BlogPostView({
     '@id': `https://www.life-calc.kr/post/${post.id}#blogposting`,
     'mainEntityOfPage': {
       '@type': 'WebPage',
-      '@id': `https://www.life-calc.kr/?p=${post.id}`
+      '@id': `https://www.life-calc.kr/post/${post.id}`
     },
     'headline': post.title,
     'description': post.summary,
@@ -150,12 +150,12 @@ export default function BlogPostView({
     if (ogDesc) ogDesc.setAttribute('content', post.summary);
 
     let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (ogUrl) ogUrl.setAttribute('content', `https://www.life-calc.kr/?p=${post.id}`);
+    if (ogUrl) ogUrl.setAttribute('content', `https://www.life-calc.kr/post/${post.id}`);
 
     let canonical = document.querySelector('link[rel="canonical"]');
     const prevCanonical = canonical?.getAttribute('href') || 'https://www.life-calc.kr/';
     if (canonical) {
-      canonical.setAttribute('href', `https://www.life-calc.kr/?p=${post.id}`);
+      canonical.setAttribute('href', `https://www.life-calc.kr/post/${post.id}`);
     }
 
     return () => {
@@ -186,7 +186,7 @@ export default function BlogPostView({
           </a>
           <span>&gt;</span>
           <a 
-            href={`/?cat=${post.category}`}
+            href={`/category/${post.category}`}
             onClick={(e) => { e.preventDefault(); onSelectCategory(post.category); }}
             className="hover:text-[#1078b9] transition font-semibold text-gray-700 no-underline"
           >
@@ -452,7 +452,7 @@ export default function BlogPostView({
               </p>
             </div>
             <a
-              href={`/?calc=${post.relatedCalculatorId}`}
+              href={`/calculators/${post.relatedCalculatorId}`}
               onClick={(e) => {
                 e.preventDefault();
                 if (post.relatedCalculatorId) {
@@ -501,7 +501,7 @@ export default function BlogPostView({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs no-print">
         {prevPost ? (
           <a
-            href={`/?p=${prevPost.id}`}
+            href={`/post/${prevPost.id}`}
             onClick={(e) => {
               e.preventDefault();
               onSelectPost(prevPost);
@@ -520,7 +520,7 @@ export default function BlogPostView({
 
         {nextPost && (
           <a
-            href={`/?p=${nextPost.id}`}
+            href={`/post/${nextPost.id}`}
             onClick={(e) => {
               e.preventDefault();
               onSelectPost(nextPost);
@@ -548,7 +548,7 @@ export default function BlogPostView({
             {relatedPosts.map(rel => (
               <li key={rel.id}>
                 <a
-                  href={`/?p=${rel.id}`}
+                  href={`/post/${rel.id}`}
                   onClick={(e) => {
                     e.preventDefault();
                     onSelectPost(rel);

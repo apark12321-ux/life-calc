@@ -1,8 +1,32 @@
 {
   "rewrites": [
     {
-      "source": "/((?!ads\\.txt|robots\\.txt|sitemap\\.xml|rss\\.xml|google.*\\.html|assets/).*)",
-      "destination": "/index.html"
+      "source": "/post/:id",
+      "destination": "/post/:id/index.html"
+    },
+    {
+      "source": "/category/:id",
+      "destination": "/category/:id/index.html"
+    },
+    {
+      "source": "/calculators",
+      "destination": "/calculators/index.html"
+    },
+    {
+      "source": "/calculators/:id",
+      "destination": "/calculators/index.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy/index.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms/index.html"
     }
   ],
   "headers": [
@@ -48,6 +72,56 @@
           "value": "public, max-age=3600"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "p",
+          "value": "(?<id>[A-Za-z0-9_-]+)"
+        }
+      ],
+      "destination": "/post/:id",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "calc",
+          "value": "(?<id>[A-Za-z0-9_-]+)"
+        }
+      ],
+      "destination": "/calculators/:id",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "(?<id>work|property|finance)"
+        }
+      ],
+      "destination": "/category/:id",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "cat",
+          "value": "(?<id>calculators|about|privacy|terms)"
+        }
+      ],
+      "destination": "/:id",
+      "permanent": true
     }
   ]
 }
