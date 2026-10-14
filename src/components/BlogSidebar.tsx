@@ -3,6 +3,7 @@ import { PostItem, CategoryType } from '../types';
 import { ALL_BLOG_POSTS } from '../data/postsData';
 import { Folder, Bell, Tag, Check, HelpCircle } from 'lucide-react';
 import TableOfContents from './TableOfContents';
+import { categoryPath } from '../utils/routes';
 
 interface BlogSidebarProps {
   onSelectPost: (post: PostItem) => void;
@@ -78,7 +79,7 @@ export default function BlogSidebar({
 
         <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
           <a
-            href="/?cat=about"
+            href="/about"
             onClick={(e) => {
               e.preventDefault();
               onSelectCategory('about');
@@ -113,7 +114,7 @@ export default function BlogSidebar({
         <ul className="space-y-2 text-xs text-gray-700 font-body">
           <li>
             <a
-              href="/?cat=about"
+              href="/about"
               onClick={(e) => { e.preventDefault(); onSelectCategory('about'); }}
               className="line-clamp-2 text-gray-700 hover:text-[#1078b9] transition no-underline block"
             >
@@ -122,7 +123,7 @@ export default function BlogSidebar({
           </li>
           <li>
             <a
-              href="/?cat=about"
+              href="/about"
               onClick={(e) => { e.preventDefault(); onSelectCategory('about'); }}
               className="line-clamp-2 text-gray-700 hover:text-[#1078b9] transition no-underline block"
             >
@@ -156,7 +157,7 @@ export default function BlogSidebar({
             {categories.map((cat) => (
               <a
                 key={cat.id}
-                href={`/?cat=${cat.id}`}
+                href={categoryPath(cat.id)}
                 onClick={(e) => {
                   e.preventDefault();
                   onSelectCategory(cat.id);
@@ -169,7 +170,7 @@ export default function BlogSidebar({
             ))}
 
             <a
-              href="/?cat=calculators"
+              href="/calculators"
               onClick={(e) => {
                 e.preventDefault();
                 onNavigateToCalculator('wage_salary');
@@ -193,7 +194,7 @@ export default function BlogSidebar({
           {recentPosts.map((p) => (
             <li key={p.id}>
               <a
-                href={`/?p=${p.id}`}
+                href={`/post/${p.id}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onSelectPost(p);
@@ -221,7 +222,7 @@ export default function BlogSidebar({
           {recommendedPosts.map((p) => (
             <li key={p.id}>
               <a
-                href={`/?p=${p.id}`}
+                href={`/post/${p.id}`}
                 onClick={(e) => {
                   e.preventDefault();
                   onSelectPost(p);

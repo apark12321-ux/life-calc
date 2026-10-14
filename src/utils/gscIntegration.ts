@@ -9,6 +9,7 @@
 
 import { useEffect } from 'react';
 import { CategoryType, PostItem } from '../types';
+import { categoryPath } from './routes';
 
 const DEFAULT_GSC_TOKEN = 'google-site-verification-life-calc-kr-2026';
 const STORAGE_KEY = 'gsc_verification_token';
@@ -92,7 +93,7 @@ export function updateBreadcrumbSchema(category: CategoryType, post: PostItem | 
       '@type': 'ListItem',
       position: 2,
       name: categoryNames[category],
-      item: `https://www.life-calc.kr/?cat=${category}`
+      item: `https://www.life-calc.kr${categoryPath(category)}`
     });
 
     if (post) {
@@ -100,14 +101,14 @@ export function updateBreadcrumbSchema(category: CategoryType, post: PostItem | 
         '@type': 'ListItem',
         position: 3,
         name: post.title,
-        item: `https://www.life-calc.kr/?p=${post.id}`
+        item: `https://www.life-calc.kr/post/${post.id}`
       });
     } else if (calcId) {
       items.push({
         '@type': 'ListItem',
         position: 3,
         name: '실무 금융 모의계산기',
-        item: `https://www.life-calc.kr/?calc=${calcId}`
+        item: `https://www.life-calc.kr/calculators/${calcId}`
       });
     }
   }
@@ -177,11 +178,9 @@ export function useGoogleSearchConsole(
       }
 
       if (selectedPost) {
-        canonicalTag.href = `https://www.life-calc.kr/?p=${selectedPost.id}`;
-      } else if (currentCategory === 'calculators' && activeCalculatorSubId) {
-        canonicalTag.href = `https://www.life-calc.kr/?calc=${activeCalculatorSubId}`;
+        canonicalTag.href = `https://www.life-calc.kr/post/${selectedPost.id}`;
       } else if (currentCategory !== 'all') {
-        canonicalTag.href = `https://www.life-calc.kr/?cat=${currentCategory}`;
+        canonicalTag.href = `https://www.life-calc.kr${categoryPath(currentCategory)}`;
       } else {
         canonicalTag.href = 'https://www.life-calc.kr/';
       }

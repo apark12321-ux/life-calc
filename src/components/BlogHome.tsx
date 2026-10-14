@@ -151,7 +151,7 @@ export default function BlogHome({
               <React.Fragment key={post.id}>
                 <article className="bg-white border border-gray-200 rounded-xl hover:border-[#1078b9] hover:shadow-xs transition duration-150 group">
                   <a
-                    href={`/?p=${post.id}`}
+                    href={`/post/${post.id}`}
                     onClick={(e) => {
                       e.preventDefault();
                       onSelectPost(post);

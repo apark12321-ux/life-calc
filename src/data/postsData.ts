@@ -1187,4 +1187,27 @@ id: 'post-fin-07',
   }
 ];
 
-export const ALL_BLOG_POSTS: PostItem[] = [...RECENT_BLOG_POSTS, ...INITIAL_BLOG_POSTS];
+// 글 ID는 곧 글 주소(/post/<id>)다. 서로 다른 글이 같은 ID를 쓰면 한 주소에 글 하나만 열리고
+// 나머지는 접근할 수 없게 되므로, 겹치는 경우 먼저 발행된 글이 원래 ID를 유지하고
+// 나중에 발행된 글에는 발행일을 붙인 ID(예: post-fin-10-20261011)를 준다.
+// 발행일은 바뀌지 않으므로 이후 글이 추가되어도 기존 주소는 그대로 유지된다.
+function withUniqueIds(posts: PostItem[]): PostItem[] {
+  const byOldest = posts
+    .map((post, index) => ({ post, index }))
+    .sort((a, b) => a.post.date.localeCompare(b.post.date) || b.index - a.index);
+  const used = new Set<string>();
+  const assigned = new Map<number, string>();
+  for (const { post, index } of byOldest) {
+    let id = post.id;
+    if (used.has(id)) {
+      const stamp = post.date.slice(0, 10).replace(/-/g, '');
+      id = `${post.id}-${stamp}`;
+      for (let n = 2; used.has(id); n++) id = `${post.id}-${stamp}-${n}`;
+    }
+    used.add(id);
+    assigned.set(index, id);
+  }
+  return posts.map((post, index) => (assigned.get(index) === post.id ? post : { ...post, id: assigned.get(index)! }));
+}
+
+export const ALL_BLOG_POSTS: PostItem[] = withUniqueIds([...RECENT_BLOG_POSTS, ...INITIAL_BLOG_POSTS]);

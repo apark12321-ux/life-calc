@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Menu, X } from 'lucide-react';
 import { CategoryType } from '../types';
+import { categoryPath } from '../utils/routes';
 
 interface BlogHeaderProps {
   currentCategory: CategoryType;
@@ -64,7 +65,7 @@ export default function BlogHeader({
             <ul className="flex items-center h-full">
               {navItems.map((item) => {
                 const isActive = currentCategory === item.id;
-                const linkHref = item.id === 'all' ? '/' : `/?cat=${item.id}`;
+                const linkHref = categoryPath(item.id);
                 return (
                   <li key={item.id} className="h-full border-r border-[#005f8d]/60 last:border-r-0">
                     <a
@@ -169,7 +170,7 @@ export default function BlogHeader({
         <div className="md:hidden bg-[#0b5f94] border-t border-[#005f8d] px-4 py-3 space-y-1">
           {navItems.map((item) => {
             const isActive = currentCategory === item.id;
-            const linkHref = item.id === 'all' ? '/' : `/?cat=${item.id}`;
+            const linkHref = categoryPath(item.id);
             return (
               <a
                 key={item.id}

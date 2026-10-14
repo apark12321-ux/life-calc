@@ -132,7 +132,8 @@ export class AutoPosterEngine {
     this.ensureDataDirectory();
     this.autoPosts = this.loadAutoPosts();
     this.scheduleState = this.loadScheduleState();
-    this.startScheduler();
+    // 빌드 시 사전 렌더링용으로 띄운 경우에는 자동 발행 스케줄러를 켜지 않는다.
+    if (process.env.PRERENDER_SNAPSHOT !== '1') this.startScheduler();
   }
 
   private ensureDataDirectory() {

@@ -7,6 +7,7 @@ import BlogHome from './components/BlogHome';
 import BlogPostView from './components/BlogPostView';
 import { ChevronUp, Cookie, Check } from 'lucide-react';
 import { useGoogleSearchConsole } from './utils/gscIntegration';
+import { parseRoute, canonicalPath, categoryPath, postPath, calcPath } from './utils/routes';
 
 const CalculatorsHub = lazy(() => import('./components/CalculatorsHub'));
 const AboutApp = lazy(() => import('./components/AboutApp'));
@@ -47,10 +48,18 @@ export default function App() {
   // Sync state from current URL
   const syncStateFromUrl = useCallback(() => {
     try {
-      const params = new URLSearchParams(window.location.search);
-      const postId = params.get('p') || params.get('post');
-      const cat = params.get('cat') || params.get('c') || params.get('category');
-      const calcId = params.get('calc') || params.get('s');
+      const route = parseRoute(window.location.pathname, new URLSearchParams(window.location.search));
+      const postId = route.postId;
+      const cat = route.catId;
+      const calcId = route.calcId;
+
+      // 예전 물음표 주소(/?p=..., /?cat=...)로 들어오면 주소창을 대표 주소로 바꿔 준다.
+      if (route.legacy) {
+        window.history.replaceState(window.history.state, '', canonicalPath(route));
+      } else if (/[?&](p|post|cat|c|category|calc|s)=/.test(window.location.search)) {
+        // 서버에서 대표 주소로 넘어온 뒤 남은 예전 물음표 값은 지운다.
+        window.history.replaceState(window.history.state, '', window.location.pathname);
+      }
 
       if (postId) {
         const found = posts.find(p => p.id === postId) || ALL_BLOG_POSTS.find(p => p.id === postId);
@@ -74,6 +83,7 @@ export default function App() {
           work: '직장·급여·퇴직 실전 Q&A | 박과장의 생활경제 Q&A',
           property: '부동산·세금 실전 Q&A | 박과장의 생활경제 Q&A',
           finance: '연금·금융·절세 실전 Q&A | 박과장의 생활경제 Q&A',
+          calculators: '실전 금융 계산기 | 박과장의 생활경제 Q&A',
           about: '블로그 소개 및 편집 원칙 | 박과장의 생활경제 Q&A',
           privacy: '개인정보처리방침 | 박과장의 생활경제 Q&A',
           terms: '이용약관 및 법적 고지 | 박과장의 생활경제 Q&A',
@@ -154,7 +164,7 @@ export default function App() {
     setSelectedPost(null);
     setSearchQuery('');
     
-    const newUrl = cat === 'all' ? window.location.pathname : `${window.location.pathname}?cat=${cat}`;
+    const newUrl = categoryPath(cat);
     window.history.pushState({ category: cat }, '', newUrl);
 
     const titles: Record<string, string> = {
@@ -175,7 +185,7 @@ export default function App() {
   const handleSelectPost = (post: PostItem) => {
     setSelectedPost(post);
     setCurrentCategory(post.category);
-    const newUrl = `${window.location.pathname}?p=${post.id}`;
+    const newUrl = postPath(post.id);
     window.history.pushState({ postId: post.id }, '', newUrl);
     document.title = `${post.title} | 박과장의 생활경제 노트`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -186,7 +196,7 @@ export default function App() {
     setCurrentCategory('calculators');
     setActiveCalculatorSubId(calcId);
     setSelectedPost(null);
-    const newUrl = `${window.location.pathname}?calc=${calcId}`;
+    const newUrl = calcPath(calcId);
     window.history.pushState({ calcId }, '', newUrl);
     document.title = `실전 금융 계산기 | 박과장의 생활경제 노트`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -292,19 +302,19 @@ export default function App() {
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-2 pb-4 border-b border-gray-100 font-medium">
             <a href="/" onClick={(e) => { e.preventDefault(); handleSelectCategory('all'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">홈</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=work" onClick={(e) => { e.preventDefault(); handleSelectCategory('work'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">직장·급여</a>
+            <a href="/category/work" onClick={(e) => { e.preventDefault(); handleSelectCategory('work'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">직장·급여</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=property" onClick={(e) => { e.preventDefault(); handleSelectCategory('property'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">부동산·세금</a>
+            <a href="/category/property" onClick={(e) => { e.preventDefault(); handleSelectCategory('property'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">부동산·세금</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=finance" onClick={(e) => { e.preventDefault(); handleSelectCategory('finance'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">연금·금융</a>
+            <a href="/category/finance" onClick={(e) => { e.preventDefault(); handleSelectCategory('finance'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">연금·금융</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=calculators" onClick={(e) => { e.preventDefault(); handleSelectCategory('calculators'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">실무 계산기</a>
+            <a href="/calculators" onClick={(e) => { e.preventDefault(); handleSelectCategory('calculators'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">실무 계산기</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=about" onClick={(e) => { e.preventDefault(); handleSelectCategory('about'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">블로그 소개</a>
+            <a href="/about" onClick={(e) => { e.preventDefault(); handleSelectCategory('about'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">블로그 소개</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=privacy" onClick={(e) => { e.preventDefault(); handleSelectCategory('privacy'); }} className="hover:text-[#1078b9] transition font-bold text-gray-900 underline">개인정보처리방침</a>
+            <a href="/privacy" onClick={(e) => { e.preventDefault(); handleSelectCategory('privacy'); }} className="hover:text-[#1078b9] transition font-bold text-gray-900 underline">개인정보처리방침</a>
             <span className="text-gray-300">|</span>
-            <a href="/?cat=terms" onClick={(e) => { e.preventDefault(); handleSelectCategory('terms'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">이용약관</a>
+            <a href="/terms" onClick={(e) => { e.preventDefault(); handleSelectCategory('terms'); }} className="hover:text-[#1078b9] text-gray-700 transition no-underline">이용약관</a>
           </div>
 
           {/* Blog Description & Legal Disclaimer */}
