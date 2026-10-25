@@ -398,6 +398,7 @@ export function renderPreRenderedHome(allPosts: PostItem[], category: CategoryTy
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-xs">
           <h3 class="text-xs font-bold text-gray-900 border-b border-gray-200 pb-2 mb-3">2026 실무 금융 계산기 바로가기</h3>
           <ul class="space-y-2 text-xs">
+            <li><a href="/calculators/yearend" class="text-gray-700 hover:text-[#1078b9] font-bold block py-1">&bull; 2026 연말정산 카드 25% 황금비율 & 월세 세액공제 계산기</a></li>
             <li><a href="/calculators/wage_salary" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 2026 연봉 실수령액 계산기</a></li>
             <li><a href="/calculators/wage_hourly" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 최저시급(10,030원) & 주휴수당 계산기</a></li>
             <li><a href="/calculators/wage_severance" class="text-gray-700 hover:text-[#1078b9] block py-1">&bull; 퇴직금 및 평균임금 산정 계산기</a></li>

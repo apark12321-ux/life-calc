@@ -365,12 +365,37 @@ export default function BlogPostView({
               }
               if (paragraph.startsWith('- ')) {
                 return (
-                  <ul key={idx} className="list-disc pl-5 space-y-1.5 text-gray-700 text-sm sm:text-base">
-                    {paragraph.split('\n').map((item, itemIdx) => (
-                      <li key={itemIdx} className="leading-relaxed">
-                        {renderFormattedText(item.replace(/^- /, ''))}
-                      </li>
-                    ))}
+                  <ul key={idx} className="list-disc pl-5 space-y-2 text-gray-700 text-sm sm:text-base">
+                    {paragraph.split('\n').map((item, itemIdx) => {
+                      const cleanItem = item.replace(/^- /, '').trim();
+                      const matchingPost = ALL_BLOG_POSTS.find(
+                        p => p.title.trim() === cleanItem ||
+                             cleanItem.includes(p.title.trim()) ||
+                             p.title.trim().includes(cleanItem)
+                      );
+                      if (matchingPost) {
+                        return (
+                          <li key={itemIdx} className="leading-relaxed">
+                            <a
+                              href={`/post/${matchingPost.id}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                onSelectPost(matchingPost);
+                              }}
+                              className="text-[#1078b9] hover:text-[#0b5381] hover:underline font-semibold inline-flex items-center gap-1 group"
+                            >
+                              <span>{renderFormattedText(cleanItem)}</span>
+                              <span className="text-xs transition-transform group-hover:translate-x-0.5">&rarr;</span>
+                            </a>
+                          </li>
+                        );
+                      }
+                      return (
+                        <li key={itemIdx} className="leading-relaxed">
+                          {renderFormattedText(cleanItem)}
+                        </li>
+                      );
+                    })}
                   </ul>
                 );
               }

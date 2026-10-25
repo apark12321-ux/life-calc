@@ -517,9 +517,14 @@ export class AutoPosterEngine {
   public getAllPosts(): PostItem[] {
     const combined = [...this.autoPosts, ...ALL_BLOG_POSTS];
     const seen = new Set<string>();
+    const now = Date.now();
     return combined.filter(p => {
       if (seen.has(p.id)) return false;
       seen.add(p.id);
+      const publishDate = new Date(p.date).getTime();
+      if (!isNaN(publishDate) && publishDate > now + 3600000) {
+        return false;
+      }
       return true;
     });
   }

@@ -3,6 +3,7 @@ import InsuranceCalculator from './InsuranceCalculator';
 import WageCalculator from './WageCalculator';
 import FinanceCalculator from './FinanceCalculator';
 import PropertyCalculator from './PropertyCalculator';
+import YearEndTaxCalculator from './YearEndTaxCalculator';
 import { ArrowLeft } from 'lucide-react';
 import { CategoryType } from '../types';
 
@@ -16,6 +17,7 @@ export default function CalculatorsHub({
   onBackToBlog
 }: CalculatorsHubProps) {
   const [activeTab, setActiveTab] = useState<string>(() => {
+    if (initialTab.startsWith('yearend') || initialTab.startsWith('tax')) return 'yearend';
     if (initialTab.startsWith('wage')) return 'wage';
     if (initialTab.startsWith('finance')) return 'finance';
     if (initialTab.startsWith('property')) return 'property';
@@ -23,6 +25,7 @@ export default function CalculatorsHub({
   });
 
   const tabs = [
+    { id: 'yearend', label: '연말정산·절세', icon: '★', desc: '카드 25% 황금비율 문턱, 체크카드 30%, 월세 17% 환급' },
     { id: 'insurance', label: '4대사회보험', icon: '■', desc: '국민연금, 건강보험, 고용보험, 산재보험 모의 계산' },
     { id: 'wage', label: '급여·퇴직금', icon: '◆', desc: '최저임금, 주휴수당, 연봉 실수령액, 퇴직금, 실업급여' },
     { id: 'finance', label: '금융·예적금·대출', icon: '●', desc: '예금·적금 만기 이자, 대출 상환 원리금 시뮬레이션' },
@@ -59,7 +62,7 @@ export default function CalculatorsHub({
       </div>
 
       {/* Calculator Navigation Tabs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {tabs.map((t) => {
           const isActive = activeTab === t.id;
           return (
@@ -94,6 +97,7 @@ export default function CalculatorsHub({
 
       {/* Active Calculator Component Container */}
       <div className="bg-white rounded-3xl p-4 sm:p-8 border border-slate-200 shadow-xs">
+        {activeTab === 'yearend' && <YearEndTaxCalculator />}
         {activeTab === 'insurance' && <InsuranceCalculator />}
         {activeTab === 'wage' && <WageCalculator />}
         {activeTab === 'finance' && <FinanceCalculator />}

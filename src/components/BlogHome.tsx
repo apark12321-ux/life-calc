@@ -29,7 +29,11 @@ export default function BlogHome({
 
   // Filter posts
   const filteredPosts = useMemo(() => {
-    let list = posts;
+    const now = Date.now();
+    let list = posts.filter(p => {
+      const pDate = new Date(p.date).getTime();
+      return isNaN(pDate) || pDate <= now + 3600000;
+    });
 
     // Filter by category
     if (currentCategory !== 'all' && ['work', 'property', 'finance'].includes(currentCategory)) {
