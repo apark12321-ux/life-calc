@@ -8,12 +8,15 @@ const DATA_DIR = path.join(process.cwd(), 'data');
 const AUTO_POSTS_FILE = path.join(DATA_DIR, 'auto_posts.json');
 const SCHEDULE_FILE = path.join(DATA_DIR, 'schedule_state.json');
 
-export function getKoreaDateString(): string {
-  // Asia/Seoul timezone (UTC+9)
+export function getKoreaNow(): Date {
   const d = new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-  const kst = new Date(utc + (9 * 3600000));
-  return kst.toISOString().split('T')[0];
+  return new Date(utc + (9 * 3600000));
+}
+
+export function getKoreaDateString(): string {
+  // Asia/Seoul timezone (UTC+9)
+  return getKoreaNow().toISOString().split('T')[0];
 }
 
 export interface AutoPostScheduleSlot {
@@ -214,50 +217,51 @@ export class AutoPosterEngine {
   }
 
   /**
-   * Generates randomized schedule slots for today across the 3 streamlined categories.
+   * Generates a single randomized schedule slot for today (1 post per day with organic random time).
    */
   public generateTodaySchedule(force = false): AutoPostScheduleSlot[] {
     const today = getKoreaDateString();
     const categories: PostCategory[] = ['work', 'property', 'finance'];
 
-    // 3 slots spaced across day: Morning (07:00~08:00), Lunch (12:30~13:30), Evening (19:30~20:30)
-    const baseHours = [7, 13, 20];
-    
-    // Shuffle categories daily for organic distribution
-    const shuffledCategories = [...categories].sort(() => Math.random() - 0.5);
+    // 1일 1포스팅 원칙: 3대 핵심 카테고리를 순환 배정하여 균형 유지
+    const allPosts = this.getAllPosts();
+    const lastCategory = allPosts[0]?.category;
+    let nextCategory: PostCategory = 'work';
+    if (lastCategory === 'work') nextCategory = 'property';
+    else if (lastCategory === 'property') nextCategory = 'finance';
+    else if (lastCategory === 'finance') nextCategory = 'work';
+    else nextCategory = categories[Math.floor(Math.random() * categories.length)];
 
-    const slots: AutoPostScheduleSlot[] = [];
+    const meta = CATEGORY_META[nextCategory] || { name: nextCategory, icon: '💼' };
 
-    for (let i = 0; i < 3; i++) {
-      const cat = shuffledCategories[i];
-      const meta = CATEGORY_META[cat];
-      const hour = baseHours[i];
-      const minute = Math.floor(Math.random() * 60);
-      const second = Math.floor(Math.random() * 60);
+    // 사람이 직접 포스팅하는 자연스러운 독자 활동 시간대(08:00 ~ 22:30) 중 랜덤 시각 추첨
+    const realisticHours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+    const hour = realisticHours[Math.floor(Math.random() * realisticHours.length)];
+    const minute = Math.floor(Math.random() * 58) + 1; // 1 ~ 58
+    const second = Math.floor(Math.random() * 58) + 1; // 1 ~ 58
 
-      const hourStr = String(hour).padStart(2, '0');
-      const minStr = String(minute).padStart(2, '0');
-      const secStr = String(second).padStart(2, '0');
-      const timeStr = `${hourStr}:${minStr}:${secStr}`;
+    const hourStr = String(hour).padStart(2, '0');
+    const minStr = String(minute).padStart(2, '0');
+    const secStr = String(second).padStart(2, '0');
+    const timeStr = `${hourStr}:${minStr}:${secStr}`;
 
-      slots.push({
-        id: `slot-${today}-${cat}-${i}`,
-        category: cat,
-        categoryName: meta?.name || cat,
+    const slots: AutoPostScheduleSlot[] = [
+      {
+        id: `slot-${today}-${nextCategory}-daily`,
+        category: nextCategory,
+        categoryName: meta?.name || nextCategory,
         categoryIcon: meta?.icon || '💼',
         scheduledTime: `${today}T${timeStr}`,
         scheduledHour: hour,
         scheduledMinute: minute,
         scheduledSecond: second,
         status: 'pending'
-      });
-    }
-
-    slots.sort((a, b) => (a.scheduledHour * 3600 + a.scheduledMinute * 60 + a.scheduledSecond) - (b.scheduledHour * 3600 + b.scheduledMinute * 60 + b.scheduledSecond));
+      }
+    ];
 
     this.scheduleState.date = today;
     this.scheduleState.slots = slots;
-    this.addLog(`오늘(${today}) 3대 핵심 카테고리별 1인칭 스토리텔링 자동 포스팅 스케줄 배정 완료`, 'info');
+    this.addLog(`오늘(${today}) 1일 1포스팅 자동화 스케줄 배정 완료 [예정 시각: ${timeStr}, 주제: ${meta.name}]`, 'info');
     this.saveScheduleState();
     return slots;
   }
@@ -291,7 +295,7 @@ export class AutoPosterEngine {
       this.verifyAndGenerateTodaySchedule();
     }
 
-    const now = new Date();
+    const now = getKoreaNow();
     const currentSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
 
     for (const slot of this.scheduleState.slots) {
@@ -307,8 +311,14 @@ export class AutoPosterEngine {
   private async executeSlot(slot: AutoPostScheduleSlot) {
     this.isProcessing = true;
     try {
-      this.addLog(`[자동 발행 실행] 카테고리: ${slot.categoryName}(${slot.category}) 예약 시각 도달 (${slot.scheduledHour}:${slot.scheduledMinute}:${slot.scheduledSecond})`, 'info');
-      const newPost = await this.generatePostForCategory(slot.category);
+      const hourStr = String(slot.scheduledHour).padStart(2, '0');
+      const minStr = String(slot.scheduledMinute).padStart(2, '0');
+      const secStr = String(slot.scheduledSecond).padStart(2, '0');
+      const timeStr = `${hourStr}:${minStr}:${secStr}`;
+      const scheduledDateTime = `${slot.scheduledTime.split('T')[0]} ${timeStr}`;
+
+      this.addLog(`[1일 1포스팅 자동 발행 실행] 카테고리: ${slot.categoryName}(${slot.category}) 예약 시각(${timeStr}) 도달`, 'info');
+      const newPost = await this.generatePostForCategory(slot.category, undefined, scheduledDateTime);
       
       this.autoPosts.unshift(newPost);
       this.saveAutoPosts();
@@ -316,9 +326,9 @@ export class AutoPosterEngine {
       slot.status = 'published';
       slot.publishedPostId = newPost.id;
       slot.publishedPostTitle = newPost.title;
-      slot.publishedAt = new Date().toISOString();
+      slot.publishedAt = scheduledDateTime;
 
-      this.addLog(`[발행 완료] "${newPost.title}" (${slot.categoryName}) 1인칭 실전 스토리 발행 성공`, 'success');
+      this.addLog(`[1일 1포스팅 발행 완료] "${newPost.title}" (${slot.categoryName}) 1인칭 실전 스토리 발행 성공 (발행시간: ${timeStr})`, 'success');
       this.triggerBackgroundIndexing(newPost.id, newPost.title);
       this.saveScheduleState();
     } catch (err: any) {
@@ -334,12 +344,20 @@ export class AutoPosterEngine {
   /**
    * Generates a rich 1st-person storytelling post using Gemini or procedural generator.
    */
-  public async generatePostForCategory(category: PostCategory, customTopic?: string): Promise<PostItem> {
+  public async generatePostForCategory(category: PostCategory, customTopic?: string, customDateTime?: string): Promise<PostItem> {
     const today = getKoreaDateString();
     const meta = CATEGORY_META[category] || { name: category, icon: '💼' };
     const suggestions = TOPIC_SUGGESTIONS[category] || [];
     const chosenSuggestion = suggestions[Math.floor(Math.random() * suggestions.length)];
     const targetTopic = customTopic || chosenSuggestion?.title || `${meta.name} 직접 겪은 실전 가이드`;
+
+    // 1일 1포스팅용 자연스러운 랜덤 시각 생성 (08:00 ~ 22:30)
+    const realisticHours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+    const randH = realisticHours[Math.floor(Math.random() * realisticHours.length)];
+    const randM = Math.floor(Math.random() * 58) + 1;
+    const randS = Math.floor(Math.random() * 58) + 1;
+    const defaultDateTime = `${today} ${String(randH).padStart(2, '0')}:${String(randM).padStart(2, '0')}:${String(randS).padStart(2, '0')}`;
+    const postDate = customDateTime || defaultDateTime;
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (apiKey) {
@@ -414,7 +432,7 @@ export class AutoPosterEngine {
           authorRole: '돈 지키는 박과장',
           authorNote: parsed.authorNote || '💡 제가 직접 겪어보고 엑셀로 검증한 팩트만 공유합니다. 여러분도 권리를 꼭 챙기세요.',
           readTimeMinutes: parsed.readTimeMinutes || 5,
-          date: today,
+          date: postDate,
           viewCount: Math.floor(Math.random() * 150) + 120,
           tags: parsed.tags || [meta.name, '실제경험', '2026최신', '박과장후기'],
           highlights: parsed.highlights || [
@@ -448,7 +466,7 @@ export class AutoPosterEngine {
       authorRole: '돈 지키는 박과장',
       authorNote: `💡 ${chosenSuggestion?.hint || '가만히 있으면 아무도 안 챙겨줍니다. 본인이 직접 계산해보고 당당하게 요구해야 합니다.'}`,
       readTimeMinutes: 5,
-      date: today,
+      date: postDate,
       viewCount: Math.floor(Math.random() * 120) + 90,
       tags: [meta.name, '실화후기', '팩트체크', '2026기준', '돈지키기'],
       highlights: [
@@ -506,10 +524,16 @@ export class AutoPosterEngine {
   }
 
   public async triggerInstantPost(category: PostCategory, topic?: string): Promise<PostItem> {
-    const post = await this.generatePostForCategory(category, topic);
+    const now = getKoreaNow();
+    const hourStr = String(now.getHours()).padStart(2, '0');
+    const minStr = String(now.getMinutes()).padStart(2, '0');
+    const secStr = String(now.getSeconds()).padStart(2, '0');
+    const instantDateTime = `${getKoreaDateString()} ${hourStr}:${minStr}:${secStr}`;
+
+    const post = await this.generatePostForCategory(category, topic, instantDateTime);
     this.autoPosts.unshift(post);
     this.saveAutoPosts();
-    this.addLog(`[즉시 수동 발행] "${post.title}" (${post.categoryName}) 1인칭 스토리텔링 등록 완료`, 'success');
+    this.addLog(`[즉시 수동 발행] "${post.title}" (${post.categoryName}) 1인칭 스토리텔링 등록 완료 (${instantDateTime})`, 'success');
     this.triggerBackgroundIndexing(post.id, post.title);
     return post;
   }

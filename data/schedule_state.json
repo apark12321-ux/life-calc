@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-04",
+  "enabled": true,
+  "intervalHours": 6,
+  "slots": [
+    {
+      "id": "slot-2026-11-04-finance-daily",
+      "category": "finance",
+      "categoryName": "연금·금융·절세",
+      "categoryIcon": "●",
+      "scheduledTime": "2026-11-04T17:15:14",
+      "scheduledHour": 17,
+      "scheduledMinute": 15,
+      "scheduledSecond": 14,
+      "status": "pending"
+    }
+  ],
+  "logs": [
+    {
+      "timestamp": "2026-11-04T14:37:08.158Z",
+      "message": "오늘(2026-11-04) 1일 1포스팅 자동화 스케줄 배정 완료 [예정 시각: 17:15:14, 주제: 연금·금융·절세]",
+      "type": "info"
+    },
+    {
+      "timestamp": "2026-11-04T14:37:03.209Z",
+      "message": "자동 포스팅 엔진 가동 (직장·월급·퇴직 / 내집·부동산·세금 / 연금·보험·재테크 1인칭 실화 스토리텔링)",
+      "type": "info"
+    }
+  ]
+}

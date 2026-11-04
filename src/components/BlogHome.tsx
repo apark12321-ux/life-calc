@@ -174,7 +174,7 @@ export default function BlogHome({
 
                         {/* Post Date */}
                         <span className="text-gray-500 text-xs">
-                          게시: {post.date.split(' ')[0]}
+                          게시: {post.date.slice(0, 16)}
                         </span>
                       </div>
 

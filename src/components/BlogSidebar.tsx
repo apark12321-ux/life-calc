@@ -205,7 +205,7 @@ export default function BlogSidebar({
                   {p.title}
                 </p>
                 <span className="text-[11px] text-gray-400 font-num">
-                  {p.date.split(' ')[0]}
+                  {p.date.slice(0, 16)}
                 </span>
               </a>
             </li>
