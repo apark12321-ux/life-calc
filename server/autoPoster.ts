@@ -545,7 +545,8 @@ export class AutoPosterEngine {
     return combined.filter(p => {
       if (seen.has(p.id)) return false;
       seen.add(p.id);
-      const publishDate = new Date(p.date).getTime();
+      const cleanDate = p.date.includes('+') ? p.date : (p.date.includes('T') ? p.date + '+09:00' : p.date.replace(' ', 'T') + '+09:00');
+      const publishDate = new Date(cleanDate).getTime();
       if (!isNaN(publishDate) && publishDate > now + 3600000) {
         return false;
       }

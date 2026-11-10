@@ -1,6 +1,8 @@
 import { PostItem } from '../types';
+import { NOVEMBER_POSTS_PART1 } from './novemberPostsPart1';
+import { NOVEMBER_POSTS_PART2 } from './novemberPostsPart2';
 
-export const RECENT_BLOG_POSTS: PostItem[] = [
+const PREVIOUS_RECENT_POSTS: PostItem[] = [
   // 1. 2026-10-25 (일, 최신 오늘자 발행)
   {
     id: 'post-property-housing-subscription-250k-strategy',
@@ -3456,3 +3458,10 @@ HUG가 인정하는 주택가격 산정 기준은 대단히 엄격합니다.
 만약 계약서에 "수습 90%"라고 되어 있다면, 내 시급이 **2026년 최저시급 10,030원의 90%인 9,027원 미만으로 떨어지지 않는지** 반드시 계산기를 두드려 확인하세요. 단 1원이라도 모자라면 최저임금법 위반으로 노동청 신고 대상입니다.`
   }
 ];
+
+export const RECENT_BLOG_POSTS: PostItem[] = [
+  ...NOVEMBER_POSTS_PART2,
+  ...NOVEMBER_POSTS_PART1,
+  ...PREVIOUS_RECENT_POSTS,
+];
+

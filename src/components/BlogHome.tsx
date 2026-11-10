@@ -31,7 +31,8 @@ export default function BlogHome({
   const filteredPosts = useMemo(() => {
     const now = Date.now();
     let list = posts.filter(p => {
-      const pDate = new Date(p.date).getTime();
+      const cleanDate = p.date.includes('+') ? p.date : (p.date.includes('T') ? p.date + '+09:00' : p.date.replace(' ', 'T') + '+09:00');
+      const pDate = new Date(cleanDate).getTime();
       return isNaN(pDate) || pDate <= now + 3600000;
     });
 
